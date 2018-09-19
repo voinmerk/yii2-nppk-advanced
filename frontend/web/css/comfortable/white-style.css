@@ -1,0 +1,511 @@
+/*
+
+	white - #fff
+	black - #000
+
+*/
+
+body {
+	background-color: #fff;
+	background-image: none;
+	color: #000;
+}
+
+.btn-link, .btn-link:hover, .btn-link:focus, .btn-link:active {
+	color: #000;
+}
+
+/* SPINNER, LOADER */
+
+.spinner > div {
+	border-radius: 5px;
+}
+
+.spinner > .bnc {
+	background-color: #000;
+}
+
+.spn_hol {
+    background: #fff;
+}
+
+.spinner > div {
+    background-color: #fff;
+}
+
+/* Расписание (страница) */
+
+.timetable .nav-tabs > li > a {
+	background-color: #fff;
+	color: #000;
+}
+
+.timetable .nav > li > a:focus,
+.timetable .nav > li > a:hover {
+	background-color: #fff;
+}
+
+.timetable .table-bordered {
+	border-color: #000;
+}
+
+.timetable .table-bordered > tbody > tr > td,
+.timetable .table-bordered > tbody > tr > th,
+.timetable .table-bordered > tfoot > tr > td,
+.timetable .table-bordered > tfoot > tr > th,
+.timetable .table-bordered > thead > tr > td,
+.timetable .table-bordered > thead > tr > th {
+	border-color: #000;
+}
+
+.timetable table.active {
+	border-color: #000;
+}
+
+.timetable table.active > tbody > tr > td,
+.timetable table.active > tbody > tr > th,
+.timetable table.active > tfoot > tr > td,
+.timetable table.active > tfoot > tr > th,
+.timetable table.active > thead > tr > td,
+.timetable table.active > thead > tr > th {
+	border-color: #000;
+}
+
+.timetable .nav-tabs > li > a,
+.timetable .nav-tabs > li > a:focus,
+.timetable .nav-tabs > li > a:hover {
+	background-color: #fff;
+	color: #000;
+	border: 2px solid #000;
+}
+
+.timetable .nav-tabs > li.active > a,
+.timetable .nav-tabs > li.active > a:focus,
+.timetable .nav-tabs > li.active > a:hover {
+	background-color: #000;
+	border: 2px solid #000;
+	color: #fff;
+}
+
+.timetable table.active td {
+	background-color: #fff;
+}
+
+.timetable td {
+	border-color: #000;
+}
+
+.timetable tr {
+	background: #fff;
+}
+
+.timetable table tbody tr:nth-child(even) {
+	background: #fff;
+}
+
+.timetable .tabs-title > a {
+	background-color: #fff;
+}
+
+.timetable .tabs-title > a:focus, .timetable .tabs-title > a[aria-selected='true'] {
+	background-color: #fff;
+	color: #000;
+}
+
+.timetable-sidebar {
+	background-color: #000;
+}
+
+.page-header h1,
+.page-header h2 {
+	color: #000;
+}
+
+.page-header {
+	background: #fff;
+	border-color: #000;
+}
+
+.page-body {
+	background: #fff;
+}
+
+.tt-good {
+	color: #000;
+}
+
+.tt-error {
+	color: #000;
+}
+
+.btn-k,
+.btn-k:hover,
+.btn-k:focus {
+	border-color: #000;
+	background-color: transparent;
+	color: #000;
+}
+
+.btn-k:active {
+	color: #fff;
+	border-color: #000;
+	background-color: #000;
+}
+
+/* Кабинеты */
+
+.room-content {
+	background-color: #000;
+	border: 2px solid #fff;
+}
+
+.room-header {
+	background-color: #000;
+}
+
+.room-title {
+    color: #fff;
+}
+
+.room-error > h3 {
+	color: #fff;	
+}
+
+.room-swf {
+	border-color: #fff;
+}
+
+.room-info {
+    color: #fff;
+}
+
+/* MENU */
+
+.new-menu .navbar-default {
+	background: #fff;
+	border-bottom: 2px solid #000;
+}
+
+.new-menu .navbar-default .navbar-brand {
+	color: #000;
+}
+
+.new-menu .navbar-default .navbar-nav > li > a,
+.new-menu .navbar-default .navbar-nav > li > a:active {
+	color: #000;
+}
+
+.new-menu .navbar-default .navbar-nav > li > a:hover,
+.new-menu .navbar-default .navbar-nav > li > a:focus {
+	background-color: #fff;
+}
+
+.new-menu .navbar-default .navbar-nav > li > a.active,
+.new-menu .navbar-default .navbar-nav > li > a.active:focus,
+.new-menu .navbar-default .navbar-nav > li > a.active:hover,
+.new-menu .navbar-default .navbar-nav > li > a.active:active {
+	background-color: #000;
+	border-color: #000;
+	color: #fff;
+}
+
+.new-menu .navbar-default .navbar-nav > li.active > a, 
+.new-menu .navbar-default .navbar-nav > li.active > a:focus, 
+.new-menu .navbar-default .navbar-nav > li.active > a:hover, 
+.new-menu .navbar-default .navbar-nav > li.active > a:active {
+	background-color: #000;
+	border-color: #000;
+	color: #fff;
+}
+
+/* SPECIAL / INVALID */
+
+#spec_tools .navbar-default {
+	background: #fff;
+	border-top: 2px solid #000;
+}
+
+#spec_tools .navbar-default .navbar-brand {
+	color: #000;
+}
+
+#spec_tools .navbar-default .navbar-text {
+	color: #000;
+}
+
+#spec_tools .navbar-default .navbar-nav > li > a,
+#spec_tools .navbar-default .navbar-nav > li > a:hover,
+#spec_tools .navbar-default .navbar-nav > li > a:focus {
+	color: #000;
+}
+
+#spec_tools .navbar-default .navbar-nav > li > a:active {
+	background-color: #000;
+	border-color: #000;
+	color: #fff;
+}
+
+#spec_tools .navbar-default .navbar-nav > li > a.active,
+#spec_tools .navbar-default .navbar-nav > li > a.active:hover,
+#spec_tools .navbar-default .navbar-nav > li > a.active:active, 
+#spec_tools .navbar-default .navbar-nav > li > a.active:focus {
+	background-color: #000;
+	border-color: #000;
+	color: #fff;
+}
+
+/* blog */
+
+.thumbnail {
+	background-color: #fff;
+	border-color: #fff;
+}
+
+a.thumbnail.active,
+a.thumbnail:focus,
+a.thumbnail:hover {
+	border-color: #000;
+}
+
+.panel-heading {
+    background-color: #000;
+}
+
+.panel-heading h1,
+.panel-heading h2 {
+    color: #fff;
+}
+
+.panel-primary {
+	border-color: #000;
+}
+
+.panel-primary > .panel-heading {
+	background-color: #000;
+	border-color: #000;
+}
+
+.panel-body {
+	background-color: #fff;
+}
+
+#accordion .panel-title > .small,
+#accordion .panel-title > .small > a,
+#accordion .panel-title > a,
+#accordion .panel-title > small,
+#accordion .panel-title > small > a {
+	color: #fff;
+}
+
+#accordion .panel-primary>.panel-heading+.panel-collapse>.panel-body {
+	border-color: #000;
+}
+
+.panel-footer {
+	border-color: #000;
+}
+
+/* Teachers */
+
+.groups-list .btn-primary {
+	background-color: #FFF;
+	color: #000;
+	border: 2px solid #000;
+}
+
+.btn-primary.active.focus,
+.btn-primary.active:focus,
+.btn-primary.active:hover,
+.btn-primary:active.focus,
+.btn-primary:active:focus,
+.btn-primary:active:hover,
+.open>.dropdown-toggle.btn-primary.focus,
+.open>.dropdown-toggle.btn-primary:focus,
+.open>.dropdown-toggle.btn-primary:hover {
+	background-color: #000;
+	border-color: #000;
+	color: #fff;
+}
+
+/* list-group (sidebar) */
+
+.list-group-item.active,
+.list-group-item.active:focus,
+.list-group-item.active:hover,
+.list-group-item.active:active {
+	background-color: #000;
+	border-color: #000;
+}
+
+.list-group-item.active > a {
+	color: #fff;
+}
+
+.list-group-item > a:hover,
+.list-group-item > a:focus,
+.list-group-item > a:active {
+	color: #fff;
+	background-color: #000;
+	border-color: #000;
+}
+
+.list-group-item {
+	border-color: #000;
+	background-color: #fff;
+}
+
+.list-group-item > a {
+	color: #000;
+}
+
+/* Pagination */
+
+.pagination > .disabled > a, 
+.pagination > .disabled > a:focus,
+.pagination > .disabled > a:hover, 
+.pagination > .disabled > span, 
+.pagination > .disabled > span:focus, 
+.pagination > .disabled > span:hover {
+	background-color: #fff;
+	border-color: #000;
+	color: #000;
+}
+
+.pagination > .active > a, 
+.pagination > .active > a:focus, 
+.pagination > .active > a:hover, 
+.pagination > .active > span, 
+.pagination > .active > span:focus, 
+.pagination > .active > span:hover,
+.pagination > li > a:focus, 
+.pagination > li > a:hover, 
+.pagination > li > span:focus, 
+.pagination > li > span:hover {
+	background-color: #000;
+	border-color: #000;
+	color: #fff;
+}
+
+.pagination > li > a, .pagination > li > span {
+	background-color: #fff;
+	border-color: #000;
+	color: #000;
+}
+
+/* Footer */
+
+#footer {
+	background-color: #fff;
+	border-top: 2px solid #000;
+}
+
+#footer p {
+	color: #000;
+}
+
+#footer .btn-default {
+	background-color: #000;
+	color: #fff;
+}
+
+#footer hr {
+	border-color: #000;
+}
+
+#footer .nav > li > a {
+	color: #000;
+}
+
+#footer .nav > li > a:focus,
+#footer .nav > li > a:hover {
+	background-color: #000;
+	color: #fff;
+}
+
+// Update 29.01.18
+
+#custom-content.panel {
+	background-color: #fff;
+}
+
+#custom-content .mfp-close,
+#custom-content button.mfp-close,
+#custom-content .mfp-close:hover,
+#custom-content button.mfp-close:hover,
+#custom-content .mfp-close:focus,
+#custom-content button.mfp-close:focus {
+    background-color: #fff;
+    color: #000;
+}
+
+.new-menu .navbar-default .navbar-nav > .open > a, 
+.new-menu .navbar-default .navbar-nav > .open > a:focus, 
+.new-menu .navbar-default .navbar-nav > .open > a:hover {
+	color:#fff;
+	background-color: #000;
+}
+
+.new-menu .dropdown-menu {
+	background-color: #000;
+}
+
+.new-menu .dropdown-menu > li > a, 
+.new-menu .dropdown-menu > li > a:active {
+	background-color: #fff;
+	color: #000;
+}
+
+.new-menu .dropdown-menu > li > a:focus, 
+.new-menu .dropdown-menu > li > a:hover {
+	background-color: #000;
+	color: #fff;
+}
+
+.new-menu .navbar-nav > li > .dropdown-menu {
+	border-color: #000;
+}
+
+#spec_show.active {
+	background-color: #000;
+	color: #fff;
+}
+
+.mfp-close {
+	opacity: 1;
+}
+
+img.mfp-img {
+    background-color: #fff;
+}
+
+.mfp-title {
+    color: #000;
+}
+
+.mfp-image-holder .mfp-close, .mfp-iframe-holder .mfp-close {
+    color: #fff;
+    background-color: #000;
+}
+
+.timetable .tt-error,
+.timetable .tt-good {
+	color: #000;
+}
+
+.btn-read-more, .btn-read-more:active {
+	border-color: #000;
+}
+
+.btn-read-more:hover, .btn-read-more:focus {
+	background-color: #000;
+	color: #fff;
+}
+
+#custom-content .mfp-close, #custom-content button.mfp-close {
+	background-color: #fff;
+	color: #000;
+}
+
+.slick-prev::before, .slick-next::before {
+	color: #000;
+}
