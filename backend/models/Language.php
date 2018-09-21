@@ -94,6 +94,19 @@ class Language extends \yii\db\ActiveRecord
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public static function getLanguageIdByCode($code)
+    {
+        return self::find()->select(['id'])->from('languages')->where(['published' => 1, 'code' => $code])->asArray()->one();
+    }
+
+    public static function getLanguages($fields)
+    {
+        return self::find()->select($fields)->where(['published' => 1])->asArray()->all();
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getBlogsDescriptions()

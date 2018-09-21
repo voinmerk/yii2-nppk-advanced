@@ -15,7 +15,7 @@ use Yii;
  * @property Blogs $blog
  * @property Languages $language
  */
-class BlogsDescription extends \yii\db\ActiveRecord
+class BlogDescription extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}

@@ -3,11 +3,18 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Blog;
-use backend\models\BlogSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+
+use backend\models\Blog;
+use backend\models\BlogSearch;
+use backend\models\BlogDescription;
+use backend\models\BlogMenu;
+use backend\models\Language;
+
+
 
 /**
  * BlogController implements the CRUD actions for Blog model.
@@ -63,15 +70,44 @@ class BlogController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Blog();
+        $request = Yii::$app->request;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $languages = Language::getLanguages(['id', 'name']);
+
+        $blog = new Blog();
+
+        foreach($languages as $language) {
+            $blogDesc[$language['id']] = new BlogDescription();
+        }
+
+        // $blog->load(Yii::$app->request->post()) && $blog->save()
+
+        if ($request->isPost) {
+
+            var_dump($request->post());
+            exit;
+
+            // return $this->redirect(['view', 'id' => $blog->id]);
         } else {
+            $menuItems = BlogMenu::getMenu();
+
+            $blogMenuItem = ArrayHelper::map($menuItems, 'id', 'name');
+
             return $this->render('create', [
-                'model' => $model,
+                'blog' => $blog,
+                'blogDesc' => $blogDesc,
+                'blogMenuItem' => $blogMenuItem,
+                'languages' => $languages,
             ]);
         }
+    }
+
+    public function actionStore($request)
+    {
+        /*if() {
+
+        }*/
+        return $this->redirect(['blog/index']);
     }
 
     /**
