@@ -43,7 +43,7 @@ class Blog extends \yii\db\ActiveRecord
     {
         return [
             [['fixed', 'published', 'cut', 'created_by', 'updated_by', 'blog_menu_id', 'created_at', 'updated_at'], 'integer'],
-            [['slug', 'template', 'created_at', 'updated_at'], 'required'],
+            [['slug', 'blog_menu_id', 'template', 'created_at', 'updated_at'], 'required'],
             [['slug', 'template'], 'string', 'max' => 255],
             [['slug'], 'unique'],
             [['blog_menu_id'], 'exist', 'skipOnError' => true, 'targetClass' => BlogMenu::className(), 'targetAttribute' => ['blog_menu_id' => 'id']],

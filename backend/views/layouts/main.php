@@ -13,6 +13,7 @@ if (class_exists('backend\assets\AppAsset')) {
 dmstr\web\AdminLteAsset::register($this);
 
 $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
+$this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/img/icon.ico']);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

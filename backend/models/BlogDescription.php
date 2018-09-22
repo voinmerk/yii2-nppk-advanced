@@ -15,7 +15,7 @@ use Yii;
  * @property Blogs $blog
  * @property Languages $language
  */
-class BlogsDescription extends \yii\db\ActiveRecord
+class BlogDescription extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -31,7 +31,7 @@ class BlogsDescription extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['blog_id', 'language_id'], 'required'],
+            [['blog_id', 'language_id', 'name', 'description'], 'required'],
             [['blog_id', 'language_id'], 'integer'],
             [['description'], 'string'],
             [['name'], 'string', 'max' => 255],
