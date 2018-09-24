@@ -7,6 +7,8 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Blog;
 
+use common\models\User;
+
 /**
  * BlogSearch represents the model behind the search form of `backend\models\Blog`.
  */
@@ -41,13 +43,36 @@ class BlogSearch extends Blog
      */
     public function search($params)
     {
-        $query = Blog::find();
+        $language = (Language::getLanguageIdByCode(Yii::$app->language))['language_id'];
+
+        $query = Blog::find()
+                    ->select([
+                        'blogs.*', 
+                        'blogDesc.name AS name', 
+                        'createdUser.username AS created_username', 
+                        /*'blogMenuDesc.name AS menu_name', */
+                    ])
+                    ->joinWith([
+                        'blogsDescriptions' => function($q) {
+                            return $q->from(['blogDesc' => BlogDescription::tableName()]);
+                        },
+                        'createdBy' => function($q) {
+                            return $q->from(['createdUser' => User::tableName()]);
+                        },
+                        /*'blogsMenuDescriptions' => function($q) {
+                            return $q->from(['blogMenuDesc' => BlogMenuDescription::tableName()]);
+                        },*/
+                    ])
+                    ->where([
+                        'blogDesc.language_id' => $language,
+                        /*'blogMenuDesc.language_id' => $language,*/
+                    ]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['id' => SORT_DESC]]
+            'sort' => ['defaultOrder' => ['updated_at' => SORT_DESC, 'created_at' => SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -60,19 +85,15 @@ class BlogSearch extends Blog
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'fixed' => $this->fixed,
             'published' => $this->published,
-            'cut' => $this->cut,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'blog_menu_id' => $this->blog_menu_id,
-            'created_at' => $this->created_at,
+            // 'blog_menu_id' => $this->blog_menu_id,
             'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'slug', $this->slug])
-            ->andFilterWhere(['like', 'template', $this->template]);
+            ->andFilterWhere(['like', 'template', $this->template])
+            ->andFilterWhere(['like', 'createdBy.username', $this->createdBy->username])
+            /*->andFilterWhere(['like', 'blogsDescriptions.username', $this->blogsDescriptions->name])*/;
 
         return $dataProvider;
     }

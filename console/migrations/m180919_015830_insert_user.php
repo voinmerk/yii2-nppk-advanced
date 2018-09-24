@@ -18,8 +18,8 @@ class m180919_015830_insert_user extends Migration
             'password_hash' => Yii::$app->security->generatePasswordHash('123123'),
             'email' => 'admin@localhost',
             'status' => '10',
-            'created_at' => '0',
-            'updated_at' => '0',
+            'created_at' => time(),
+            'updated_at' => time(),
         ]);
     }
 

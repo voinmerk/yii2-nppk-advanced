@@ -118,4 +118,44 @@ class Blog extends \yii\db\ActiveRecord
     {
         return $this->hasMany(BlogDescription::className(), ['blog_id' => 'id']);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldName($id)
+    {
+        $query = $this->find()
+                    ->from(['b' => $this->tableName()])
+                    ->select(['blogDesc.name AS name'])
+                    ->joinWith([
+                        'blogsDescriptions' => function($query) {
+                            return $query->from(['blogDesc' => BlogDescription::tableName()]);
+                        },
+                    ])
+                    ->where(['id' => $id, 'blogDesc.language_id' => Language::getLanguageIdByCode(Yii::$app->language)])
+                    ->one();
+
+        return $query->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getStatusList()
+    {
+        return [
+            Yii::t('backend', 'published'),
+            Yii::t('backend', 'unpublished'),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusName()
+    {
+        $status = $this->getStatusList();
+
+        return $status[$this->published];
+    }
 }

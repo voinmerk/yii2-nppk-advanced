@@ -98,6 +98,25 @@ class BlogMenu extends \yii\db\ActiveRecord
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public static function getList()
+    {
+        $query = self::find()
+                    ->select(['blogMenu.id', 'blogMenuDesc.name AS name'])
+                    ->from('blogs_menu blogMenu')
+                    ->joinWith([
+                        'blogsMenuDescriptions' => function($q) {
+                            return $q->from(['blogMenuDesc' => BlogMenuDescription::tableName()]);
+                        },
+                    ])
+                    ->where(['blogMenuDesc.language_id' => Language::getLanguageIdByCode(Yii::$app->language)])
+                    ->all();
+
+        return \yii\helpers\ArrayHelper::map($query, 'id', 'name');
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getBlogs()

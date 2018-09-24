@@ -95,6 +95,19 @@ return [
 
                 'login' => 'auth/login',
                 'logout' => 'auth/logout',
+
+                // REST routes for CRUD operations
+                'POST <controller:\w+>s' => '<controller>/create',
+                '<controller:\w+>s' => '<controller>/index',
+                '<controller:\w+>s/sort/<sort:\w+>' => '<controller>/index',
+
+                'PUT <controller:\w+>/<id:\d+>' => '<controller>/update',
+                'DELETE <controller:\w+>/<id:\d+>' => '<controller>/delete',
+                '<controller:\w+>/<id:\d+>' => '<controller>/view',
+
+                // normal routes for CRUD operations
+                '<controller:\w+>s/create' => '<controller>/create',
+                '<controller:\w+>/<action:update|delete>/<id:\d+>' => '<controller>/<action>',
             ],
         ],
     ],

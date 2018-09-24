@@ -7,4 +7,7 @@ return [
 
 	'Fixed' => 'Fixed',
 	'Slug' => 'SEO Url',
+
+	'published' => 'Published',
+	'unpublished' => 'Unpublished',
 ];

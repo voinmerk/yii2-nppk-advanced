@@ -17,4 +17,7 @@ return [
 	'Updated At' => 'Дата изменения',
 	'Name' => 'Наименование',
 	'Description' => 'Описание',
+
+	'published' => 'Опубликовано',
+	'unpublished' => 'Не опубликовано',
 ];
