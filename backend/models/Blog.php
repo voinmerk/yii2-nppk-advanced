@@ -35,7 +35,6 @@ class Blog extends \yii\db\ActiveRecord
     {
         return '{{%blogs}}';
     }
-
     /**
      * {@inheritdoc}
      */
@@ -58,6 +57,24 @@ class Blog extends \yii\db\ActiveRecord
     public function behaveriors()
     {
         return [
+            /*'multilang' => [
+                'class' => \omgdef\multilingual\MultilingualBehavior::className(),
+                'languages' => [
+                    'ru-RU' => 'Русский',
+                    'en-US' => 'English',
+                ],
+                'languageField' => 'language_id',
+                //'localizedPrefix' => '',
+                //'requireTranslations' => false',
+                //'dynamicLangClass' => true',
+                'langClassName' => BlogDescription::className(), // or namespace/for/a/class/PostLang
+                'defaultLanguage' => 'ru-RU',
+                'langForeignKey' => 'blog_id',
+                'tableName' => "{{%blogs_description}}",
+                'attributes' => [
+                    'name', 'description',
+                ]
+            ],*/
             'blame' => [
                 'class' => \yii\behaveriors\BlameableBehavior::className(),
             ],

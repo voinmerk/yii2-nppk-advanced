@@ -21,7 +21,8 @@
         "dmstr/yii2-adminlte-asset": "^2.1",
         "codemix/yii2-localeurls": "^1.7",
         "mihaildev/yii2-ckeditor": "*",
-        "rmrevin/yii2-fontawesome": "2.10.0"
+        "rmrevin/yii2-fontawesome": "2.10.0",
+        "omgdef/yii2-multilingual-behavior": "^2.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

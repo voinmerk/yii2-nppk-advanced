@@ -54,7 +54,7 @@ class BlogSearch extends Blog
                     ])
                     ->joinWith([
                         'blogsDescriptions' => function($q) {
-                            return $q->from(['blogDesc' => BlogDescription::tableName()]);
+                            return $q->from(['blogDesc' => BlogDescription::tableName()])->where(['blogDesc.language_id' => $language]);
                         },
                         'createdBy' => function($q) {
                             return $q->from(['createdUser' => User::tableName()]);
@@ -62,10 +62,6 @@ class BlogSearch extends Blog
                         /*'blogsMenuDescriptions' => function($q) {
                             return $q->from(['blogMenuDesc' => BlogMenuDescription::tableName()]);
                         },*/
-                    ])
-                    ->where([
-                        'blogDesc.language_id' => $language,
-                        /*'blogMenuDesc.language_id' => $language,*/
                     ]);
 
         // add conditions that should always apply here
@@ -92,7 +88,7 @@ class BlogSearch extends Blog
 
         $query->andFilterWhere(['like', 'slug', $this->slug])
             ->andFilterWhere(['like', 'template', $this->template])
-            ->andFilterWhere(['like', 'createdBy.username', $this->createdBy->username])
+            ->andFilterWhere(['like', 'users.username', $this->created_by])
             /*->andFilterWhere(['like', 'blogsDescriptions.username', $this->blogsDescriptions->name])*/;
 
         return $dataProvider;

@@ -45,14 +45,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         ];
                     }
                 ],
-                [
+                /*[
                     'label' => 'Заголовок',
                     'attribute' => 'name',
                     'format' => 'text',
                     'value' => function ($model) {
                         return $model->getFieldName($model->id);
                     },
-                ],
+                ],*/
                 [
                     'label' => 'Статус',
                     'attribute' => 'published',
@@ -67,11 +67,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'label' => 'Автор',
-                    'attribute' => 'createdBy.username',
-                    // 'format' => 'text',
-                    'value' => function ($model) {
-                        return $model->createdBy->username;
-                    },
+                    'attribute' => 'created_by',
+                    'value' => 'createdBy.username',
                 ],
                 // 'blog_menu_id',
                 'updated_at:datetime',

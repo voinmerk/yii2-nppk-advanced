@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "190a953e1061c77da36216eed6ac1f93",
+    "content-hash": "3f1ad4e19ae4c00511a966a43e5bb8b4",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -704,6 +704,54 @@
                 "yii"
             ],
             "time": "2014-11-19T22:04:08+00:00"
+        },
+        {
+            "name": "omgdef/yii2-multilingual-behavior",
+            "version": "2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OmgDef/yii2-multilingual-behavior.git",
+                "reference": "93c1c3e20cb9219136b7706291e4e1f1e371dc95"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OmgDef/yii2-multilingual-behavior/zipball/93c1c3e20cb9219136b7706291e4e1f1e371dc95",
+                "reference": "93c1c3e20cb9219136b7706291e4e1f1e371dc95",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "require-dev": {
+                "phpunit/dbunit": ">=1.2",
+                "phpunit/phpunit": "4.6.*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "omgdef\\multilingual\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-4-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "OmgDef",
+                    "email": "omgdef@gmail.com"
+                }
+            ],
+            "description": "Port of the yii-multilingual-behavior for yii",
+            "keywords": [
+                " behavior",
+                " i18",
+                " multilingual",
+                " yii2-multilingual-behavior",
+                "extension",
+                "yii2"
+            ],
+            "time": "2016-02-12T10:38:57+00:00"
         },
         {
             "name": "rmrevin/yii2-fontawesome",
