@@ -12,6 +12,10 @@ use backend\models\BlogMenu;
  */
 class BlogMenuSearch extends BlogMenu
 {
+    public $name;
+    public $description;
+    public $createdName;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +23,7 @@ class BlogMenuSearch extends BlogMenu
     {
         return [
             [['id', 'parent_id', 'published', 'sort_order', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['slug'], 'safe'],
+            [['name', 'description', 'createdName', 'slug'], 'safe'],
         ];
     }
 
@@ -43,35 +47,101 @@ class BlogMenuSearch extends BlogMenu
     {
         $query = BlogMenu::find();
 
-        // add conditions that should always apply here
+        $query->select([
+                    'blogs_menu.*',
+                    'blogs_menu_description.name AS name',
+                    'blogs_menu_description.description AS description',
+                ]);
+
+        $query->joinWith(['blogsMenuDescriptions' => function($q) {
+            $q->select([
+                'blogs_menu_description.name AS name',
+                'blogs_menu_description.description AS description',
+            ]);
+            $q->where('blogs_menu_description.language_id = 1');
+        }]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['id' => SORT_DESC]]
+            'sort' => ['defaultOrder' => ['updated_at' => SORT_DESC]]
         ]);
 
-        $this->load($params);
+        $dataProvider->setSort([
+            'attributes' => [
+                'name' => [
+                    'asc' => ['blogs_menu_description.name' => SORT_ASC],
+                    'desc' => ['blogs_menu_description.name' => SORT_DESC],
+                    'label' => 'Name',
+                ],
+                'description' => [
+                    'asc' => ['blogs_menu_description.description' => SORT_ASC],
+                    'desc' => ['blogs_menu_description.description' => SORT_DESC],
+                    'label' => 'Description',
+                ],
+                'createdName' => [
+                    'asc' => ['users.username' => SORT_ASC],
+                    'desc' => ['users.username' => SORT_DESC],
+                    'label' => 'Created Name',
+                ],
+                'published',
+                'updated_at',
+            ],
+        ]);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+        if (!($this->load($params) && $this->validate())) {
+            $query->joinWith(['createdBy']);
+            $query->joinWith(['blogsMenuDescriptions' => function($q) {
+                $q->where('blogs_menu_description.language_id = 1');
+            }]);
+
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'parent_id' => $this->parent_id,
-            'published' => $this->published,
-            'sort_order' => $this->sort_order,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ]);
+        $this->addCondition($query, 'blogs_menu_description.name', true);
+        $this->addCondition($query, 'blogs_menu_description.description', true);
+        $this->addCondition($query, 'blogs_menu.created_by');
+        $this->addCondition($query, 'blogs_menu.published');
+        $this->addCondition($query, 'blogs_menu.updated_at');
 
-        $query->andFilterWhere(['like', 'slug', $this->slug]);
+        $query->joinWith(['createdBy' => function ($q) {
+            $q->where('users.username LIKE "%' . $this->createdName . '%"');
+        }]);
+
+        $query->joinWith(['blogsMenuDescriptions' => function ($q) {
+            $q->where('blogs_menu_description.name LIKE "%' . $this->name . '%"');
+            $q->andWhere('blogs_menu_description.language_id = 1');
+        }]);
+
+        $query->joinWith(['blogsMenuDescriptions' => function ($q) {
+            $q->where('blogs_menu_description.description LIKE "%' . $this->description . '%"');
+            $q->andWhere('blogs_menu_description.language_id = 1');
+        }]);
 
         return $dataProvider;
+    }
+
+    protected function addCondition($query, $attribute, $partialMatch = false)
+    {
+        if (($pos = strrpos($attribute, '.')) !== false) {
+            $modelAttribute = substr($attribute, $pos + 1);
+        } else {
+            $modelAttribute = $attribute;
+        }
+     
+        $value = $this->$modelAttribute;
+        if (trim($value) === '') {
+            return;
+        }
+     
+        /*
+         * Для корректной работы фильтра со связью со
+         * свой же моделью делаем:
+         */
+     
+        if ($partialMatch) {
+            $query->andWhere(['like', $attribute, $value]);
+        } else {
+            $query->andWhere([$attribute => $value]);
+        }
     }
 }

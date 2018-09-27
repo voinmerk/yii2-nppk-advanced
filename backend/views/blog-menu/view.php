@@ -1,39 +1,51 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Blog */
 
-$this->title = $model->id;
+$this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('backend', 'Blogs'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-view box box-primary">
     <div class="box-header">
-        <?= Html::a(Yii::t('backend', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-flat']) ?>
-        <?= Html::a(Yii::t('backend', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger btn-flat',
-            'data' => [
-                'confirm' => Yii::t('backend', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
+        <?= $this->render('@viewComponents/header-view', [
+            'title' => $model->name,
+            'action_update' => Url::to(['blog-menu/update', 'id' => $model->id]),
+            'action_delete' => Url::to(['blog-menu/delete', 'id' => $model->id]),
         ]) ?>
     </div>
     <div class="box-body table-responsive no-padding">
         <?= DetailView::widget([
             'model' => $model,
             'attributes' => [
-                'id',
-                'fixed',
+                // 'id',
+                'name:text',
                 'slug',
-                'template',
-                'published',
-                'cut',
-                'created_by',
-                'updated_by',
-                'blog_menu_id',
+                [
+                    'attribute' => 'template',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        return '<span class="label label-warning">' . $model->templateName . '</span>';
+                    },
+                ],
+                [
+                    'attribute' => 'published',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        $class = $model->published ? ' label-success' : ' label-danger';
+                        $name = $model->statusName;
+
+                        return '<span class="label' . $class . '">' . $name . '</span>';
+                    },
+                    'filter' => \backend\models\Blog::getStatusList(),
+                ],
+                'createdName',
+                'updatedName',
                 'created_at:datetime',
                 'updated_at:datetime',
             ],

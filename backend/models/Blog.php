@@ -12,7 +12,7 @@ use common\models\User;
  * @property int $id
  * @property int $fixed
  * @property string $slug
- * @property string $template
+ * @property int $template
  * @property int $published
  * @property int $cut
  * @property int $created_by
@@ -41,9 +41,9 @@ class Blog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fixed', 'published', 'cut', 'created_by', 'updated_by', 'blog_menu_id', 'created_at', 'updated_at'], 'integer'],
+            [['fixed', 'published', 'cut', 'created_by', 'updated_by', 'blog_menu_id', 'created_at', 'updated_at', 'template'], 'integer'],
             [['slug', 'blog_menu_id', 'template', 'created_at', 'updated_at'], 'required'],
-            [['slug', 'template'], 'string', 'max' => 255],
+            [['slug'], 'string', 'max' => 255],
             [['slug'], 'unique'],
             [['blog_menu_id'], 'exist', 'skipOnError' => true, 'targetClass' => BlogMenu::className(), 'targetAttribute' => ['blog_menu_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -101,6 +101,12 @@ class Blog extends \yii\db\ActiveRecord
             'blog_menu_id' => Yii::t('backend', 'Blog Menu ID'),
             'created_at' => Yii::t('backend', 'Created At'),
             'updated_at' => Yii::t('backend', 'Updated At'),
+
+            'name' => Yii::t('backend', 'Name'),
+            'description' => Yii::t('backend', 'Description'),
+            'createdName' => Yii::t('backend', 'Created Name'),
+            'updatedName' => Yii::t('backend', 'Updated Name'),
+            'blogMenuName' => Yii::t('backend', 'Blog Menu ID'),
         ];
     }
 
@@ -115,9 +121,24 @@ class Blog extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getBlogMenuName()
+    {
+        return $this->blogMenu->blogsMenuDescriptions[0]->name;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCreatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedName() {
+        return $this->createdBy->username;
     }
 
     /**
@@ -131,28 +152,30 @@ class Blog extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getUpdatedName() {
+        return $this->updatedBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getBlogsDescriptions()
     {
         return $this->hasMany(BlogDescription::className(), ['blog_id' => 'id']);
     }
 
     /**
-     * {@inheritdoc}
+     * @return \yii\db\ActiveQuery
      */
-    public function getFieldName($id)
-    {
-        $query = $this->find()
-                    ->from(['b' => $this->tableName()])
-                    ->select(['blogDesc.name AS name'])
-                    ->joinWith([
-                        'blogsDescriptions' => function($query) {
-                            return $query->from(['blogDesc' => BlogDescription::tableName()]);
-                        },
-                    ])
-                    ->where(['id' => $id, 'blogDesc.language_id' => Language::getLanguageIdByCode(Yii::$app->language)])
-                    ->one();
+    public function getName() {
+        return $this->blogsDescriptions[0]->name;
+    }
 
-        return $query->name;
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDescription() {
+        return $this->blogsDescriptions[0]->description;
     }
 
     /**
@@ -161,8 +184,8 @@ class Blog extends \yii\db\ActiveRecord
     public static function getStatusList()
     {
         return [
-            Yii::t('backend', 'published'),
             Yii::t('backend', 'unpublished'),
+            Yii::t('backend', 'published'),
         ];
     }
 
@@ -174,5 +197,23 @@ class Blog extends \yii\db\ActiveRecord
         $status = $this->getStatusList();
 
         return $status[$this->published];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getTemplateList()
+    {
+        return ['news', 'page'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplateName()
+    {
+        $templates = $this->getTemplateList();
+
+        return $templates[$this->template];
     }
 }

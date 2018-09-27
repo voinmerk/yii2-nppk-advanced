@@ -14,6 +14,10 @@ use common\models\User;
  */
 class BlogSearch extends Blog
 {
+    public $name;
+    public $description;
+    public $createdName;
+
     /**
      * @inheritdoc
      */
@@ -21,7 +25,7 @@ class BlogSearch extends Blog
     {
         return [
             [['id', 'fixed', 'published', 'cut', 'created_by', 'updated_by', 'blog_menu_id', 'created_at', 'updated_at'], 'integer'],
-            [['slug', 'template'], 'safe'],
+            [['name', 'description', 'createdName', 'slug', 'template'], 'safe'],
         ];
     }
 
@@ -43,54 +47,105 @@ class BlogSearch extends Blog
      */
     public function search($params)
     {
-        $language = (Language::getLanguageIdByCode(Yii::$app->language))['language_id'];
+        // $language = Language::getLanguageIdByCode(Yii::$app->language)->id;
 
-        $query = Blog::find()
-                    ->select([
-                        'blogs.*', 
-                        'blogDesc.name AS name', 
-                        'createdUser.username AS created_username', 
-                        /*'blogMenuDesc.name AS menu_name', */
-                    ])
-                    ->joinWith([
-                        'blogsDescriptions' => function($q) {
-                            return $q->from(['blogDesc' => BlogDescription::tableName()])->where(['blogDesc.language_id' => $language]);
-                        },
-                        'createdBy' => function($q) {
-                            return $q->from(['createdUser' => User::tableName()]);
-                        },
-                        /*'blogsMenuDescriptions' => function($q) {
-                            return $q->from(['blogMenuDesc' => BlogMenuDescription::tableName()]);
-                        },*/
-                    ]);
+        $query = Blog::find();
 
-        // add conditions that should always apply here
+        $query->select([
+                    'blogs.*',
+                    'blogs_description.name AS name',
+                    'blogs_description.description AS description',
+                ]);
+
+        $query->joinWith(['blogsDescriptions' => function($q) {
+            $q->select([
+                'blogs_description.name AS name',
+                'blogs_description.description AS description',
+            ]);
+            $q->where('blogs_description.language_id = 1');
+        }]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['updated_at' => SORT_DESC, 'created_at' => SORT_DESC]]
+            'sort' => ['defaultOrder' => ['updated_at' => SORT_DESC]],
         ]);
 
-        $this->load($params);
+        $dataProvider->setSort([
+            'attributes' => [
+                'name' => [
+                    'asc' => ['blogs_description.name' => SORT_ASC],
+                    'desc' => ['blogs_description.name' => SORT_DESC],
+                    'label' => 'Name',
+                ],
+                'description' => [
+                    'asc' => ['blogs_description.description' => SORT_ASC],
+                    'desc' => ['blogs_description.description' => SORT_DESC],
+                    'label' => 'Description',
+                ],
+                'createdName' => [
+                    'asc' => ['users.username' => SORT_ASC],
+                    'desc' => ['users.username' => SORT_DESC],
+                    'label' => 'Created Name',
+                ],
+                'published',
+                'updated_at',
+            ],
+        ]);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+        if (!($this->load($params) && $this->validate())) {
+            $query->joinWith(['createdBy']);
+            $query->joinWith(['blogsDescriptions' => function($q) {
+                $q->where('blogs_description.language_id = 1');
+            }]);
+
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'published' => $this->published,
-            // 'blog_menu_id' => $this->blog_menu_id,
-            'updated_at' => $this->updated_at,
-        ]);
+        $this->addCondition($query, 'blogs_description.name', true);
+        $this->addCondition($query, 'blogs_description.description', true);
+        $this->addCondition($query, 'blogs.created_by');
+        $this->addCondition($query, 'blogs.published');
+        $this->addCondition($query, 'blogs.updated_at');
 
-        $query->andFilterWhere(['like', 'slug', $this->slug])
-            ->andFilterWhere(['like', 'template', $this->template])
-            ->andFilterWhere(['like', 'users.username', $this->created_by])
-            /*->andFilterWhere(['like', 'blogsDescriptions.username', $this->blogsDescriptions->name])*/;
+        $query->joinWith(['createdBy' => function ($q) {
+            $q->where('users.username LIKE "%' . $this->createdName . '%"');
+        }]);
+
+        $query->joinWith(['blogsDescriptions' => function ($q) {
+            $q->where('blogs_description.name LIKE "%' . $this->name . '%"');
+            $q->andWhere('blogs_description.language_id = 1');
+        }]);
+
+        $query->joinWith(['blogsDescriptions' => function ($q) {
+            $q->where('blogs_description.description LIKE "%' . $this->description . '%"');
+            $q->andWhere('blogs_description.language_id = 1');
+        }]);
 
         return $dataProvider;
+    }
+
+    protected function addCondition($query, $attribute, $partialMatch = false)
+    {
+        if (($pos = strrpos($attribute, '.')) !== false) {
+            $modelAttribute = substr($attribute, $pos + 1);
+        } else {
+            $modelAttribute = $attribute;
+        }
+     
+        $value = $this->$modelAttribute;
+        if (trim($value) === '') {
+            return;
+        }
+     
+        /*
+         * Для корректной работы фильтра со связью со
+         * свой же моделью делаем:
+         */
+     
+        if ($partialMatch) {
+            $query->andWhere(['like', $attribute, $value]);
+        } else {
+            $query->andWhere([$attribute => $value]);
+        }
     }
 }

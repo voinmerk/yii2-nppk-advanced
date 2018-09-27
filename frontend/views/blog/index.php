@@ -26,16 +26,17 @@ $this->title = 'НППК - ' . Yii::t('frontend', 'Information') . ' - ' . $blog
 
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				<h1><?= $item['name']; ?></h1>
+				<h1><?= $item['name'] ?></h1>
 			</div>
 
-			<div id="new_<?= $item['blog_id']; ?>" class="panel-body thumbnails">
+			<div id="new_<?= $item['id']; ?>" class="panel-body thumbnails">
+				
 				<?= $description ?>
 			</div>
 
 			<?php if($item['cut']) { ?>
 			<div class="panel-footer clearfix">
-				<a class="pull-right btn btn-read-more dop" href="javascript: return false;" js-id="#new_<?php echo $item['blog_id']; ?>" ><?= Yii::t('frontend', 'Read more') ?></a>
+				<a class="pull-right btn btn-read-more dop" href="javascript: return false;" js-id="#new_<?php echo $item['id']; ?>" ><?= Yii::t('frontend', 'Read more') ?></a>
 			</div>
 			<?php } ?>
 		</div>

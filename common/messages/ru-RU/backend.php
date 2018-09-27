@@ -12,7 +12,7 @@ return [
 	'Cut' => 'Превью',
 	'Created By' => 'Автор',
 	'Updated By' => 'Модератор',
-	'Blog Menu ID' => 'Пренадлежит меню',
+	'Blog Menu ID' => 'Раздел блога',
 	'Created At' => 'Дата создания',
 	'Updated At' => 'Дата изменения',
 	'Name' => 'Наименование',
@@ -20,4 +20,21 @@ return [
 
 	'published' => 'Опубликовано',
 	'unpublished' => 'Не опубликовано',
+
+	'Actions' => 'Действия',
+
+	'Created Name' => 'Автор',
+	'Updated Name' => 'Модератор',
+
+	'Are you sure you want to delete this item?' => 'Вы уверены, что хотите удалить этот элемент?',
+
+	'Template' => 'Шаблон',
+
+	'Blog' => 'Блог',
+	'Blogs' => 'Все блоги',
+	'Blog list' => 'Список блогов',
+
+	'Blog Menu' => 'Разделы блога',
+	'Blogs menu' => 'Все разделы',
+	'Blogs menus list' => 'Список разделов',
 ];

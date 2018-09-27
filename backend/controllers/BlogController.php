@@ -102,14 +102,6 @@ class BlogController extends Controller
         }
     }
 
-    public function actionStore($request)
-    {
-        /*if() {
-
-        }*/
-        return $this->redirect(['blog/index']);
-    }
-
     /**
      * Updates an existing Blog model.
      * If update is successful, the browser will be redirected to the 'view' page.

@@ -3,6 +3,8 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
+// use kartik\daterange\DateRangePicker;
+use dosamigos\datetimepicker\DateTimePicker;
 
 use rmrevin\yii\fontawesome\FontAwesome as Fa;
 
@@ -15,15 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-index box box-primary">
     <div class="box-header with-border">
-        <div class="box-title">
-            <h3><i class="fa fa-list"></i> Список блогов</h3>
-        </div>
-
-        <?= $this->render('@viewComponents/header', [
-            'form_id' => 'blog-form',
+        <?= $this->render('@viewComponents/header-list', [
+            'title' => Yii::t('backend', 'Blog list'),
             'action_create' => Url::to(['blog/create']),
-            'action_copy' => Url::to(['blog/copy']),
-            'action_delete' => Url::to(['blog/delete']),
+            'action_copy' => Url::to(['blog/copy-rows']),
+            'action_delete' => Url::to(['blog/delete-rows']),
         ]) ?>
     </div>
     <div class="box-body table-responsive no-padding">
@@ -36,29 +34,27 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['class' => 'yii\grid\SerialColumn'],
                 [
                     'class' => 'yii\grid\CheckboxColumn',
-                    'checkboxOptions' => function() {
+                    'name' => 'id',
+                    'checkboxOptions' => function($model) {
                         return [
                             'onchange' => '
                                var keys = $("#grid").yiiGridView("getSelectedRows");
                                $(this).parent().parent().toggleClass("danger")
-                            '
+                            ',
+                            'value' => $model->id,
                         ];
                     }
                 ],
-                /*[
-                    'label' => 'Заголовок',
-                    'attribute' => 'name',
-                    'format' => 'text',
-                    'value' => function ($model) {
-                        return $model->getFieldName($model->id);
-                    },
-                ],*/
+                'name:text',
+                // 'description:html',
+                'createdName:text',
+                // 'blog_menu_id',
                 [
-                    'label' => 'Статус',
+                    // 'label' => Yii::t('backend', 'Status'),
                     'attribute' => 'published',
                     'format' => 'html',
-                    'value' => function ($model) {
-                        $class = !$model->published ? ' label-success' : ' label-danger';
+                    'value' => function($model) {
+                        $class = $model->published ? ' label-success' : ' label-danger';
                         $name = $model->statusName;
 
                         return '<span class="label' . $class . '">' . $name . '</span>';
@@ -66,27 +62,56 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => \backend\models\Blog::getStatusList(),
                 ],
                 [
-                    'label' => 'Автор',
-                    'attribute' => 'created_by',
-                    'value' => 'createdBy.username',
+                    'attribute' => 'updated_at',
+                    'format' => 'datetime',
+                    'filter' => DateTimePicker::widget([
+                        'model' => $searchModel,
+                        'value' => $searchModel->updated_at,
+                        'attribute' => 'updated_at',
+                        'language' => 'ru',
+                        'size' => 'ms',
+                        'clientOptions' => [
+                            'autoclose' => true,
+                            'format' => 'dd MM yyyy - HH:ii P',
+                            'todayBtn' => true
+                        ]
+                    ]),
                 ],
-                // 'blog_menu_id',
-                'updated_at:datetime',
+                // 'updated_at:datetime',
+                /*[
+                    'attribute' => 'updated_at',
+                    'format' => 'datetime',
+                    'filter' => '
+                        <div class="drp-container input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'.
+                            DateRangePicker::widget([
+                                'name'  => 'ItemOrderSearch[created_at]',
+                                'pluginOptions' => [ 
+                                    'locale' => [
+                                        'separator' => 'to',
+                                    ],
+                                    'opens' => 'right',
+                                ],
+                            ]) . '
+                        </div>
+                    ',
+                    'content' => function($data){
+                        return Yii::$app->formatter->asDatetime($data['created_at'], "php:d M Y");
+                    },
+                ],*/
                 [
                     'class' => 'yii\grid\ActionColumn',
-                    // 'label' => 'Действие',
+                    'header' => Yii::t('backend', 'Actions'),
                     'template' => '{view} {update}',
                     'buttons' => [
                         'view' => function ($url, $model) {
-                            return Html::a(Fa::icon('eye'), $url, ['class' => 'btn btn-primary']);
+                            return Html::a(Fa::icon('eye'), $url, ['class' => 'btn btn-primary btn-flat']);
                         },
                         'update' => function ($url, $model) {
-                            return Html::a(Fa::icon('pencil'), $url, ['class' => 'btn btn-warning']);
+                            return Html::a(Fa::icon('pencil'), $url, ['class' => 'btn btn-warning btn-flat']);
                         },
-                        /*'delete' => function ($url, $model) {
-                            return Html::a(Fa::icon('trash-o'), $url, ['class' => 'btn btn-danger']);
-                        },*/
                     ],
+                    'headerOptions' => ['class' => 'text-right'],
+                    'contentOptions' => ['class' => 'text-right'],
                 ],
             ],
         ]); ?>

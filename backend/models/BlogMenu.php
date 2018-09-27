@@ -40,8 +40,8 @@ class BlogMenu extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'published', 'sort_order', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['slug', 'created_at', 'updated_at'], 'required'],
+            [['parent_id', 'published', 'sort_order', 'template', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['slug', 'template', 'created_at', 'updated_at'], 'required'],
             [['slug'], 'string', 'max' => 255],
             [['slug'], 'unique'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -73,12 +73,18 @@ class BlogMenu extends \yii\db\ActiveRecord
             'id' => Yii::t('backend', 'ID'),
             'parent_id' => Yii::t('backend', 'Parent ID'),
             'slug' => Yii::t('backend', 'Slug'),
+            'template' => Yii::t('backend', 'Template'),
             'published' => Yii::t('backend', 'Published'),
             'sort_order' => Yii::t('backend', 'Sort Order'),
             'created_by' => Yii::t('backend', 'Created By'),
             'updated_by' => Yii::t('backend', 'Updated By'),
             'created_at' => Yii::t('backend', 'Created At'),
             'updated_at' => Yii::t('backend', 'Updated At'),
+
+            'name' => Yii::t('backend', 'Name'),
+            'description' => Yii::t('backend', 'Description'),
+            'createdName' => Yii::t('backend', 'Created Name'),
+            'updatedName' => Yii::t('backend', 'Updated Name'),
         ];
     }
 
@@ -135,6 +141,13 @@ class BlogMenu extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCreatedName() {
+        return $this->createdBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
@@ -143,8 +156,68 @@ class BlogMenu extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getUpdatedName() {
+        return $this->updatedBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getBlogsMenuDescriptions()
     {
         return $this->hasMany(BlogMenuDescription::className(), ['blog_menu_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getName() {
+        return $this->blogsMenuDescriptions[0]->name;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDescription() {
+        return $this->blogsMenuDescriptions[0]->description;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getStatusList()
+    {
+        return [
+            Yii::t('backend', 'unpublished'),
+            Yii::t('backend', 'published'),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusName()
+    {
+        $status = $this->getStatusList();
+
+        return $status[$this->published];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getTemplateList()
+    {
+        return ['news', 'page'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplateName()
+    {
+        $templates = $this->getTemplateList();
+
+        return $templates[$this->template];
     }
 }

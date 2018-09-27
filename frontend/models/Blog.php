@@ -75,7 +75,7 @@ class Blog extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function getBlog($id, $page)
+    public static function getBlog($id)
     {
         return self::find()
                     ->select(['blogs.*', 'blogs_description.name AS name', 'blogs_description.description AS description', 'blogs_menu.slug AS slug', 'users.username AS username'])
@@ -90,6 +90,41 @@ class Blog extends \yii\db\ActiveRecord
                     ->orderBy(['fixed' => SORT_DESC, 'created_at' => SORT_DESC])
                     ->asArray()
                     ->all();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getBlogBeta($id)
+    {
+        $query = self::find();
+
+        $query->select([
+            'blogs.*',
+            'blogs_description.name AS name',
+            'blogs_description.description AS description',
+            'blogs_menu.slug AS slug',
+            'users.username AS username'
+        ])
+        ->joinWith([
+            'blogMenu', /*=> function($q) {
+                return $q->where();
+            },*/
+            'blogsDescriptions',
+            'createdBy'
+        ])
+        ->leftJoin('blogs_description', 'blogs_description.blog_id = blogs.id')
+        ->leftJoin('users', 'users.id = blogs.created_by')
+        ->leftJoin('blogs_menu', 'blogs.blog_menu_id = blogs_menu.id')
+        ->where([
+            'blogs_description.language_id' => Language::getLanguageIdByCode(Yii::$app->language), 
+            'blogs.published' => 1, 
+            'blogs_menu.slug' => $id
+        ])
+        ->orderBy(['blogs.fixed' => SORT_DESC, 'blogs.created_at' => SORT_DESC])
+        ->all();
+
+        return $query;
     }
 
     /**
@@ -122,5 +157,37 @@ class Blog extends \yii\db\ActiveRecord
     public function getBlogsDescriptions()
     {
         return $this->hasMany(BlogDescription::className(), ['blog_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getName() {
+        return $this->blogsDescriptions[0]->name;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDescription() {
+        return $this->blogsDescriptions[0]->description;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getTemplateList()
+    {
+        return ['news', 'page'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplateName()
+    {
+        $templates = $this->getTemplateList();
+
+        return $templates[$this->template];
     }
 }
