@@ -72,22 +72,19 @@ class BlogController extends Controller
     {
         $request = Yii::$app->request;
 
-        $languages = Language::getLanguages(['id', 'name']);
+        $languages = Language::getLanguages(['id', 'name', 'locale'], false);
 
         $blog = new Blog();
 
-        foreach($languages as $language) {
-            $blogDesc[$language['id']] = new BlogDescription();
-        }
-
-        // $blog->load(Yii::$app->request->post()) && $blog->save()
-
         if ($request->isPost) {
-
-            var_dump($request->post());
-            exit;
-
-            // return $this->redirect(['view', 'id' => $blog->id]);
+            if($blog->load($request->post())) {
+                if($blog->save()) {
+                    exit('error');
+                    // return $this->redirect(['view', 'id' => $blog->id]);
+                } else {
+                    exit('hello');
+                }
+            }
         } else {
             $menuItems = BlogMenu::getMenu();
 
@@ -95,7 +92,6 @@ class BlogController extends Controller
 
             return $this->render('create', [
                 'blog' => $blog,
-                'blogDesc' => $blogDesc,
                 'blogMenuItem' => $blogMenuItem,
                 'languages' => $languages,
             ]);
@@ -110,13 +106,25 @@ class BlogController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $request = Yii::$app->request;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $languages = Language::getLanguages(['id', 'name', 'locale'], false);
+
+        $blog = $this->findModel($id);
+
+        if ($request->isPost) {
+            if($blog->load($request->post()) && $blog->save()) {
+                return $this->redirect(['view', 'id' => $blog->id]);
+            }
         } else {
+            $menuItems = BlogMenu::getMenu();
+
+            $blogMenuItem = ArrayHelper::map($menuItems, 'id', 'name');
+
             return $this->render('update', [
-                'model' => $model,
+                'blog' => $blog,
+                'blogMenuItem' => $blogMenuItem,
+                'languages' => $languages,
             ]);
         }
     }

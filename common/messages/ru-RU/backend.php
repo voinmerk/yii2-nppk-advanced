@@ -37,4 +37,9 @@ return [
 	'Blog Menu' => 'Разделы блога',
 	'Blogs menu' => 'Все разделы',
 	'Blogs menus list' => 'Список разделов',
+
+	'News' => 'Новость',
+	'Page' => 'Страница',
+
+	'Selected section...' => 'Выберите раздел...',
 ];

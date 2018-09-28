@@ -101,9 +101,36 @@ class Language extends \yii\db\ActiveRecord
         return self::find()->select(['id'])->where(['published' => 1, 'code' => $code])->one();
     }
 
-    public static function getLanguages($fields)
+    /**
+     * {@inheritdoc}
+     */
+    public static function getLanguages($fields, $asArray = true)
     {
-        return self::find()->select($fields)->where(['published' => 1])->asArray()->all();
+        $query = self::find()->select($fields)->where(['published' => 1]);
+
+        if($asArray) {
+            $query->asArray();
+        }
+        
+        return $query->all();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getList()
+    {
+        $data = self::find()->select(['id', 'name'])->asArray()->all();
+
+        return \yii\helpers\ArrayHelper::map($data, 'id', 'name');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefault()
+    {
+        return self::findOne(['default' => 1]);
     }
 
     /**

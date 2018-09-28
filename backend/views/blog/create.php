@@ -14,7 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
 	    'blog' => $blog,
-        'blogDesc' => $blogDesc,
         'blogMenuItem' => $blogMenuItem,
         'languages' => $languages,
     ]) ?>

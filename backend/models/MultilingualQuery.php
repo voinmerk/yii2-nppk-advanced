@@ -8,5 +8,5 @@ use yii\db\ActiveQuery;
  */
 class MultilingualQuery extends ActiveQuery
 {
-	use omgdef\multilingual\MultilingualTrait;
+	use \omgdef\multilingual\MultilingualTrait;
 }

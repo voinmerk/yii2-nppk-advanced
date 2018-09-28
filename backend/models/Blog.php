@@ -42,8 +42,9 @@ class Blog extends \yii\db\ActiveRecord
     {
         return [
             [['fixed', 'published', 'cut', 'created_by', 'updated_by', 'blog_menu_id', 'created_at', 'updated_at', 'template'], 'integer'],
-            [['slug', 'blog_menu_id', 'template', 'created_at', 'updated_at'], 'required'],
-            [['slug'], 'string', 'max' => 255],
+            [['slug', 'name', 'description', 'blog_menu_id', 'template', 'created_at', 'updated_at'], 'required'],
+            [['description'], 'string'],
+            [['slug', 'name'], 'string', 'max' => 255],
             [['slug'], 'unique'],
             [['blog_menu_id'], 'exist', 'skipOnError' => true, 'targetClass' => BlogMenu::className(), 'targetAttribute' => ['blog_menu_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -54,32 +55,32 @@ class Blog extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function behaveriors()
+    public function behaviors()
     {
+        $defaultLanguage = Language::getDefault(); // default language (all attributes)
+        $languages = Language::getList(); // as array map (locale => name)
+
         return [
-            /*'multilang' => [
+            'multilang' => [
                 'class' => \omgdef\multilingual\MultilingualBehavior::className(),
-                'languages' => [
-                    'ru-RU' => 'Русский',
-                    'en-US' => 'English',
-                ],
+                'languages' => $languages,
                 'languageField' => 'language_id',
                 //'localizedPrefix' => '',
                 //'requireTranslations' => false',
                 //'dynamicLangClass' => true',
                 'langClassName' => BlogDescription::className(), // or namespace/for/a/class/PostLang
-                'defaultLanguage' => 'ru-RU',
+                'defaultLanguage' => $defaultLanguage->id,
                 'langForeignKey' => 'blog_id',
-                'tableName' => "{{%blogs_description}}",
+                'tableName' => BlogDescription::tableName(),
                 'attributes' => [
                     'name', 'description',
-                ]
-            ],*/
+                ],
+            ],
             'blame' => [
-                'class' => \yii\behaveriors\BlameableBehavior::className(),
+                'class' => \yii\behaviors\BlameableBehavior::className(),
             ],
             'timestamp' => [
-                'class' => \yii\behaveriors\TimestampBehavior::className(),
+                'class' => \yii\behaviors\TimestampBehavior::className(),
             ],
         ];
     }
@@ -204,7 +205,10 @@ class Blog extends \yii\db\ActiveRecord
      */
     public static function getTemplateList()
     {
-        return ['news', 'page'];
+        return [
+            Yii::t('backend', 'News'),
+            Yii::t('backend', 'Page'),
+        ];
     }
 
     /**
@@ -215,5 +219,13 @@ class Blog extends \yii\db\ActiveRecord
         $templates = $this->getTemplateList();
 
         return $templates[$this->template];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function find()
+    {
+        return new MultilingualQuery(get_called_class());
     }
 }

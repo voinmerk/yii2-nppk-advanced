@@ -13,8 +13,9 @@ $this->params['breadcrumbs'][] = 'Update';
 <div class="blog-update">
 
     <?= $this->render('_form', [
-        'model' => $model,
-    	'blogMenuItem' => $blogMenuItem
+	    'blog' => $blog,
+        'blogMenuItem' => $blogMenuItem,
+        'languages' => $languages,
     ]) ?>
 
 </div>
