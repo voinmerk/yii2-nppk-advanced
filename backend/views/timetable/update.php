@@ -15,6 +15,9 @@ $this->params['breadcrumbs'][] = Yii::t('backend', 'Update');
 <div class="timetable-update">
 
     <?= $this->render('_form', [
+    	'lessonList' => $lessonList,
+        'roomList' => $roomList,
+        'groupList' => $groupList,
         'model' => $model,
     ]) ?>
 

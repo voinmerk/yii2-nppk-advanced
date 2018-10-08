@@ -13,7 +13,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="timetable-create">
 
     <?= $this->render('_form', [
-    'model' => $model,
+    	'lessonList' => $lessonList,
+        'roomList' => $roomList,
+        'groupList' => $groupList,
+    	'model' => $model,
+        'modelLesson' => $modelLesson,
     ]) ?>
 
 </div>

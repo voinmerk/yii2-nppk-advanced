@@ -43,32 +43,77 @@ class TimetableSearch extends Timetable
     {
         $query = Timetable::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['id' => SORT_DESC]]
+            'sort' => ['defaultOrder' => ['updated_at' => SORT_DESC]],
         ]);
 
-        $this->load($params);
+        $dataProvider->setSort([
+            'attributes' => [
+                'groupName' => [
+                    'asc' => ['group.name' => SORT_ASC],
+                    'desc' => ['group.name' => SORT_DESC],
+                    'label' => 'Group Name',
+                ],
+                'createdName' => [
+                    'asc' => ['users.username' => SORT_ASC],
+                    'desc' => ['users.username' => SORT_DESC],
+                    'label' => 'Created Name',
+                ],
+                'date',
+                'published',
+                'updated_at',
+            ],
+        ]);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+        if (!($this->load($params) && $this->validate())) {
+            $query->joinWith(['group']);
+            $query->joinWith(['createdBy']);
+
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'date' => $this->date,
-            'group_id' => $this->group_id,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ]);
+        $this->addCondition($query, 'groups.name', true);
+        $this->addCondition($query, 'groups.name', true);
+        $this->addCondition($query, 'timetables.group_id');
+        $this->addCondition($query, 'timetables.date');
+        $this->addCondition($query, 'timetables.created_by');
+        $this->addCondition($query, 'timetables.published');
+        $this->addCondition($query, 'timetables.updated_at');
+
+        $query->joinWith(['group' => function ($q) {
+            $q->where('group.name LIKE "%' . $this->groupName . '%"');
+        }]);
+
+        $query->joinWith(['createdBy' => function ($q) {
+            $q->where('users.username LIKE "%' . $this->createdName . '%"');
+        }]);
 
         return $dataProvider;
+    }
+
+    protected function addCondition($query, $attribute, $partialMatch = false)
+    {
+        if (($pos = strrpos($attribute, '.')) !== false) {
+            $modelAttribute = substr($attribute, $pos + 1);
+        } else {
+            $modelAttribute = $attribute;
+        }
+     
+        $value = $this->$modelAttribute;
+        if (trim($value) === '') {
+            return;
+        }
+     
+        /*
+         * Для корректной работы фильтра со связью со
+         * свой же моделью делаем:
+         */
+     
+        if ($partialMatch) {
+            $query->andWhere(['like', $attribute, $value]);
+        } else {
+            $query->andWhere([$attribute => $value]);
+        }
     }
 }

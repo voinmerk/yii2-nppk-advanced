@@ -78,7 +78,34 @@ class Room extends \yii\db\ActiveRecord
             'updated_by' => Yii::t('backend', 'Updated By'),
             'created_at' => Yii::t('backend', 'Created At'),
             'updated_at' => Yii::t('backend', 'Updated At'),
+
+            'number' => Yii::t('backend', 'Number'),
+            'name' => Yii::t('backend', 'Name'),
+            'description' => Yii::t('backend', 'Description'),
+            'createdName' => Yii::t('backend', 'Created Name'),
+            'updatedName' => Yii::t('backend', 'Updated Name'),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getList()
+    {
+        return self::find()
+                    ->select([
+                        'rooms.*',
+                        'rd.number AS number',
+                        'rd.name AS name',
+                        'rd.description AS description',
+                    ])
+                    ->joinWith([
+                        'roomsDescriptions' => function($q) {
+                            $q->from(['rd' => RoomDescription::tableName()]);
+                        },
+                    ])
+                    ->where('rd.language_id = 1')
+                    ->all();
     }
 
     /**
@@ -100,6 +127,14 @@ class Room extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCreatedName()
+    {
+        return $this->createdBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
@@ -108,9 +143,41 @@ class Room extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getUpdatedName()
+    {
+        return $this->updatedBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getRoomsDescriptions()
     {
         return $this->hasMany(RoomDescription::className(), ['room_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNumber()
+    {
+        return $this->roomsDescriptions[0]->number;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getName()
+    {
+        return $this->roomsDescriptions[0]->name;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDescription()
+    {
+        return $this->roomsDescriptions[0]->description;
     }
 
     /**

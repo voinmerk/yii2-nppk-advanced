@@ -101,7 +101,26 @@ class GroupController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $session = Yii::$app->session;
+
+        if($this->findModel($id)->delete()) {
+            $session->setFlash('success', 'Выбранный элемент успешно удалён');
+        } else {
+            $session->setFlash('error_warning', 'Возникла ошибка в ходе удаления выбранного элемента');
+        }
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionCopyRows($selected)
+    {
+        foreach ($selected as $id) {
+            $model = $this->findModel($id);
+
+            $copy = new Group();
+            $copy->attributes = $model->attributes;
+            $copy->save();
+        }
 
         return $this->redirect(['index']);
     }

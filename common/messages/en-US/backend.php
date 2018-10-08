@@ -10,4 +10,8 @@ return [
 
 	'published' => 'Published',
 	'unpublished' => 'Unpublished',
+
+	'Sort Order' => 'Sort Order',
+
+	'Update Group' => 'Update Group',
 ];

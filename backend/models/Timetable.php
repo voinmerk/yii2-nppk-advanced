@@ -50,14 +50,14 @@ class Timetable extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function behaveriors()
+    public function behaviors()
     {
         return [
             'blame' => [
-                'class' => \yii\behaveriors\BlameableBehavior::className(),
+                'class' => \yii\behaviors\BlameableBehavior::className(),
             ],
             'timestamp' => [
-                'class' => \yii\behaveriors\TimestampBehavior::className(),
+                'class' => \yii\behaviors\TimestampBehavior::className(),
             ],
         ];
     }
@@ -75,6 +75,10 @@ class Timetable extends \yii\db\ActiveRecord
             'updated_by' => Yii::t('backend', 'Updated By'),
             'created_at' => Yii::t('backend', 'Created At'),
             'updated_at' => Yii::t('backend', 'Updated At'),
+
+            'createdName' => Yii::t('backend', 'Created Name'),
+            'updatedName' => Yii::t('backend', 'Updated Name'),
+            'groupName' => Yii::t('backend', 'Group Name'),
         ];
     }
 
@@ -89,6 +93,14 @@ class Timetable extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getGroupName()
+    {
+        return $this->group->name;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCreatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
@@ -97,9 +109,25 @@ class Timetable extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCreatedName()
+    {
+        return $this->createdBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedName()
+    {
+        return $this->updatedBy->username;
     }
 
     /**

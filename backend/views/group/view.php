@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -12,25 +13,32 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="group-view box box-primary">
     <div class="box-header">
-        <?= Html::a(Yii::t('backend', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-flat']) ?>
-        <?= Html::a(Yii::t('backend', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger btn-flat',
-            'data' => [
-                'confirm' => Yii::t('backend', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
+        <?= $this->render('@viewComponents/header-view', [
+            'title' => $model->name,
+            'action_update' => Url::to(['group/update', 'id' => $model->id]),
+            'action_delete' => Url::to(['group/delete', 'id' => $model->id]),
         ]) ?>
     </div>
     <div class="box-body table-responsive no-padding">
         <?= DetailView::widget([
             'model' => $model,
             'attributes' => [
-                'id',
-                'name',
+                // 'id',
+                'name:text',
                 'sort_order',
-                'published',
-                'created_by',
-                'updated_by',
+                [
+                    'attribute' => 'published',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        $class = $model->published ? ' label-success' : ' label-danger';
+                        $name = $model->statusName;
+
+                        return '<span class="label' . $class . '">' . $name . '</span>';
+                    },
+                    'filter' => \backend\models\Blog::getStatusList(),
+                ],
+                'createdName',
+                'updatedName',
                 'created_at:datetime',
                 'updated_at:datetime',
             ],

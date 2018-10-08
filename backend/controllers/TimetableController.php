@@ -3,7 +3,12 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\helpers\ArrayHelper;
+use backend\models\Group;
+use backend\models\Lesson;
+use backend\models\Room;
 use backend\models\Timetable;
+use backend\models\TimetableLesson;
 use backend\models\TimetableSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -64,12 +69,26 @@ class TimetableController extends Controller
     public function actionCreate()
     {
         $model = new Timetable();
+        $modelLesson = new TimetableLesson();
+
+        $lessons = Lesson::getList();
+        $lessonList = ArrayHelper::map($lessons, 'id', 'name');
+
+        $rooms = Room::getList();
+        $roomList = ArrayHelper::map($rooms, 'id', 'number');
+
+        $groups = Group::getList(['id', 'name']);
+        $groupList = ArrayHelper::map($groups, 'id', 'name');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
+                'lessonList' => $lessonList,
+                'roomList' => $roomList,
+                'groupList' => $groupList,
                 'model' => $model,
+                'modelLesson' => $modelLesson,
             ]);
         }
     }

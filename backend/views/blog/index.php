@@ -6,7 +6,7 @@ use yii\grid\GridView;
 // use kartik\daterange\DateRangePicker;
 use dosamigos\datetimepicker\DateTimePicker;
 
-use rmrevin\yii\fontawesome\FontAwesome as Fa;
+use rmrevin\yii\fontawesome\FA;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\BlogSearch */

@@ -24,6 +24,9 @@ use common\models\User;
  */
 class Group extends \yii\db\ActiveRecord
 {
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+
     /**
      * {@inheritdoc}
      */
@@ -38,9 +41,12 @@ class Group extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'created_at', 'updated_at'], 'required'],
+            [['name'], 'required'],
+            [['created_at', 'updated_at'], 'default', 'value' => time()],
             [['sort_order', 'published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            ['published', 'default', 'value' => self::STATUS_ACTIVE],
+            ['published', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
         ];
@@ -49,14 +55,14 @@ class Group extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function behaveriors()
+    public function behaviors()
     {
         return [
             'blame' => [
-                'class' => \yii\behaveriors\BlameableBehavior::className(),
+                'class' => \yii\behaviors\BlameableBehavior::className(),
             ],
             'timestamp' => [
-                'class' => \yii\behaveriors\TimestampBehavior::className(),
+                'class' => \yii\behaviors\TimestampBehavior::className(),
             ],
         ];
     }
@@ -75,7 +81,18 @@ class Group extends \yii\db\ActiveRecord
             'updated_by' => Yii::t('backend', 'Updated By'),
             'created_at' => Yii::t('backend', 'Created At'),
             'updated_at' => Yii::t('backend', 'Updated At'),
+
+            'createdName' => Yii::t('backend', 'Created Name'),
+            'updatedName' => Yii::t('backend', 'Updated Name'),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getList($fields)
+    {
+        return self::find()->select($fields)->where(['published' => self::STATUS_ACTIVE])->all();
     }
 
     /**
@@ -89,6 +106,13 @@ class Group extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCreatedName() {
+        return $this->createdBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
@@ -97,8 +121,36 @@ class Group extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getUpdatedName() {
+        return $this->updatedBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getTimetables()
     {
         return $this->hasMany(Timetable::className(), ['group_id' => 'id']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getStatusList()
+    {
+        return [
+            Yii::t('backend', 'unpublished'),
+            Yii::t('backend', 'published'),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusName()
+    {
+        $status = $this->getStatusList();
+
+        return $status[$this->published];
     }
 }

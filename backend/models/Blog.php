@@ -138,7 +138,8 @@ class Blog extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCreatedName() {
+    public function getCreatedName()
+    {
         return $this->createdBy->username;
     }
 
@@ -153,7 +154,8 @@ class Blog extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUpdatedName() {
+    public function getUpdatedName()
+    {
         return $this->updatedBy->username;
     }
 

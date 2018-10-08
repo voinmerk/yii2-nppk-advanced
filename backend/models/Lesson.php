@@ -71,7 +71,34 @@ class Lesson extends \yii\db\ActiveRecord
             'updated_by' => Yii::t('backend', 'Updated By'),
             'created_at' => Yii::t('backend', 'Created At'),
             'updated_at' => Yii::t('backend', 'Updated At'),
+
+            'name' => Yii::t('backend', 'Name'),
+            'description' => Yii::t('backend', 'Description'),
+            'createdName' => Yii::t('backend', 'Created Name'),
+            'updatedName' => Yii::t('backend', 'Updated Name'),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getList()
+    {
+        $query = self::find()
+                    ->select([
+                        'lessons.*',
+                        'ld.name AS name',
+                        'ld.description AS description',
+                    ])
+                    ->joinWith([
+                        'lessonsDescriptions' => function($q) {
+                            $q->from(['ld' => LessonDescription::tableName()]);
+                        },
+                    ])
+                    ->where('ld.language_id = 1')
+                    ->all();
+
+        return $query;
     }
 
     /**
@@ -85,6 +112,14 @@ class Lesson extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCreatedName()
+    {
+        return $this->createdBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
@@ -93,9 +128,33 @@ class Lesson extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getUpdatedName()
+    {
+        return $this->updatedBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getLessonsDescriptions()
     {
         return $this->hasMany(LessonDescription::className(), ['lesson_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getName()
+    {
+        return $this->lessonsDescriptions[0]->name;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDescription()
+    {
+        return $this->lessonsDescriptions[0]->description;
     }
 
     /**
