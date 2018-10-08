@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="blog-form box box-primary">
-    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal']]); ?>
+    <?php $form = ActiveForm::begin(['options' => ['class' => '']]); ?>
         <div class="box-body table-responsive">
             <pre><?php // var_dump($blog) ?></pre>
 
@@ -20,12 +20,16 @@ use yii\widgets\ActiveForm;
 
             <?php // echo $form->field($blog, 'cut')->dropDownList([0 => 'Обрезать для превью', 1 => 'Не обрезать']) ?>
 
-            <?php echo $form->field($blog, 'blog_menu_id')->dropDownList($blogMenuItem, ['prompt' => Yii::t('backend', 'Selected section...'), 'class' => 'required']) ?>
+            <?php echo $form->field($blog, 'blog_menu_id')->dropDownList($blogMenuItem, ['prompt' => Yii::t('backend', 'Selected section...'), 'class' => 'form-control required']) ?>
 
             <ul class="nav nav-tabs" role="tablist">
                 <?php $first = 1; ?>
                 <?php foreach($languages as $language) { ?>
-                <li role="presentation" class="<?= $first ? 'active' : '' ?>"><a href="#language_<?= $language->id ?>" aria-controls="language_<?= $language->id ?>" role="tab" data-toggle="tab"><?= Html::img('@web/img/language/' . $language->locale . '.png', ['title' => $language->name]) ?> <?= $language->name ?></a></li>
+                <li role="presentation" class="<?= $first ? 'active' : '' ?>">
+                    <a href="#language_<?= $language->id ?>" aria-controls="language_<?= $language->id ?>" role="tab" data-toggle="tab">
+                        <?= Html::img('@web/img/language/' . $language->locale . '.png', ['title' => $language->name]) ?> <?= $language->name ?>
+                    </a>
+                </li>
                 <?php $first = 0; ?>
                 <?php } ?>
             </ul>

@@ -98,6 +98,7 @@ class BlogController extends Controller
                     exit('error');
                     // return $this->redirect(['view', 'id' => $blog->id]);
                 } else {
+                    var_dump($blog);
                     exit('hello');
                 }
             }
