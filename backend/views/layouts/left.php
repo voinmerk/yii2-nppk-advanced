@@ -1,5 +1,8 @@
 <?php
 
+use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
+
 $menuItems = [
     // Main menu
     ['label' => 'Меню', 'options' => ['class' => 'header']],
@@ -93,6 +96,8 @@ $menuItems = [
     ],*/
 ];
 
+$model = new \backend\models\forms\SearchForm;
+
 ?>
 <aside class="main-sidebar">
 
@@ -111,7 +116,7 @@ $menuItems = [
         </div>
 
         <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
+        <!-- <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Искать..."/>
               <span class="input-group-btn">
@@ -119,7 +124,18 @@ $menuItems = [
                 </button>
               </span>
             </div>
-        </form>
+        </form> -->
+        <?php $form = ActiveForm::begin(['id' => 'form-search', 'options' => ['class' => 'sidebar-form']]); ?>
+
+        <?= $form->field($model, 'q', [
+            'inputTemplate' => '<div class="input-group">{input}<span class="input-group-btn"><button class="btn btn-flat" type="submit"><i class="fa fa-search"></i></button></span></div>'
+        ])->textInput([
+            'placeholder' => Yii::t('backend', 'Search...')
+        ])->label(false) ?>
+
+        <?php ActiveForm::end(); ?>
+
+        <?= $this->blocks['search'] ?>
         <!-- /.search form -->
 
         <?= dmstr\widgets\Menu::widget([

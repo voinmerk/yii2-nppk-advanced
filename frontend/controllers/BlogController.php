@@ -19,7 +19,7 @@ class BlogController extends Controller
 		$page = $request->get('page');
 
 		$blogs = new Blog();
-		
+
 		$model = $blogs->getBlog($id, $page);
 
 		$blog_menu = BlogMenu::getMenu();
@@ -28,7 +28,7 @@ class BlogController extends Controller
 
 		if(!count($blog_title)) $blog_title['name'] = Yii::t('frontend', '404: Page not found!');
 
-		//die(var_dump($blogs_menu));
+		//die(var_dump(Blog::find()->with('name')->where(['published' => 1])->all()));
 
 		return $this->render('index', [
 			'model' => $model,

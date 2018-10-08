@@ -83,7 +83,7 @@ class Language extends \yii\db\ActiveRecord
      */
     public static function getLanguageIdByCode($code)
     {
-        return self::find()->select(['id'])->from('languages')->where(['published' => 1, 'code' => $code])->asArray()->one();
+        return self::find()->select(['id'])->from('languages')->where(['published' => 1, 'code' => $code])->one();
     }
 
     /**

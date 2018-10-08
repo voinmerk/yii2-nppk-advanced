@@ -37,6 +37,22 @@ class BlogController extends Controller
     }
 
     /**
+     * @inheritdoc
+     */
+     public function beforeAction($action)
+     {
+         $model = new \backend\models\forms\SearchForm;
+
+         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+             $q = \yii\helpers\Html::encode($model->q);
+
+             return $this->redirect(['bot/search', 'q' => $q]);
+         }
+
+         return true;
+     }
+
+    /**
      * Lists all Blog models.
      * @return mixed
      */

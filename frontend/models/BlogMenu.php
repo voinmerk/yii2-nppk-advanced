@@ -75,8 +75,8 @@ class BlogMenu extends \yii\db\ActiveRecord
                     ->select(['blogs_menu.*', 'blogs_menu_description.name AS name'])
                     ->leftJoin('blogs_menu_description', 'blogs_menu_description.blog_menu_id = blogs_menu.id')
                     ->where([
-                        'blogs_menu.published' => 1, 
-                        'blogs_menu.slug' => $id, 
+                        'blogs_menu.published' => 1,
+                        'blogs_menu.slug' => $id,
                         'blogs_menu_description.language_id' => Language::getLanguageIdByCode(Yii::$app->language)
                     ])
                     ->asArray()
@@ -91,7 +91,7 @@ class BlogMenu extends \yii\db\ActiveRecord
                     ->select(['blogs_menu.*', 'blogs_menu_description.name AS name', 'blogs_menu_description.description AS description'])
                     ->leftJoin('blogs_menu_description', 'blogs_menu_description.blog_menu_id = blogs_menu.id')
                     ->where([
-                        'blogs_menu.published' => 1, 
+                        'blogs_menu.published' => 1,
                         'blogs_menu_description.language_id' => Language::getLanguageIdByCode(Yii::$app->language),
                     ])
                     ->asArray()
@@ -128,5 +128,25 @@ class BlogMenu extends \yii\db\ActiveRecord
     public function getBlogsMenuDescriptions()
     {
         return $this->hasMany(BlogMenuDescription::className(), ['blog_menu_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getName()
+    {
+        $languageId = Language::getLanguageIdByCode(Yii::$app->language)->id;
+
+        return $this->hasOne(BlogMenuDescription::className(), ['blog_menu_id' => 'id'])->andWhere(['blogs_menu_description.language_id' => $languageId]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDescription()
+    {
+        $languageId = Language::getLanguageIdByCode(Yii::$app->language)->id;
+
+        return $this->hasOne(BlogMenuDescription::className(), ['blog_menu_id' => 'id'])->andWhere(['blogs_menu_description.language_id' => $languageId]);
     }
 }

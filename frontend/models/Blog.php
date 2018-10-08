@@ -83,8 +83,8 @@ class Blog extends \yii\db\ActiveRecord
                     ->leftJoin('users', 'users.id = blogs.created_by')
                     ->leftJoin('blogs_menu', 'blogs.blog_menu_id = blogs_menu.id')
                     ->where([
-                        'blogs_description.language_id' => Language::getLanguageIdByCode(Yii::$app->language), 
-                        'blogs.published' => 1, 
+                        'blogs_description.language_id' => Language::getLanguageIdByCode(Yii::$app->language),
+                        'blogs.published' => 1,
                         'blogs_menu.slug' => $id
                     ])
                     ->orderBy(['fixed' => SORT_DESC, 'created_at' => SORT_DESC])
@@ -117,8 +117,8 @@ class Blog extends \yii\db\ActiveRecord
         ->leftJoin('users', 'users.id = blogs.created_by')
         ->leftJoin('blogs_menu', 'blogs.blog_menu_id = blogs_menu.id')
         ->where([
-            'blogs_description.language_id' => Language::getLanguageIdByCode(Yii::$app->language), 
-            'blogs.published' => 1, 
+            'blogs_description.language_id' => Language::getLanguageIdByCode(Yii::$app->language),
+            'blogs.published' => 1,
             'blogs_menu.slug' => $id
         ])
         ->orderBy(['blogs.fixed' => SORT_DESC, 'blogs.created_at' => SORT_DESC])
@@ -162,16 +162,16 @@ class Blog extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getName() {
+    /*public function getName() {
         return $this->blogsDescriptions[0]->name;
-    }
+    }*/
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDescription() {
+    /*public function getDescription() {
         return $this->blogsDescriptions[0]->description;
-    }
+    }*/
 
     /**
      * {@inheritdoc}
@@ -189,5 +189,25 @@ class Blog extends \yii\db\ActiveRecord
         $templates = $this->getTemplateList();
 
         return $templates[$this->template];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getName()
+    {
+        $language = Language::getLanguageIdByCode(Yii::$app->language);
+
+        return $this->hasOne(BlogDescription::className(), ['blog_id' => 'id'])->andWhere(['blogs_description.language_id' => $language->id]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDescription()
+    {
+        $language = Language::getLanguageIdByCode(Yii::$app->language);
+
+        return $this->hasOne(BlogDescription::className(), ['blog_id' => 'id'])->andWhere(['blogs_description.language_id' => $language->id]);
     }
 }
