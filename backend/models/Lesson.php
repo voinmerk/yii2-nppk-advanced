@@ -3,32 +3,34 @@
 namespace backend\models;
 
 use Yii;
-
 use common\models\User;
 
 /**
- * This is the model class for table "{{%lessons}}".
+ * This is the model class for table "{{%lesson}}".
  *
  * @property int $id
+ * @property string $name
  * @property int $published
  * @property int $created_by
  * @property int $updated_by
  * @property int $created_at
  * @property int $updated_at
  *
- * @property Users $createdBy
- * @property Users $updatedBy
- * @property LessonsDescription[] $lessonsDescriptions
- * @property TimetablesLesson[] $timetablesLessons
+ * @property User $createdBy
+ * @property User $updatedBy
+ * @property TimetableLesson[] $timetableLessons
  */
 class Lesson extends \yii\db\ActiveRecord
 {
+    const UNPUBLISHED = 0;
+    const PUBLISHED = 1;
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%lessons}}';
+        return '{{%lesson}}';
     }
 
     /**
@@ -37,8 +39,9 @@ class Lesson extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['name'], 'required'],
             [['published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['created_at', 'updated_at'], 'required'],
+            [['name'], 'string', 'max' => 255],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
         ];
@@ -47,14 +50,14 @@ class Lesson extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function behaveriors()
+     public function behaviors()
     {
         return [
             'blame' => [
-                'class' => \yii\behaveriors\BlameableBehavior::className(),
+                'class' => \yii\behaviors\BlameableBehavior::className(),
             ],
             'timestamp' => [
-                'class' => \yii\behaveriors\TimestampBehavior::className(),
+                'class' => \yii\behaviors\TimestampBehavior::className(),
             ],
         ];
     }
@@ -65,40 +68,18 @@ class Lesson extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('backend', 'ID'),
-            'published' => Yii::t('backend', 'Published'),
-            'created_by' => Yii::t('backend', 'Created By'),
-            'updated_by' => Yii::t('backend', 'Updated By'),
-            'created_at' => Yii::t('backend', 'Created At'),
-            'updated_at' => Yii::t('backend', 'Updated At'),
+            'id' => 'ID',
+            'name' => 'Название предмета',
+            'published' => 'Публикация',
+            'created_by' => 'Автор',
+            'updated_by' => 'Модератор',
+            'created_at' => 'Дата создания',
+            'updated_at' => 'Дата обновления',
 
-            'name' => Yii::t('backend', 'Name'),
-            'description' => Yii::t('backend', 'Description'),
-            'createdName' => Yii::t('backend', 'Created Name'),
-            'updatedName' => Yii::t('backend', 'Updated Name'),
+            'statusName' => 'Публикация',
+            'createdName' => 'Автор',
+            'updatedName' => 'Модератор',
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getList()
-    {
-        $query = self::find()
-                    ->select([
-                        'lessons.*',
-                        'ld.name AS name',
-                        'ld.description AS description',
-                    ])
-                    ->joinWith([
-                        'lessonsDescriptions' => function($q) {
-                            $q->from(['ld' => LessonDescription::tableName()]);
-                        },
-                    ])
-                    ->where('ld.language_id = 1')
-                    ->all();
-
-        return $query;
     }
 
     /**
@@ -112,14 +93,6 @@ class Lesson extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCreatedName()
-    {
-        return $this->createdBy->username;
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
@@ -128,40 +101,45 @@ class Lesson extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getTimetableLessons()
+    {
+        return $this->hasMany(TimetableLesson::className(), ['lesson_id' => 'id']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreatedName()
+    {
+        return $this->createdBy->username;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getUpdatedName()
     {
         return $this->updatedBy->username;
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * {@inheritdoc}
      */
-    public function getLessonsDescriptions()
+    public static function getStatusList()
     {
-        return $this->hasMany(LessonDescription::className(), ['lesson_id' => 'id']);
+        return [
+            'Не опубликовано',
+            'Опубликовано',
+        ];
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * {@inheritdoc}
      */
-    public function getName()
+    public function getStatusName()
     {
-        return $this->lessonsDescriptions[0]->name;
-    }
+        $status = $this->getStatusList();
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDescription()
-    {
-        return $this->lessonsDescriptions[0]->description;
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTimetablesLessons()
-    {
-        return $this->hasMany(TimetableLesson::className(), ['lesson_id' => 'id']);
+        return $status[$this->published];
     }
 }

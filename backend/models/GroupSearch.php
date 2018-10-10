@@ -12,6 +12,8 @@ use backend\models\Group;
  */
 class GroupSearch extends Group
 {
+    public $createdName;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class GroupSearch extends Group
     {
         return [
             [['id', 'sort_order', 'published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['name'], 'safe'],
+            [['name', 'createdName'], 'safe'],
         ];
     }
 
@@ -43,8 +45,6 @@ class GroupSearch extends Group
     {
         $query = Group::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => ['defaultOrder' => ['updated_at' => SORT_DESC]],
@@ -52,14 +52,10 @@ class GroupSearch extends Group
 
         $dataProvider->setSort([
             'attributes' => [
-                'name' => [
-                    'asc' => ['name' => SORT_ASC],
-                    'desc' => ['name' => SORT_DESC],
-                    'label' => 'Name',
-                ],
+                'name',
                 'createdName' => [
-                    'asc' => ['users.username' => SORT_ASC],
-                    'desc' => ['users.username' => SORT_DESC],
+                    'asc' => ['{{%user}}.username' => SORT_ASC],
+                    'desc' => ['{{%user}}.username' => SORT_DESC],
                     'label' => 'Created Name',
                 ],
                 'published',
@@ -73,13 +69,13 @@ class GroupSearch extends Group
             return $dataProvider;
         }
 
-        $this->addCondition($query, 'groups.name', true);
-        $this->addCondition($query, 'groups.created_by');
-        $this->addCondition($query, 'groups.published');
-        $this->addCondition($query, 'groups.updated_at');
+        $this->addCondition($query, '{{%group}}.name', true);
+        $this->addCondition($query, '{{%group}}.created_by');
+        $this->addCondition($query, '{{%group}}.published');
+        $this->addCondition($query, '{{%group}}.updated_at');
 
         $query->joinWith(['createdBy' => function ($q) {
-            $q->where('users.username LIKE "%' . $this->createdName . '%"');
+            $q->where('{{%user}}.username LIKE "%' . $this->createdName . '%"');
         }]);
 
         return $dataProvider;
@@ -92,17 +88,17 @@ class GroupSearch extends Group
         } else {
             $modelAttribute = $attribute;
         }
-     
+
         $value = $this->$modelAttribute;
         if (trim($value) === '') {
             return;
         }
-     
+
         /*
          * Для корректной работы фильтра со связью со
          * свой же моделью делаем:
          */
-     
+
         if ($partialMatch) {
             $query->andWhere(['like', $attribute, $value]);
         } else {

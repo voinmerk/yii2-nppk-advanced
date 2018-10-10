@@ -3,13 +3,14 @@
 namespace backend\models;
 
 use Yii;
-
 use common\models\User;
 
 /**
- * This is the model class for table "{{%teachers}}".
+ * This is the model class for table "{{%teacher}}".
  *
  * @property int $id
+ * @property string $title
+ * @property string $content
  * @property int $room_id
  * @property int $published
  * @property int $sort_order
@@ -20,11 +21,10 @@ use common\models\User;
  * @property int $created_at
  * @property int $updated_at
  *
- * @property Images $image
- * @property TeachersGroup $teacherGroup
- * @property Users $createdBy
- * @property Users $updatedBy
- * @property TeachersDescription[] $teachersDescriptions
+ * @property Image $image
+ * @property TeacherGroup $teacherGroup
+ * @property User $createdBy
+ * @property User $updatedBy
  */
 class Teacher extends \yii\db\ActiveRecord
 {
@@ -33,7 +33,7 @@ class Teacher extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%teachers}}';
+        return '{{%teacher}}';
     }
 
     /**
@@ -42,8 +42,10 @@ class Teacher extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['room_id', 'created_at', 'updated_at'], 'required'],
+            [['title', 'room_id', 'created_at', 'updated_at'], 'required'],
+            [['content'], 'string'],
             [['room_id', 'published', 'sort_order', 'teacher_group_id', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['title'], 'string', 'max' => 50],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
             [['teacher_group_id'], 'exist', 'skipOnError' => true, 'targetClass' => TeacherGroup::className(), 'targetAttribute' => ['teacher_group_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -54,34 +56,21 @@ class Teacher extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function behaveriors()
-    {
-        return [
-            'blame' => [
-                'class' => \yii\behaveriors\BlameableBehavior::className(),
-            ],
-            'timestamp' => [
-                'class' => \yii\behaveriors\TimestampBehavior::className(),
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('backend', 'ID'),
-            'room_id' => Yii::t('backend', 'Room ID'),
-            'published' => Yii::t('backend', 'Published'),
-            'sort_order' => Yii::t('backend', 'Sort Order'),
-            'teacher_group_id' => Yii::t('backend', 'Teacher Group ID'),
-            'image_id' => Yii::t('backend', 'Image ID'),
-            'created_by' => Yii::t('backend', 'Created By'),
-            'updated_by' => Yii::t('backend', 'Updated By'),
-            'created_at' => Yii::t('backend', 'Created At'),
-            'updated_at' => Yii::t('backend', 'Updated At'),
+            'id' => 'ID',
+            'title' => 'Title',
+            'content' => 'Content',
+            'room_id' => 'Room ID',
+            'published' => 'Published',
+            'sort_order' => 'Sort Order',
+            'teacher_group_id' => 'Teacher Group ID',
+            'image_id' => 'Image ID',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
@@ -115,13 +104,5 @@ class Teacher extends \yii\db\ActiveRecord
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTeachersDescriptions()
-    {
-        return $this->hasMany(TeacherDescription::className(), ['teacher_id' => 'id']);
     }
 }

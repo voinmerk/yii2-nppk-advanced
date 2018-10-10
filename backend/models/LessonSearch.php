@@ -12,6 +12,8 @@ use backend\models\Lesson;
  */
 class LessonSearch extends Lesson
 {
+    public $createdName;
+
     /**
      * @inheritdoc
      */
@@ -19,6 +21,7 @@ class LessonSearch extends Lesson
     {
         return [
             [['id', 'published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['name', 'createdName'], 'safe'],
         ];
     }
 
@@ -42,31 +45,64 @@ class LessonSearch extends Lesson
     {
         $query = Lesson::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['id' => SORT_DESC]]
+            'sort' => ['defaultOrder' => ['updated_at' => SORT_DESC]],
         ]);
 
-        $this->load($params);
+        $dataProvider->setSort([
+            'attributes' => [
+                'name',
+                'createdName' => [
+                    'asc' => ['{{%user}}.username' => SORT_ASC],
+                    'desc' => ['{{%user}}.username' => SORT_DESC],
+                    'label' => 'Created Name',
+                ],
+                'published',
+                'updated_at',
+            ],
+        ]);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+        if (!($this->load($params) && $this->validate())) {
+            $query->joinWith(['createdBy']);
+
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'published' => $this->published,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ]);
+        $this->addCondition($query, '{{%lesson}}.name', true);
+        $this->addCondition($query, '{{%lesson}}.created_by');
+        $this->addCondition($query, '{{%lesson}}.published');
+        $this->addCondition($query, '{{%lesson}}.updated_at');
+
+        $query->joinWith(['createdBy' => function ($q) {
+            $q->where('{{%user}}.username LIKE "%' . $this->createdName . '%"');
+        }]);
 
         return $dataProvider;
+    }
+
+    protected function addCondition($query, $attribute, $partialMatch = false)
+    {
+        if (($pos = strrpos($attribute, '.')) !== false) {
+            $modelAttribute = substr($attribute, $pos + 1);
+        } else {
+            $modelAttribute = $attribute;
+        }
+
+        $value = $this->$modelAttribute;
+        if (trim($value) === '') {
+            return;
+        }
+
+        /*
+         * Для корректной работы фильтра со связью со
+         * свой же моделью делаем:
+         */
+
+        if ($partialMatch) {
+            $query->andWhere(['like', $attribute, $value]);
+        } else {
+            $query->andWhere([$attribute => $value]);
+        }
     }
 }

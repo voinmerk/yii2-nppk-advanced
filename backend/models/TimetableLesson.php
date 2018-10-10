@@ -3,9 +3,10 @@
 namespace backend\models;
 
 use Yii;
+use common\models\User;
 
 /**
- * This is the model class for table "{{%timetables_lesson}}".
+ * This is the model class for table "{{%timetable_lesson}}".
  *
  * @property int $id
  * @property int $timetable_id
@@ -13,9 +14,9 @@ use Yii;
  * @property int $room_id
  * @property int $sort_order
  *
- * @property Lessons $lesson
- * @property Rooms $room
- * @property Timetables $timetable
+ * @property Lesson $lesson
+ * @property Room $room
+ * @property Timetable $timetable
  */
 class TimetableLesson extends \yii\db\ActiveRecord
 {
@@ -24,7 +25,7 @@ class TimetableLesson extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%timetables_lesson}}';
+        return '{{%timetable_lesson}}';
     }
 
     /**
@@ -47,11 +48,11 @@ class TimetableLesson extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('backend', 'ID'),
-            'timetable_id' => Yii::t('backend', 'Timetable ID'),
-            'lesson_id' => Yii::t('backend', 'Lesson ID'),
-            'room_id' => Yii::t('backend', 'Room ID'),
-            'sort_order' => Yii::t('backend', 'Sort Order'),
+            'id' => 'ID',
+            'timetable_id' => 'Timetable ID',
+            'lesson_id' => 'Lesson ID',
+            'room_id' => 'Room ID',
+            'sort_order' => 'Sort Order',
         ];
     }
 
@@ -77,5 +78,41 @@ class TimetableLesson extends \yii\db\ActiveRecord
     public function getTimetable()
     {
         return $this->hasOne(Timetable::className(), ['id' => 'timetable_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLessons()
+    {
+        return Lesson::find()->where(['published' => Lesson::PUBLISHED])->all();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getLessonList()
+    {
+        $lessonList = \yii\helpers\ArrayHelper::map(self::getLessons(), 'id', 'name');
+
+        return $lessonList;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRooms()
+    {
+        return Room::find()->where(['published' => Room::PUBLISHED])->all();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getRoomList()
+    {
+        $roomList = \yii\helpers\ArrayHelper::map(self::getRooms(), 'id', 'title');
+
+        return $roomList;
     }
 }

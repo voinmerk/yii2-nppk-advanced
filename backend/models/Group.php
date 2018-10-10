@@ -3,11 +3,10 @@
 namespace backend\models;
 
 use Yii;
-
 use common\models\User;
 
 /**
- * This is the model class for table "{{%groups}}".
+ * This is the model class for table "{{%group}}".
  *
  * @property int $id
  * @property string $name
@@ -18,21 +17,21 @@ use common\models\User;
  * @property int $created_at
  * @property int $updated_at
  *
- * @property Users $createdBy
- * @property Users $updatedBy
- * @property Timetables[] $timetables
+ * @property User $createdBy
+ * @property User $updatedBy
+ * @property Timetable[] $timetables
  */
 class Group extends \yii\db\ActiveRecord
 {
-    const STATUS_INACTIVE = 0;
-    const STATUS_ACTIVE = 1;
-
+    const UNPUBLISHED = 0;
+    const PUBLISHED = 1;
+    
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%groups}}';
+        return '{{%group}}';
     }
 
     /**
@@ -42,11 +41,8 @@ class Group extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['created_at', 'updated_at'], 'default', 'value' => time()],
             [['sort_order', 'published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            ['published', 'default', 'value' => self::STATUS_ACTIVE],
-            ['published', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
         ];
@@ -55,7 +51,7 @@ class Group extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+     public function behaviors()
     {
         return [
             'blame' => [
@@ -73,26 +69,19 @@ class Group extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('backend', 'ID'),
-            'name' => Yii::t('backend', 'Name'),
-            'sort_order' => Yii::t('backend', 'Sort Order'),
-            'published' => Yii::t('backend', 'Published'),
-            'created_by' => Yii::t('backend', 'Created By'),
-            'updated_by' => Yii::t('backend', 'Updated By'),
-            'created_at' => Yii::t('backend', 'Created At'),
-            'updated_at' => Yii::t('backend', 'Updated At'),
+            'id' => 'ID',
+            'name' => 'Номер группы',
+            'sort_order' => 'Сортировка',
+            'published' => 'Публикация',
+            'created_by' => 'Автор',
+            'updated_by' => 'Модератор',
+            'created_at' => 'Дата создания',
+            'updated_at' => 'Дата обновления',
 
-            'createdName' => Yii::t('backend', 'Created Name'),
-            'updatedName' => Yii::t('backend', 'Updated Name'),
+            'statusName' => 'Публикация',
+            'createdName' => 'Автор',
+            'updatedName' => 'Модератор',
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getList($fields)
-    {
-        return self::find()->select($fields)->where(['published' => self::STATUS_ACTIVE])->all();
     }
 
     /**
@@ -106,23 +95,9 @@ class Group extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCreatedName() {
-        return $this->createdBy->username;
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUpdatedName() {
-        return $this->updatedBy->username;
     }
 
     /**
@@ -136,11 +111,27 @@ class Group extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public function getCreatedName()
+    {
+        return $this->createdBy->username;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdatedName()
+    {
+        return $this->updatedBy->username;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function getStatusList()
     {
         return [
-            Yii::t('backend', 'unpublished'),
-            Yii::t('backend', 'published'),
+            'Не опубликовано',
+            'Опубликовано',
         ];
     }
 

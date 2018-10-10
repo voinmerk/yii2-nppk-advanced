@@ -3,13 +3,13 @@
 namespace backend\models;
 
 use Yii;
-
 use common\models\User;
 
 /**
- * This is the model class for table "{{%teachers_group}}".
+ * This is the model class for table "{{%teacher_group}}".
  *
  * @property int $id
+ * @property string $name
  * @property string $slug
  * @property int $sort_order
  * @property int $published
@@ -18,10 +18,9 @@ use common\models\User;
  * @property int $created_at
  * @property int $updated_at
  *
- * @property Teachers[] $teachers
- * @property Users $createdBy
- * @property Users $updatedBy
- * @property TeachersGroupDescription[] $teachersGroupDescriptions
+ * @property Teacher[] $teachers
+ * @property User $createdBy
+ * @property User $updatedBy
  */
 class TeacherGroup extends \yii\db\ActiveRecord
 {
@@ -30,7 +29,7 @@ class TeacherGroup extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%teachers_group}}';
+        return '{{%teacher_group}}';
     }
 
     /**
@@ -39,9 +38,9 @@ class TeacherGroup extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['slug', 'created_at', 'updated_at'], 'required'],
+            [['name', 'slug', 'created_at', 'updated_at'], 'required'],
             [['sort_order', 'published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['slug'], 'string', 'max' => 255],
+            [['name', 'slug'], 'string', 'max' => 255],
             [['slug'], 'unique'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
@@ -51,32 +50,18 @@ class TeacherGroup extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function behaveriors()
-    {
-        return [
-            'blame' => [
-                'class' => \yii\behaveriors\BlameableBehavior::className(),
-            ],
-            'timestamp' => [
-                'class' => \yii\behaveriors\TimestampBehavior::className(),
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('backend', 'ID'),
-            'slug' => Yii::t('backend', 'Slug'),
-            'sort_order' => Yii::t('backend', 'Sort Order'),
-            'published' => Yii::t('backend', 'Published'),
-            'created_by' => Yii::t('backend', 'Created By'),
-            'updated_by' => Yii::t('backend', 'Updated By'),
-            'created_at' => Yii::t('backend', 'Created At'),
-            'updated_at' => Yii::t('backend', 'Updated At'),
+            'id' => 'ID',
+            'name' => 'Name',
+            'slug' => 'Slug',
+            'sort_order' => 'Sort Order',
+            'published' => 'Published',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
@@ -102,13 +87,5 @@ class TeacherGroup extends \yii\db\ActiveRecord
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTeachersGroupDescriptions()
-    {
-        return $this->hasMany(TeacherGroupDescription::className(), ['teacher_group_id' => 'id']);
     }
 }

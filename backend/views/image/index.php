@@ -7,12 +7,12 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\ImageSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('backend', 'Images');
+$this->title = 'Images';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="image-index box box-primary">
     <div class="box-header with-border">
-        <?= Html::a(Yii::t('backend', 'Create Image'), ['create'], ['class' => 'btn btn-success btn-flat']) ?>
+        <?= Html::a('Create Image', ['create'], ['class' => 'btn btn-success btn-flat']) ?>
     </div>
     <div class="box-body table-responsive no-padding">
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -24,10 +24,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['class' => 'yii\grid\SerialColumn'],
 
                 'id',
+                'title',
+                'content:ntext',
                 'src',
                 'created_by',
-                'updated_by',
-                'created_at',
+                // 'updated_by',
+                // 'created_at',
                 // 'updated_at',
 
                 ['class' => 'yii\grid\ActionColumn'],

@@ -16,11 +16,11 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'sort_order')->textInput() ?>
 
-        <?= $form->field($model, 'published')->dropDownList($model->statusList) ?>
+        <?= $form->field($model, 'published')->dropDownList($model->getStatusList()) ?>
 
     </div>
     <div class="box-footer">
-        <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success btn-flat']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success btn-flat']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 </div>

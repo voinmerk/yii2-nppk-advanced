@@ -19,7 +19,7 @@ class ImageSearch extends Image
     {
         return [
             [['id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['src'], 'safe'],
+            [['title', 'content', 'src'], 'safe'],
         ];
     }
 
@@ -67,7 +67,9 @@ class ImageSearch extends Image
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'src', $this->src]);
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'content', $this->content])
+            ->andFilterWhere(['like', 'src', $this->src]);
 
         return $dataProvider;
     }

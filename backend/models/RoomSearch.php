@@ -19,6 +19,7 @@ class RoomSearch extends Room
     {
         return [
             [['id', 'sort_order', 'published', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['title', 'content'], 'safe'],
         ];
     }
 
@@ -68,6 +69,9 @@ class RoomSearch extends Room
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
+
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'content', $this->content]);
 
         return $dataProvider;
     }

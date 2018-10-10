@@ -1,8 +1,10 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use dosamigos\datetimepicker\DateTimePicker;
+use yii\bootstrap\ActiveForm;
+use rmrevin\yii\fontawesome\FA;
+use backend\models\TimetableLesson;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Timetable */
@@ -13,32 +15,25 @@ use dosamigos\datetimepicker\DateTimePicker;
     <?php $form = ActiveForm::begin(); ?>
     <div class="box-body table-responsive">
 
-        <?= $form->field($model, 'date')->widget(DateTimePicker::className(), [
-            'language' => 'ru',
-            'size' => 'ms',
-            'template' => '{input}',
-            'pickButtonIcon' => 'glyphicon glyphicon-time',
-            'inline' => true,
-            'clientOptions' => [
-                'startView' => 1,
-                'minView' => 0,
-                'maxView' => 1,
-                'autoclose' => true,
-                'linkFormat' => 'dd MM yyyy', // if inline = true
-                'format' => 'dd MM yyyy',
-                'todayBtn' => true
-            ]
-        ]) ?>
+        <?= $form->field($model, 'date')->textInput() ?>
 
-        <?= $form->field($model, 'group_id')->dropDownList($groupList, ['prompt' => Yii::t('backend', 'Selected group...')]) ?>
+        <?= $form->field($model, 'group_id')->dropDownList($model->getGroupList(), ['prompt' => '-- Выбор группы --']) ?>
 
-        <?= $form->field($modelLesson, 'lesson_id')->dropDownList($lessonList, ['prompt' => Yii::t('backend', 'Selected group...')])->label(Yii::t('backend', 'Lesson')) ?>
-
-        <?= $form->field($modelLesson, 'room_id')->dropDownList($roomList, ['prompt' => Yii::t('backend', 'Selected group...')])->label(Yii::t('backend', 'Room')) ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">Занятия</h4>
+            </div>
+            <div class="panel-body">
+                <?= $this->render('_lesson_input', ['lessonList' => TimetableLesson::getLessonList(), 'roomList' => TimetableLesson::getRoomList()]) ?>
+            </div>
+            <div class="panel-footer clearfix">
+                <?= Html::button(FA::icon('plus'), ['id' => 'btn-plus', 'class' => 'btn btn-success btn-flat pull-right']) ?>
+            </div>
+        </div>
 
     </div>
     <div class="box-footer">
-        <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success btn-flat']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success btn-flat']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 </div>

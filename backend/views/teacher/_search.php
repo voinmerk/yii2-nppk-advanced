@@ -17,13 +17,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
+    <?= $form->field($model, 'title') ?>
+
+    <?= $form->field($model, 'content') ?>
+
     <?= $form->field($model, 'room_id') ?>
 
     <?= $form->field($model, 'published') ?>
 
-    <?= $form->field($model, 'sort_order') ?>
+    <?php // echo $form->field($model, 'sort_order') ?>
 
-    <?= $form->field($model, 'teacher_group_id') ?>
+    <?php // echo $form->field($model, 'teacher_group_id') ?>
 
     <?php // echo $form->field($model, 'image_id') ?>
 
@@ -36,8 +40,8 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'updated_at') ?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('backend', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('backend', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

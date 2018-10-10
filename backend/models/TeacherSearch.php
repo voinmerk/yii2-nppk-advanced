@@ -19,6 +19,7 @@ class TeacherSearch extends Teacher
     {
         return [
             [['id', 'room_id', 'published', 'sort_order', 'teacher_group_id', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['title', 'content'], 'safe'],
         ];
     }
 
@@ -70,6 +71,9 @@ class TeacherSearch extends Teacher
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
+
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'content', $this->content]);
 
         return $dataProvider;
     }

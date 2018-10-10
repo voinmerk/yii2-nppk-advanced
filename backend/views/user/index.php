@@ -7,12 +7,12 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('backend', 'Users');
+$this->title = 'Users';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index box box-primary">
     <div class="box-header with-border">
-        <?= Html::a(Yii::t('backend', 'Create User'), ['create'], ['class' => 'btn btn-success btn-flat']) ?>
+        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success btn-flat']) ?>
     </div>
     <div class="box-body table-responsive no-padding">
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

@@ -7,12 +7,12 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\TeacherGroupSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('backend', 'Teacher Groups');
+$this->title = 'Teacher Groups';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="teacher-group-index box box-primary">
     <div class="box-header with-border">
-        <?= Html::a(Yii::t('backend', 'Create Teacher Group'), ['create'], ['class' => 'btn btn-success btn-flat']) ?>
+        <?= Html::a('Create Teacher Group', ['create'], ['class' => 'btn btn-success btn-flat']) ?>
     </div>
     <div class="box-body table-responsive no-padding">
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -24,10 +24,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['class' => 'yii\grid\SerialColumn'],
 
                 'id',
+                'name',
                 'slug',
                 'sort_order',
                 'published',
-                'created_by',
+                // 'created_by',
                 // 'updated_by',
                 // 'created_at',
                 // 'updated_at',

@@ -12,6 +12,10 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
     <div class="box-body table-responsive">
 
+        <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'content')->textarea(['rows' => 6]) ?>
+
         <?= $form->field($model, 'sort_order')->textInput() ?>
 
         <?= $form->field($model, 'published')->textInput() ?>
@@ -28,7 +32,7 @@ use yii\widgets\ActiveForm;
 
     </div>
     <div class="box-footer">
-        <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success btn-flat']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success btn-flat']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 </div>

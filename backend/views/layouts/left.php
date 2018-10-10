@@ -3,17 +3,25 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
+$isActive = function($controller, $action, $onlyController = false) {
+    if($onlyController) {
+        return Yii::$app->controller->id == $controller;
+    }
+
+    return Yii::$app->controller->id == $controller && Yii::$app->controller->action->id == $action;
+};
+
 $menuItems = [
     // Main menu
     ['label' => 'Меню', 'options' => ['class' => 'header']],
-    ['label' => 'Панель состояния', 'icon' => 'tachometer', 'url' => ['/site/index']],
+    ['label' => 'Панель состояния', 'icon' => 'tachometer', 'url' => ['/site/index'], 'active' => $isActive('site', 'index', true)],
     [
-        'label' => 'Блог',
+        'label' => 'Информация',
         'icon' => 'newspaper-o',
         'url' => '#',
         'items' => [
-            ['label' => 'Статьи', 'icon' => 'circle-o', 'url' => ['/blog']],
-            ['label' => 'Навигация', 'icon' => 'circle-o', 'url' => ['/blog-menu']],
+            ['label' => 'Записи', 'icon' => 'circle-o', 'url' => ['/post'], 'active' => $isActive('post', '', true)],
+            ['label' => 'Категории', 'icon' => 'circle-o', 'url' => ['/category'], 'active' => $isActive('category', '', true)],
         ],
     ],
     [
@@ -21,9 +29,9 @@ $menuItems = [
         'icon' => 'th',
         'url' => '#',
         'items' => [
-            ['label' => 'Группы', 'icon' => 'circle-o', 'url' => ['/group']],
-            ['label' => 'Предметы', 'icon' => 'circle-o', 'url' => ['/lesson']],
-            ['label' => 'Расписание', 'icon' => 'circle-o', 'url' => ['/timetable']],
+            ['label' => 'Группы', 'icon' => 'circle-o', 'url' => ['/group'], 'active' => $isActive('group', '', true)],
+            ['label' => 'Предметы', 'icon' => 'circle-o', 'url' => ['/lesson'], 'active' => $isActive('lesson', '', true)],
+            ['label' => 'Расписание', 'icon' => 'circle-o', 'url' => ['/timetable'], 'active' => $isActive('timetable', '', true)],
         ],
     ],
     [
@@ -31,16 +39,17 @@ $menuItems = [
         'icon' => 'picture-o',
         'url' => '#',
         'items' => [
-            ['label' => 'Изображения', 'icon' => 'circle-o', 'url' => ['/image']],
+            ['label' => 'Баннеры', 'icon' => 'circle-o', 'url' => ['/banner'], 'active' => $isActive('banner', '', true)],
+            ['label' => 'Изображения', 'icon' => 'circle-o', 'url' => ['/image'], 'active' => $isActive('image', '', true)],
         ],
     ],
     [
         'label' => 'Сотрудники',
-        'icon' => 'address-card-o',
+        'icon' => 'user',
         'url' => '#',
         'items' => [
-            ['label' => 'Сотрудники', 'icon' => 'circle-o', 'url' => ['/teacher']],
-            ['label' => 'Группы', 'icon' => 'circle-o', 'url' => ['/teacher-group']],
+            ['label' => 'Сотрудники', 'icon' => 'circle-o', 'url' => ['/teacher'], 'active' => $isActive('teacher', '', true)],
+            ['label' => 'Группы', 'icon' => 'circle-o', 'url' => ['/teacher-group'], 'active' => $isActive('teacher-group', '', true)],
         ],
     ],
     [
@@ -48,18 +57,9 @@ $menuItems = [
         'icon' => 'users',
         'url' => '#',
         'items' => [
-            ['label' => 'Пользователи', 'icon' => 'circle-o', 'url' => ['/user']],
-            ['label' => 'Группы', 'icon' => 'circle-o', 'url' => ['/user-group']],
-            ['label' => 'Роли', 'icon' => 'circle-o', 'url' => ['/user-permission']],
-        ],
-    ],
-    [
-        'label' => 'Локализация',
-        'icon' => 'globe',
-        'url' => '#',
-        'items' => [
-            ['label' => 'Языки', 'icon' => 'circle-o', 'url' => ['/language']],
-            ['label' => 'Переводы', 'icon' => 'circle-o', 'url' => ['/language-phrase']],
+            ['label' => 'Пользователи', 'icon' => 'circle-o', 'url' => ['/user'], 'active' => $isActive('user', '', true)],
+            ['label' => 'Группы', 'icon' => 'circle-o', 'url' => ['/user-group'], 'active' => $isActive('user-group', '', true)],
+            //['label' => 'Роли', 'icon' => 'circle-o', 'url' => ['/user-permission']],
         ],
     ],
 
