@@ -2,7 +2,7 @@
     Options +FollowSymlinks
     RewriteEngine On
 </IfModule>
- 
+
 <IfModule mod_rewrite.c>
     RewriteCond %{REQUEST_URI} ^/(admin)
     RewriteRule ^admin/assets/(.*)$ backend/web/assets/$1 [L]
@@ -18,9 +18,10 @@
     RewriteRule ^css/(.*)$ frontend/web/css/$1 [L]
     RewriteRule ^js/(.*)$ frontend/web/js/$1 [L]
     RewriteRule ^img/(.*)$ frontend/web/img/$1 [L]
+    RewriteRule ^data/(.*)$ frontend/web/data/$1 [L]
     RewriteRule ^(.*)$ frontend/web/$1 [L]
 
-    RewriteCond %{REQUEST_URI} !^/(frontend|backend)/web/(assets|css|js|img)/
+    RewriteCond %{REQUEST_URI} !^/(frontend|backend)/web/(assets|css|js|img|data)/
     RewriteCond %{REQUEST_URI} !index.php
     RewriteCond %{REQUEST_FILENAME} !-f [OR]
     RewriteCond %{REQUEST_FILENAME} !-d

@@ -3,11 +3,10 @@
 namespace frontend\models;
 
 use Yii;
-
 use common\models\User;
 
 /**
- * This is the model class for table "{{%timetables}}".
+ * This is the model class for table "{{%timetable}}".
  *
  * @property int $id
  * @property string $date
@@ -17,10 +16,10 @@ use common\models\User;
  * @property int $created_at
  * @property int $updated_at
  *
- * @property Groups $group
- * @property Users $createdBy
- * @property Users $updatedBy
- * @property TimetablesLesson[] $timetablesLessons
+ * @property Group $group
+ * @property User $createdBy
+ * @property User $updatedBy
+ * @property TimetableLesson[] $timetableLessons
  */
 class Timetable extends \yii\db\ActiveRecord
 {
@@ -29,7 +28,7 @@ class Timetable extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%timetables}}';
+        return '{{%timetable}}';
     }
 
     /**
@@ -53,59 +52,19 @@ class Timetable extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('frontend', 'ID'),
-            'date' => Yii::t('frontend', 'Date'),
-            'group_id' => Yii::t('frontend', 'Group ID'),
-            'created_by' => Yii::t('frontend', 'Created By'),
-            'updated_by' => Yii::t('frontend', 'Updated By'),
-            'created_at' => Yii::t('frontend', 'Created At'),
-            'updated_at' => Yii::t('frontend', 'Updated At'),
+            'id' => 'ID',
+            'date' => 'Date',
+            'group_id' => 'Group ID',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function getTimetables($id)
+    public static function getTimetablesByGroup($group)
     {
-        return self::find()
-                ->where(['timetables.group_id' => $id])
-                ->andWhere('timetables.date >= :date', [':date' => date('Y-m-d')])
-                ->orderBy('timetables.date')
-                ->limit(3)
-                ->asArray()
-                ->all();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getTimetablesBeta($id)
-    {
-        return self::find()
-                //->leftJoin('timetables_lesson', 'timetables_lesson.timetable_id = timetables.id')
-                ->where(['timetables.group_id' => $id])
-                ->andWhere('timetables.date >= :date', [':date' => date('Y-m-d')])
-                ->orderBy('timetables.date')
-                ->with(['timetablesLessons'])
-                ->limit(3)
-                ->asArray()
-                ->all();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getLessons($id)
-    {
-        return self::find()
-                ->select(['timetables.*', 'timetables_lesson.sort AS sort', 'timetables_lesson.lesson AS lesson', 'timetables_lesson.room AS room'])
-                ->leftJoin('timetables_lesson', 'timetables_lesson.timetable_id = timetables.id')
-                ->where(['timetables.id' => $id])
-                ->orderBy('timetables_lesson.sort')
-                ->limit(6)
-                ->asArray()
-                ->all();
+        return self::find()->with(['timetableLessons'])->where(['group_id' => $group])->andWhere('date >= :date', [':date' => date('Y-m-d')])->limit(3)->all();
     }
 
     /**
@@ -135,8 +94,8 @@ class Timetable extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTimetablesLessons()
+    public function getTimetableLessons()
     {
-        return $this->hasMany(TimetableLesson::className(), ['timetable_id' => 'id']);
+        return $this->hasMany(TimetableLesson::className(), ['timetable_id' => 'id'])->orderBy(['sort_order' => SORT_ASC]);
     }
 }

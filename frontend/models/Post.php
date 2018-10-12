@@ -6,35 +6,38 @@ use Yii;
 use common\models\User;
 
 /**
- * This is the model class for table "{{%room}}".
+ * This is the model class for table "{{%post}}".
  *
  * @property int $id
  * @property string $title
  * @property string $content
- * @property int $sort_order
+ * @property int $fixed
+ * @property string $slug
+ * @property int $template
  * @property int $published
- * @property int $image_id
  * @property int $created_by
  * @property int $updated_by
+ * @property int $category_id
  * @property int $created_at
  * @property int $updated_at
  *
- * @property Image $image
+ * @property Category $category
  * @property User $createdBy
  * @property User $updatedBy
- * @property TimetableLesson[] $timetableLessons
  */
-class Room extends \yii\db\ActiveRecord
+class Post extends \yii\db\ActiveRecord
 {
+    const TEMPLATE_NEWS = 0;
+    const TEMPLATE_PAGE = 1;
+
     const UNPUBLISHED = 0;
     const PUBLISHED = 1;
-
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%room}}';
+        return '{{%post}}';
     }
 
     /**
@@ -43,11 +46,12 @@ class Room extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'created_at', 'updated_at'], 'required'],
+            [['title', 'content', 'slug', 'created_at', 'updated_at'], 'required'],
             [['content'], 'string'],
-            [['sort_order', 'published', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['title'], 'string', 'max' => 255],
-            [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
+            [['fixed', 'template', 'published', 'created_by', 'updated_by', 'category_id', 'created_at', 'updated_at'], 'integer'],
+            [['title', 'slug'], 'string', 'max' => 255],
+            [['slug'], 'unique'],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
         ];
@@ -62,24 +66,31 @@ class Room extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'Title',
             'content' => 'Content',
-            'sort_order' => 'Sort Order',
+            'fixed' => 'Fixed',
+            'slug' => 'Slug',
+            'template' => 'Template',
             'published' => 'Published',
-            'image_id' => 'Image ID',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
+            'category_id' => 'Category ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
 
-    public static function getRooms()
+    public static function getNews()
     {
-        return self::find()->with(['image'])->where(['published' => self::PUBLISHED])->all();
+        return self::find()->with(['image'])->where(['template' => self::TEMPLATE_NEWS, 'published' => self::PUBLISHED])->all();
     }
 
-    public static function getRoomById($id)
+    public static function getPage($id)
     {
-        return self::find()->with(['images'])->where(['id' => $id, 'published' => self::PUBLISHED])->one();
+        return self::find()->where(['category_id' => $id, 'template' => self::TEMPLATE_PAGE, 'published' => self::PUBLISHED])->one();
+    }
+
+    public static function getPostByCategoryId($id)
+    {
+        return self::find()->with(['image'])->where(['category_id' => $id, 'published' => self::PUBLISHED])->one();
     }
 
     /**
@@ -93,9 +104,9 @@ class Room extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getImages()
+    public function getCategory()
     {
-        return $this->hasMany(Image::className(), ['id' => 'image_id'])->viaTable('room_to_image', ['room_id' => 'id']);
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
     /**
@@ -114,11 +125,18 @@ class Room extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTimetableLessons()
+    public static function getTamplateList()
     {
-        return $this->hasMany(TimetableLesson::className(), ['room_id' => 'id']);
+        return [
+            self::TAMPLATE_NEWS => '_news',
+            self::TAMPLATE_PAGE => '_page',
+        ];
+    }
+
+    public function getTamplate($id)
+    {
+        $templateList = self::getTamplateList();
+
+        return $tamplateList[$id];
     }
 }

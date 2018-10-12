@@ -6,13 +6,13 @@ use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
-use frontend\models\BannerImage;
-use frontend\models\BlogMenu;
+use frontend\models\Banner;
+use frontend\models\Category;
 use frontend\models\Group;
 use frontend\models\Timetable;
 use frontend\models\Room;
-use frontend\models\RoomImage;
 use frontend\models\Teacher;
+use frontend\models\TeacherGroup;
 
 /**
  * Site controller
@@ -46,17 +46,13 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $banner = new BannerImage();
+        $banner = Banner::getBannerByName('main_slider');
 
-        $banners = $banner->getImages();
-
-        $bm = new BlogMenu();
-
-        $blog_menu = $bm->getMenu();
+        $categories = Category::getCategories();
 
         return $this->render('index', [
-            'banners' => $banners,
-            'blog_menu' => $blog_menu,
+            'banner' => $banner,
+            'categories' => $categories,
         ]);
     }
 
@@ -67,23 +63,13 @@ class SiteController extends Controller
      */
     public function actionTeachers()
     {
-        $teachers = Teacher::getTeachers();
-        $leaders = Teacher::getLeaders();
+        $leaders = Teacher::getCollaboratorsByGroup(1);
+        $teachers = Teacher::getCollaboratorsByGroup(2);
 
         return $this->render('teachers', [
-            'teachers' => $teachers,
             'leaders' => $leaders,
+            'teachers' => $teachers,
         ]);
-    }
-
-    /**
-     * Displays blog page.
-     *
-     * @return string
-     */
-    public function actionBlog()
-    {
-        return $this->render('blog');
     }
 
     /**
@@ -98,20 +84,16 @@ class SiteController extends Controller
         if(!$request->isAjax) {
             $rooms = Room::getRooms();
 
-            //die(var_dump($rooms));
-
             return $this->render('rooms', [
                 'rooms' => $rooms,
             ]);
         } else {
             $id = $request->get('id');
 
-            $rooms = Room::getRoomById($id);
-            $rooms_image = RoomImage::getRoomImageById($id);
+            $room = Room::getRoomById($id);
 
             return $this->renderAjax('ajax/rooms', [
-                'rooms' => $rooms,
-                'rooms_image' => $rooms_image,
+                'room' => $room,
             ]);
         }
     }
@@ -125,29 +107,25 @@ class SiteController extends Controller
     {
         $request = new Yii::$app->request();
 
-        $group = new Group();
-
         if(!$request->isAjax) {
             $groups = Group::getGroups();
-            
+            $groupCount = Group::getGroupCount();
+
             return $this->render('timetable', [
                 'groups' => $groups,
+                'groupCount' => $groupCount,
             ]);
         } else {
-            $today = date('Y-m-d');
-
             $id = $request->get('id');
 
-            $groups = $group->getGroupById($id);
-
-            //$timetables = $timetable->getTimetables($id);
-
-            $beta = Timetable::getTimetablesBeta($id);
+            $today = date('Y-m-d');
+            $group = Group::getGroupById($id);
+            $timetables = Timetable::getTimetablesByGroup($id);
 
             return $this->renderAjax('ajax/timetable', [
-                'groups' => $groups,
+                'group' => $group,
                 'today' => $today,
-                'timetables' => $beta,
+                'timetables' => $timetables,
             ]);
         }
     }

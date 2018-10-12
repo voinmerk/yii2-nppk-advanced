@@ -1,25 +1,26 @@
 <?php
 
 use yii\helpers\Html;
+
 ?>
 
 <div id="custom-content" class="white-popup-block panel panel-primary">
-	<?php if(count($rooms)) { ?>
+	<?php if($room) { ?>
     <div class="panel-heading">
-	    <h1><?= $rooms['number']; ?> <button title="Close (Esc)" type="button" class="mfp-close pull-right"><i class="fa fa-close"></i></button></h1>
+	    <h1><?= $room->title; ?> <button title="Close (Esc)" type="button" class="mfp-close pull-right"><i class="fa fa-close"></i></button></h1>
 	</div>
 	<div class="panel-body">
-	    <p><?= $rooms['name']; ?></p>
-	   	<?php if(count($rooms_image)) { ?>
+	    <p><?= $room->content; ?></p>
+	   	<?php if($room->images) { ?>
 		<div class="slider slider-for">
-			<?php foreach($rooms_image as $rimage) { ?>
-			<div><?= Html::img('@web' . $rimage['image']['src']) ?></div>
+			<?php foreach($room->images as $image) { ?>
+			<div><?= Html::img('@web' . $image->src, ['title' => $image->title, 'alt' => $image->content]) ?>
 			<?php } ?>
 		</div>
 
 		<div class="slider slider-nav">
-			<?php foreach($rooms_image as $rimage) { ?>
-			<?= Html::img('@web' . $rimage['image']['src']) ?>
+			<?php foreach($room->images as $image) { ?>
+			<?= Html::img('@web' . $image->src, ['title' => $image->title, 'alt' => $image->content]) ?>
 			<?php } ?>
 		</div>
 

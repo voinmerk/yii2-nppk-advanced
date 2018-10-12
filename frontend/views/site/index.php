@@ -10,13 +10,15 @@ $this->title = 'НППК - ' . Yii::t('frontend', 'Home');
 <section id="home-banner" class="slider">
     <div class="flexslider">
         <ul class="slides">
-            <?php foreach($banners as $banner) { ?>
-            <li>
-                <?= Html::img('@web' . $banner['image']['src'], [
-                    'title' => $banner['image']['name'],
-                    'alt' => $banner['image']['description']
-                ]) ?>
-            </li>
+            <?php if($banner->images) { ?>
+                <?php foreach($banner->images as $image) { ?>
+                    <li>
+                        <?= Html::img('@web' . $image->src, [
+                            'title' => $image->title,
+                            'alt' => $image->content,
+                        ]) ?>
+                    </li>
+                <?php } ?>
             <?php } ?>
         </ul>
     </div>

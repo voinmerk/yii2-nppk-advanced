@@ -63,17 +63,19 @@ return [
             ],
         ],
         'urlManager' => [
-            'class' => 'codemix\localeurls\UrlManager',
+            /*'class' => 'codemix\localeurls\UrlManager',
             'languages' => ['en' => 'en-US', 'ru' => 'ru-RU'],
-            'enableDefaultLanguageUrlCode' => true,
-            
+            'enableDefaultLanguageUrlCode' => true,*/
+
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
                 '' => 'site/index',
                 'teachers' => 'site/teachers',
 
-                'blog/<id:[\w_-]+>' => 'blog/index',
+                /*'blog/<id:[\w_-]+>' => 'blog/index',
+                'blog' => 'blog/index',*/
+                'blog/<post:[\w_-]+>' => 'blog/view',
                 'blog' => 'blog/index',
 
                 'rooms/<id:\d+>' => 'site/rooms',

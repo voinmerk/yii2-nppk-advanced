@@ -6,26 +6,28 @@ use Yii;
 use common\models\User;
 
 /**
- * This is the model class for table "{{%room}}".
+ * This is the model class for table "{{%category}}".
  *
  * @property int $id
  * @property string $title
- * @property string $content
- * @property int $sort_order
+ * @property string $slug
+ * @property int $template
  * @property int $published
- * @property int $image_id
+ * @property int $sort_order
  * @property int $created_by
  * @property int $updated_by
  * @property int $created_at
  * @property int $updated_at
  *
- * @property Image $image
  * @property User $createdBy
  * @property User $updatedBy
- * @property TimetableLesson[] $timetableLessons
+ * @property Post[] $posts
  */
-class Room extends \yii\db\ActiveRecord
+class Category extends \yii\db\ActiveRecord
 {
+    const TEMPLATE_NEWS = 0;
+    const TAMPLATE_PAGE = 1;
+
     const UNPUBLISHED = 0;
     const PUBLISHED = 1;
 
@@ -34,7 +36,7 @@ class Room extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%room}}';
+        return '{{%category}}';
     }
 
     /**
@@ -43,11 +45,10 @@ class Room extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'created_at', 'updated_at'], 'required'],
-            [['content'], 'string'],
-            [['sort_order', 'published', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['title'], 'string', 'max' => 255],
-            [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
+            [['title', 'slug', 'created_at', 'updated_at'], 'required'],
+            [['template', 'published', 'sort_order', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['title', 'slug'], 'string', 'max' => 255],
+            [['slug'], 'unique'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
         ];
@@ -61,10 +62,10 @@ class Room extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'title' => 'Title',
-            'content' => 'Content',
-            'sort_order' => 'Sort Order',
+            'slug' => 'Slug',
+            'template' => 'Template',
             'published' => 'Published',
-            'image_id' => 'Image ID',
+            'sort_order' => 'Sort Order',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
             'created_at' => 'Created At',
@@ -72,30 +73,9 @@ class Room extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getRooms()
+    public static function getCategories()
     {
-        return self::find()->with(['image'])->where(['published' => self::PUBLISHED])->all();
-    }
-
-    public static function getRoomById($id)
-    {
-        return self::find()->with(['images'])->where(['id' => $id, 'published' => self::PUBLISHED])->one();
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getImage()
-    {
-        return $this->hasOne(Image::className(), ['id' => 'image_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getImages()
-    {
-        return $this->hasMany(Image::className(), ['id' => 'image_id'])->viaTable('room_to_image', ['room_id' => 'id']);
+        return self::find()->where(['published' => self::PUBLISHED, 'template' => self::TAMPLATE_PAGE])->all();
     }
 
     /**
@@ -117,8 +97,8 @@ class Room extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTimetableLessons()
+    public function getPosts()
     {
-        return $this->hasMany(TimetableLesson::className(), ['room_id' => 'id']);
+        return $this->hasMany(Post::className(), ['category_id' => 'id']);
     }
 }

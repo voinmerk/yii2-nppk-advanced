@@ -114,9 +114,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/img/
                           </ul>
 
                           <ul class="nav navbar-nav navbar-right wow fadeInRightBig animated" data-wow-duration="1s" data-wow-delay=".5s">
-                            <li class="dropdown" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
-                                <?= $this->render('main/select-language') ?>
-                            </li>
                             <li>
                                 <a href="#" id="spec_show">
                                     <i class="fa fa-wheelchair"></i> <span><?= Yii::t('frontend', 'For the visually impaired') ?></span>
@@ -137,7 +134,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/img/
                         'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                     ]) ?>
                     <?= Alert::widget() ?>  -->
-                    
+
                     <?= $content ?>
 
                 </div>

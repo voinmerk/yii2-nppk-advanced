@@ -3,13 +3,14 @@
 namespace frontend\models;
 
 use Yii;
-
 use common\models\User;
 
 /**
- * This is the model class for table "{{%teachers}}".
+ * This is the model class for table "{{%teacher}}".
  *
  * @property int $id
+ * @property string $title
+ * @property string $content
  * @property int $room_id
  * @property int $published
  * @property int $sort_order
@@ -20,20 +21,22 @@ use common\models\User;
  * @property int $created_at
  * @property int $updated_at
  *
- * @property Images $image
- * @property TeachersGroup $teacherGroup
- * @property Users $createdBy
- * @property Users $updatedBy
- * @property TeachersDescription[] $teachersDescriptions
+ * @property Image $image
+ * @property TeacherGroup $teacherGroup
+ * @property User $createdBy
+ * @property User $updatedBy
  */
 class Teacher extends \yii\db\ActiveRecord
 {
+    const UNPUBLISHED = 0;
+    const PUBLISHED = 1;
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%teachers}}';
+        return '{{%teacher}}';
     }
 
     /**
@@ -42,8 +45,10 @@ class Teacher extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['room_id', 'created_at', 'updated_at'], 'required'],
+            [['title', 'room_id', 'created_at', 'updated_at'], 'required'],
+            [['content'], 'string'],
             [['room_id', 'published', 'sort_order', 'teacher_group_id', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['title'], 'string', 'max' => 50],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
             [['teacher_group_id'], 'exist', 'skipOnError' => true, 'targetClass' => TeacherGroup::className(), 'targetAttribute' => ['teacher_group_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -57,76 +62,32 @@ class Teacher extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('frontend', 'ID'),
-            'room_id' => Yii::t('frontend', 'Room ID'),
-            'published' => Yii::t('frontend', 'Published'),
-            'sort_order' => Yii::t('frontend', 'Sort Order'),
-            'teacher_group_id' => Yii::t('frontend', 'Teacher Group ID'),
-            'image_id' => Yii::t('frontend', 'Image ID'),
-            'created_by' => Yii::t('frontend', 'Created By'),
-            'updated_by' => Yii::t('frontend', 'Updated By'),
-            'created_at' => Yii::t('frontend', 'Created At'),
-            'updated_at' => Yii::t('frontend', 'Updated At'),
+            'id' => 'ID',
+            'title' => 'Title',
+            'content' => 'Content',
+            'room_id' => 'Room ID',
+            'published' => 'Published',
+            'sort_order' => 'Sort Order',
+            'teacher_group_id' => 'Teacher Group ID',
+            'image_id' => 'Image ID',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function getLeaders()
+    public static function getCollaboratorsByGroup($group)
     {
-        $lang = Language::getLanguageIdByCode(Yii::$app->language);
-
-        return self::find()
-                ->select([
-                    'teachers.*', 
-                    'teachers_description.name AS name', 
-                    'teachers_description.description AS description', 
-                    'images.src AS src',
-                    'images_description.name AS title', 
-                    'images_description.description AS alt',
-                    '(SELECT number FROM rooms_description WHERE rooms_description.room_id = teachers.room_id AND rooms_description.language_id = '.$lang['id'].') AS number'
-                ])
-                ->leftJoin('teachers_description', 'teachers_description.teacher_id = teachers.id')
-                ->leftJoin('images', 'images.id = teachers.image_id')
-                ->leftJoin('images_description', 'images_description.image_id = images.id')
-                ->where([
-                    'teachers.published' => 1, 
-                    'teachers.teacher_group_id' => 1, 
-                    'teachers_description.language_id' => $lang['id'], 
-                    'images_description.language_id' => $lang['id']
-                ])
-                ->asArray()
-                ->all();
+        return self::find()->with(['image', 'room'])->where(['teacher_group_id' => $group, 'published' => self::PUBLISHED])->all();
     }
 
     /**
-     * {@inheritdoc}
+     * @return \yii\db\ActiveQuery
      */
-    public static function getTeachers()
+    public function getRoom()
     {
-        $lang = Language::getLanguageIdByCode(Yii::$app->language);
-        
-        return self::find()
-                ->select([
-                    'teachers.*', 
-                    'teachers_description.name AS name', 
-                    'teachers_description.description AS description', 
-                    'images.src AS src',
-                    'images_description.name AS title', 
-                    'images_description.description AS alt',
-                    '(SELECT number FROM rooms_description WHERE rooms_description.room_id = teachers.room_id AND rooms_description.language_id = '.$lang['id'].') AS number'
-                ])
-                ->leftJoin('teachers_description', 'teachers_description.teacher_id = teachers.id')
-                ->leftJoin('images', 'images.id = teachers.image_id')
-                ->leftJoin('images_description', 'images_description.image_id = images.id')
-                ->where([
-                    'teachers.published' => 1,
-                    'teachers.teacher_group_id' => 2,
-                    'teachers_description.language_id' => $lang['id'],
-                    'images_description.language_id' => $lang['id']])
-                ->asArray()
-                ->all();
+        return $this->hasOne(Room::className(), ['id' => 'room_id']);
     }
 
     /**
@@ -159,13 +120,5 @@ class Teacher extends \yii\db\ActiveRecord
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTeachersDescriptions()
-    {
-        return $this->hasMany(TeacherDescription::className(), ['teacher_id' => 'id']);
     }
 }

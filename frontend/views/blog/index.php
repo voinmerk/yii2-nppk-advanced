@@ -1,70 +1,39 @@
 <?php
 
+use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = 'НППК - ' . Yii::t('frontend', 'Information') . ' - ' . $blog_title['name'];
+$this->title = 'НППК - ' . Yii::t('frontend', 'Information') . ' - Новости';
 ?>
-
 <div class="row">
 	<div class="hidden-md hidden-lg col-md-3 sidebar wow fadeInRightBig animated" data-wow-duration="1s" data-wow-delay=".5s">
-		<ul class="list-group">
-			<?php foreach($blog_menu as $menu) { ?>
-			<li class="list-group-item <?= ($active == $menu['slug']) ? 'active' : '' ?>" data-ajax="<?= $menu['slug'] ?>">
-				<a href="<?= Url::toRoute(['blog/index', 'id' => $menu['slug']]) ?>"><?= $menu['name'] ?></a>
-			</li>
-			<?php } ?>
-		</ul>
+		<?= $this->render('_categories', ['categories' => $categories]) ?>
 	</div>
 
 	<div class="col-md-9 content wow fadeInUp animated" data-wow-duration=".5s" data-wow-delay="1s">
-		<?php if(count($model)) { ?>
-		<?php foreach($model as $item) { ?>
+		<pre><?= var_dump($posts) ?></pre>
 
-		<?php $description = html_entity_decode($item['description'], ENT_QUOTES, 'UTF-8'); ?>
+		<?php if($posts) { ?>
+			<?php foreach($posts as $post) { ?>
+				<div class="panel panel-primary">
+				    <div class="panel-heading">
+				        <h2><?= $post->title ?></h2>
+				    </div>
 
-		<?php if($item['slug'] == 'news') { ?>
+				    <div id="new_<?= $post->id; ?>" class="panel-body thumbnails">
 
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<h1><?= $item['name'] ?></h1>
-			</div>
+				        <?= Html::decode($post->content) ?>
+				    </div>
 
-			<div id="new_<?= $item['id']; ?>" class="panel-body thumbnails">
-				
-				<?= $description ?>
-			</div>
-
-			<?php if($item['cut']) { ?>
-			<div class="panel-footer clearfix">
-				<a class="pull-right btn btn-read-more dop" href="javascript: return false;" js-id="#new_<?php echo $item['id']; ?>" ><?= Yii::t('frontend', 'Read more') ?></a>
-			</div>
+				    <div class="panel-footer clearfix">
+				        <?= html::a(Yii::t('frontend', 'Read more'), Url::to(['blog/view', 'post' => $post->slug]), ['class' => 'pull-right btn btn-read-more']) ?>
+				    </div>
+				</div>
 			<?php } ?>
-		</div>
-		
-		<?php } else { ?>
-		
-		<div class="page-header">
-			<h1><?= $item['name']; ?></h1>
-		</div>
-
-		<div class="page-body thumbnails">
-			<?= $description ?>
-		</div>
-
-		<?php } ?>
-		<?php } ?>
-		<?php } else { ?>
-		<div class="alert alert-danger"><?= Yii::t('frontend', 'No data to display content ;(') ?></div>
 		<?php } ?>
 	</div>
-	
+
 	<div class="hidden-xs hidden-sm col-md-3 sidebar wow fadeInRightBig animated" data-wow-duration="1s" data-wow-delay=".5s">
-		<ul class="list-group">
-			<?php foreach($blog_menu as $menu) { ?>
-			<li class="list-group-item <?= ($active == $menu['slug']) ? 'active' : '' ?>" data-ajax="<?= $menu['slug'] ?>">
-				<a href="<?= Url::toRoute(['blog/index', 'id' => $menu['slug']]) ?>"><?= $menu['name'] ?></a>
-			</li>
-			<?php } ?>
-		</ul>
+		<?= $this->render('_categories', ['categories' => $categories]) ?>
 	</div>
 </div>

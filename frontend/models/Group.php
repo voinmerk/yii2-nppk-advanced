@@ -3,11 +3,10 @@
 namespace frontend\models;
 
 use Yii;
-
 use common\models\User;
 
 /**
- * This is the model class for table "{{%groups}}".
+ * This is the model class for table "{{%group}}".
  *
  * @property int $id
  * @property string $name
@@ -18,18 +17,21 @@ use common\models\User;
  * @property int $created_at
  * @property int $updated_at
  *
- * @property Users $createdBy
- * @property Users $updatedBy
- * @property Timetables[] $timetables
+ * @property User $createdBy
+ * @property User $updatedBy
+ * @property Timetable[] $timetables
  */
 class Group extends \yii\db\ActiveRecord
 {
+    const UNPUBLISHED = 0;
+    const PUBLISHED = 1;
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%groups}}';
+        return '{{%group}}';
     }
 
     /**
@@ -52,31 +54,30 @@ class Group extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('frontend', 'ID'),
-            'name' => Yii::t('frontend', 'Name'),
-            'sort_order' => Yii::t('frontend', 'Sort Order'),
-            'published' => Yii::t('frontend', 'Published'),
-            'created_by' => Yii::t('frontend', 'Created By'),
-            'updated_by' => Yii::t('frontend', 'Updated By'),
-            'created_at' => Yii::t('frontend', 'Created At'),
-            'updated_at' => Yii::t('frontend', 'Updated At'),
+            'id' => 'ID',
+            'name' => 'Name',
+            'sort_order' => 'Sort Order',
+            'published' => 'Published',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function getGroups()
-    {
-        return self::find()->where(['published' => 1])->asArray()->all();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function getGroupById($id)
     {
-        return self::find()->where(['published' => 1, 'id' => $id])->asArray()->one();
+        return self::find()->where(['id' => $id, 'published' => self::PUBLISHED])->one();
+    }
+
+    public static function getGroups()
+    {
+        return self::find()->where(['published' => self::PUBLISHED])->all();
+    }
+
+    public static function getGroupCount()
+    {
+        return self::find()->where(['published' => self::PUBLISHED])->count();
     }
 
     /**

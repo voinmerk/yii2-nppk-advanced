@@ -2,14 +2,15 @@
 
 use yii\bootstrap\Html;
 use yii\helpers\Url;
+use frontend\models\Category;
 
-$blogs_menu = \frontend\models\BlogMenu::getMenu();
+$categories = Category::getCategories();
 
-if (count($blogs_menu)) {
+if ($categories) {
 ?>
 <ul class="nav">
-	<?php foreach ($blogs_menu as $bm) { ?>
-	<li><a href="<?= Url::to(['blog/index', 'id' => $bm['slug']]) ?>"><?= $bm['name']; ?></a></li>
+	<?php foreach ($categories as $category) { ?>
+	<li><a href="<?= Url::to(['blog/index', 'id' => $category->slug]) ?>"><?= $category->title; ?></a></li>
 	<?php } ?>
 </ul>
 <?php } ?>

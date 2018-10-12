@@ -3,31 +3,33 @@
 namespace frontend\models;
 
 use Yii;
-
 use common\models\User;
 
 /**
- * This is the model class for table "{{%languages_phrase}}".
+ * This is the model class for table "{{%banner}}".
  *
  * @property int $id
- * @property string $key
+ * @property string $name
+ * @property int $published
  * @property int $created_by
  * @property int $updated_by
  * @property int $created_at
  * @property int $updated_at
  *
- * @property Users $createdBy
- * @property Users $updatedBy
- * @property LanguagesPhraseValue[] $languagesPhraseValues
+ * @property User $createdBy
+ * @property User $updatedBy
  */
-class LanguagePhrase extends \yii\db\ActiveRecord
+class Banner extends \yii\db\ActiveRecord
 {
+    const UNPUBLISHED = 0;
+    const PUBLISHED = 1;
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%languages_phrase}}';
+        return '{{%banner}}';
     }
 
     /**
@@ -36,10 +38,10 @@ class LanguagePhrase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['key', 'created_at', 'updated_at'], 'required'],
-            [['created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['key'], 'string', 'max' => 255],
-            [['key'], 'unique'],
+            [['published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['created_at', 'updated_at'], 'required'],
+            [['name'], 'string', 'max' => 32],
+            [['name'], 'unique'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
         ];
@@ -51,13 +53,19 @@ class LanguagePhrase extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('frontend', 'ID'),
-            'key' => Yii::t('frontend', 'Key'),
-            'created_by' => Yii::t('frontend', 'Created By'),
-            'updated_by' => Yii::t('frontend', 'Updated By'),
-            'created_at' => Yii::t('frontend', 'Created At'),
-            'updated_at' => Yii::t('frontend', 'Updated At'),
+            'id' => 'ID',
+            'name' => 'Name',
+            'published' => 'Published',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
+    }
+
+    public static function getBannerByName($name)
+    {
+        return self::find()->with(['images'])->where(['name' => $name, 'published' => self::PUBLISHED])->one();
     }
 
     /**
@@ -79,8 +87,10 @@ class LanguagePhrase extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getLanguagesPhraseValues()
+    public function getImages()
     {
-        return $this->hasMany(LanguagePhraseValue::className(), ['phrase_id' => 'id']);
+        return $this->hasMany(Image::className(), ['id' => 'image_id'])->viaTable('banner_to_image', ['banner_id' => 'id'], function($query) {
+            $query->orderBy(['sort_order' => SORT_ASC]);
+        });
     }
 }

@@ -1,10 +1,10 @@
 <div id="custom-content" class="white-popup-block panel panel-primary">
-	<?php if(count($groups)) { ?>
+	<?php if($group) { ?>
     <div class="panel-heading">
-	    <h1><?= Yii::t('frontend', 'Group Schedule') ?> <?= $groups->name ?> <button title="<?= Yii::t('frontend', 'Close (Esc)') ?>" type="button" class="mfp-close pull-right"><i class="fa fa-close"></i></button></h1>
+	    <h1><?= Yii::t('frontend', 'Group Schedule') ?> <?= $group->name ?> <button title="<?= Yii::t('frontend', 'Close (Esc)') ?>" type="button" class="mfp-close pull-right"><i class="fa fa-close"></i></button></h1>
 	</div>
 	<div class="panel-body timetable">
-		<?php if(count($timetables)) { ?>
+		<?php if($timetables) { ?>
         <?php $tt = 0; ?>
 	    <?php foreach($timetables as $timetable) { ?>
 	    <?php $tt++; ?>
@@ -22,13 +22,13 @@
 
                 $one = 0;
 
-            	foreach($timetable['timetablesLessons'] as $lesson) {
+            	foreach($timetable->timetableLessons as $lesson) {
                     if(!$one) {
                     	?>
 
-                    <td width="25px" class="text-center"><?= $lesson['sort'] ?></td>
-                    <td width="260px"><?= $lesson['lesson'] ?></td>
-                    <td width="100px"><?= $lesson['room'] ?></td>
+                    <td width="25px" class="text-center"><?= $lesson->sort_order ?></td>
+                    <td width="260px"><?= $lesson->lessonName ?></td>
+                    <td width="100px"><?= $lesson->roomName ?></td>
                 </tr>
                         <?php
 
@@ -37,9 +37,9 @@
                         ?>
 
                 <tr>
-                    <td class="text-center"><?= $lesson['sort'] ?></td>
-                    <td><?= $lesson['lesson'] ?></td>
-                    <td><?= $lesson['room'] ?></td>
+                    <td class="text-center"><?= $lesson->sort_order ?></td>
+                    <td><?= $lesson->lessonName ?></td>
+                    <td><?= $lesson->roomName ?></td>
                 </tr>
 
                         <?php

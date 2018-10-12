@@ -3,11 +3,10 @@
 namespace frontend\models;
 
 use Yii;
-
 use common\models\User;
 
 /**
- * This is the model class for table "{{%users_group}}".
+ * This is the model class for table "{{%user_group}}".
  *
  * @property int $id
  * @property string $name
@@ -18,9 +17,9 @@ use common\models\User;
  * @property int $created_at
  * @property int $updated_at
  *
- * @property Users[] $users
- * @property Users $createdBy
- * @property Users $updatedBy
+ * @property User[] $users
+ * @property User $createdBy
+ * @property User $updatedBy
  */
 class UserGroup extends \yii\db\ActiveRecord
 {
@@ -29,7 +28,7 @@ class UserGroup extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%users_group}}';
+        return '{{%user_group}}';
     }
 
     /**
@@ -52,14 +51,14 @@ class UserGroup extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('frontend', 'ID'),
-            'name' => Yii::t('frontend', 'Name'),
-            'sort_order' => Yii::t('frontend', 'Sort Order'),
-            'published' => Yii::t('frontend', 'Published'),
-            'created_by' => Yii::t('frontend', 'Created By'),
-            'updated_by' => Yii::t('frontend', 'Updated By'),
-            'created_at' => Yii::t('frontend', 'Created At'),
-            'updated_at' => Yii::t('frontend', 'Updated At'),
+            'id' => 'ID',
+            'name' => 'Name',
+            'sort_order' => 'Sort Order',
+            'published' => 'Published',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 

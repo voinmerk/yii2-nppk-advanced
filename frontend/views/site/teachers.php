@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 
 		<div class="page-body">
-		<?php if(count($leaders)) { ?>
+		<?php if($leaders) { ?>
 		<?php $i = 0; $r = 0; $wow = 0; $anim = 0; ?>
 		<?php foreach($leaders as $leader) { ?>
 			<?php $r++; ?>
@@ -25,29 +25,29 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="row">
 			<?php } ?>
 
-				<?php if($wow == 0) { 
+				<?php if($wow == 0) {
 					$anim = 'fadeInLeftBig';
-					$wow = 1; 
+					$wow = 1;
 				} else {
 					$anim = 'fadeInRightBig';
-					$wow = 0; 
+					$wow = 0;
 				} ?>
 				<div class="col-xs-margin col-xs-12 col-sm-6 col-md-6">
 					<div class="col-xs-margin col-xs-12 col-sm-6 col-md-6 wow <?php echo $anim; ?> animated" data-wow-duration="1s" data-wow-delay=".1s" special-area="1">
-						<a class="thumbnail" data-effect="mfp-zoom-in" href="<?= Url::to('@web' . $leader['src']) ?>" title="<?= $leader['title']; ?>">
-							<?= Html::img('@web' . $leader['src'], ['title' => $leader['title'], 'alt' => $leader['alt']]) ?>
+						<a class="thumbnail" data-effect="mfp-zoom-in" href="<?= Url::to('@web' . $leader->image->src) ?>" title="<?= $leader->image->title; ?>">
+							<?= Html::img('@web' . $leader->image->src, ['title' => $leader->image->title, 'alt' => $leader->image->content]) ?>
 						</a>
 					</div>
-					
+
 					<div class="col-xs-12 col-sm-6 col-md-6 wow <?php echo $anim; ?> animated" data-wow-duration="1s" data-wow-delay=".1s">
-						<h3><?= $leader['name']; ?></h3>
-						<?= html_entity_decode($leader['description'], ENT_QUOTES, 'UTF-8'); ?>
-						<?php if($leader['room_id'] != 0) { ?>
-						<a class="ajax-popup btn btn-primary btn-k" data-effect="mfp-zoom-in" href="<?= Url::to(['site/rooms', 'id' => $leader['room_id']]) ?>"><?= ['number'] ?></a>
+						<h3><?= $leader->title; ?></h3>
+						<?= Html::decode($leader->content) ?>
+						<?php if($leader->room_id != 0) { ?>
+						<a class="ajax-popup btn btn-primary btn-k" data-effect="mfp-zoom-in" href="<?= Url::to(['site/rooms', 'id' => $leader->room_id]) ?>"><?= $leader->room->title ?></a>
 						<?php } ?>
 					</div>
 				</div>
-				
+
 			<?php if($i == 1 || $r == count($leaders)) { ?>
 			</div>
 			<?php } ?>
@@ -78,24 +78,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
 				<?php if($wow == 0) {
 					$anim = 'fadeInLeftBig';
-					$wow = 1; 
+					$wow = 1;
 				} else {
 					$anim = 'fadeInRightBig';
-					$wow = 0; 
+					$wow = 0;
 				} ?>
 
 				<div class="col-xs-margin col-xs-12 col-sm-6 col-md-6">
 					<div class="col-xs-margin  col-xs-12 col-sm-6 col-md-6 wow <?php echo $anim; ?> animated" data-wow-duration="1s" data-wow-delay=".1s" special-area="1">
-						<a class="thumbnail" data-effect="mfp-zoom-in" href="<?= Url::to('@web' . $teacher['src']) ?>" title="<?= $teacher['title']; ?>">
-							<?= Html::img('@web' . $teacher['src'], ['title' => $teacher['title'], 'alt' => $teacher['alt']]) ?>
+						<a class="thumbnail" data-effect="mfp-zoom-in" href="<?= Url::to('@web' . $teacher->image->src) ?>" title="<?= $teacher->image->title ?>">
+							<?= Html::img('@web' . $teacher->image->src, ['title' => $teacher->image->title, 'alt' => $teacher->image->content]) ?>
 						</a>
 					</div>
-					
+
 					<div class="col-xs-12 col-sm-6 col-md-6 wow <?php echo $anim; ?> animated" data-wow-duration="1s" data-wow-delay=".1s">
-						<h3><?php echo $teacher['name']; ?></h3>
-						<?= html_entity_decode($teacher['description'], ENT_QUOTES, 'UTF-8'); ?>
-						<?php if($teacher['room_id'] != 0) { ?>
-						<a class="ajax-popup btn btn-primary btn-k" data-effect="mfp-zoom-in" href="<?= Url::to(['site/rooms', 'id' => $teacher['room_id']]) ?>"><?= $teacher['number'] ?></a>
+						<h3><?php echo $teacher->title; ?></h3>
+						<?= Html::decode($teacher->content) ?>
+						<?php if($teacher->room_id != 0) { ?>
+						<a class="ajax-popup btn btn-primary btn-k" data-effect="mfp-zoom-in" href="<?= Url::to(['site/rooms', 'id' => $teacher->room_id]) ?>"><?= $teacher->room->title ?></a>
 						<?php } ?>
 					</div>
 				</div>

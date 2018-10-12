@@ -5,7 +5,7 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%timetables_lesson}}".
+ * This is the model class for table "{{%timetable_lesson}}".
  *
  * @property int $id
  * @property int $timetable_id
@@ -13,9 +13,9 @@ use Yii;
  * @property int $room_id
  * @property int $sort_order
  *
- * @property Lessons $lesson
- * @property Rooms $room
- * @property Timetables $timetable
+ * @property Lesson $lesson
+ * @property Room $room
+ * @property Timetable $timetable
  */
 class TimetableLesson extends \yii\db\ActiveRecord
 {
@@ -24,7 +24,7 @@ class TimetableLesson extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%timetables_lesson}}';
+        return '{{%timetable_lesson}}';
     }
 
     /**
@@ -47,11 +47,11 @@ class TimetableLesson extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('frontend', 'ID'),
-            'timetable_id' => Yii::t('frontend', 'Timetable ID'),
-            'lesson_id' => Yii::t('frontend', 'Lesson ID'),
-            'room_id' => Yii::t('frontend', 'Room ID'),
-            'sort_order' => Yii::t('frontend', 'Sort Order'),
+            'id' => 'ID',
+            'timetable_id' => 'Timetable ID',
+            'lesson_id' => 'Lesson ID',
+            'room_id' => 'Room ID',
+            'sort_order' => 'Sort Order',
         ];
     }
 
@@ -63,12 +63,22 @@ class TimetableLesson extends \yii\db\ActiveRecord
         return $this->hasOne(Lesson::className(), ['id' => 'lesson_id']);
     }
 
+    public function getLessonName()
+    {
+        return $this->lesson->name;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getRoom()
     {
         return $this->hasOne(Room::className(), ['id' => 'room_id']);
+    }
+
+    public function getRoomName()
+    {
+        return $this->room->title;
     }
 
     /**
