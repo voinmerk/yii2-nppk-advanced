@@ -78,21 +78,21 @@ class Category extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'title' => 'Заголовок',
-            'slug' => 'СЕО-ссылка',
-            'template' => 'Шаблон',
-            'published' => 'Публикация',
-            'sort_order' => 'Сортировка',
-            'created_by' => 'Автор',
-            'updated_by' => 'Модератор',
-            'created_at' => 'Дата создания',
-            'updated_at' => 'Дата обновления',
+            'id' => Yii::t('backend', 'ID'),
+            'title' => Yii::t('backend', 'Title'),
+            'slug' => Yii::t('backend', 'Slug'),
+            'template' => Yii::t('backend', 'Template'),
+            'published' => Yii::t('backend', 'Published'),
+            'sort_order' => Yii::t('backend', 'Sort Order'),
+            'created_by' => Yii::t('backend', 'Created By'),
+            'updated_by' => Yii::t('backend', 'Updated By'),
+            'created_at' => Yii::t('backend', 'Created At'),
+            'updated_at' => Yii::t('backend', 'Updated At'),
 
-            'statusName' => 'Публикация',
-            'templateName' => 'Шаблон',
-            'createdName' => 'Автор',
-            'updatedName' => 'Модератор',
+            'statusName' => Yii::t('backend', 'Published'),
+            'createdName' => Yii::t('backend', 'Created By'),
+            'updatedName' => Yii::t('backend', 'Updated By'),
+            'templateName' => Yii::t('backend', 'Template'),
         ];
     }
 

@@ -6,16 +6,8 @@ return [
 	'rememberMe' => 'Запомнить Меня',
 
 	'Fixed' => 'Фиксирован',
-	'Slug' => 'SEO ссылка',
-	'Template' => 'Шаблон',
-	'Published' => 'Публикация',
 	'Cut' => 'Превью',
-	'Created By' => 'Автор',
-	'Updated By' => 'Модератор',
 	'Blog Menu ID' => 'Раздел блога',
-	'Created At' => 'Дата создания',
-	'Updated At' => 'Дата изменения',
-	'Name' => 'Наименование',
 	'Description' => 'Описание',
 
 	'published' => 'Опубликовано',
@@ -27,8 +19,6 @@ return [
 	'Updated Name' => 'Модератор',
 
 	'Are you sure you want to delete this item?' => 'Вы уверены, что хотите удалить этот элемент?',
-
-	'Template' => 'Шаблон',
 
 	'Blog' => 'Блог',
 	'Blogs' => 'Все блоги',
@@ -72,4 +62,65 @@ return [
 
 	'Lesson' => 'Урок',
 	'Room' => 'Кабинет',
+
+	'Posts' => 'Записи',
+	'Update Post: {title}' => 'Редактировать запись: {title}',
+	'Create Post' => 'Создать запись',
+
+	'Categories' => 'Категории',
+	'Update Category: {title}' => 'Редактировать категорию: {title}',
+	'Create Category' => 'Создать категорию',
+
+	'Groups' => 'Группы',
+	'Update Group: {title}' => 'Редактировать группу: {title}',
+	'Create Group' => 'Создать группу',
+
+	'Lessons' => 'Предметы',
+	'Update Lesson: {title}' => 'Редактировать предмет: {title}',
+	'Create Lesson' => 'Создать предмет',
+
+	'Timetables' => 'Расписание',
+	'Update Timetable: {title}' => 'Редактировать расписание: {title}',
+	'Create Timetable' => 'Создать расписание',
+
+	'Banners' => 'Баннеры',
+	'Update Banner: {title}' => 'Редактировать баннер: {title}',
+	'Create Banner' => 'Создать баннер',
+
+	'Images' => 'Изображения',
+	'Update Image: {title}' => 'Редактировать изображение: {title}',
+	'Create Image' => 'Создать изображение',
+
+	'Employees' => 'Сотрудники',
+	'Update Employee: {title}' => 'Редактировать сотрудника: {title}',
+	'Create Employee' => 'Создать сотрудника',
+
+	'Employees Groups' => 'Группы сотрудников',
+	'Update Employee Group: {title}' => 'Редактировать группу сотрудников: {title}',
+	'Create Employee Group' => 'Создать группу сотрудников',
+
+	'Users' => 'Пользователи',
+	'Update User: {title}' => 'Редактировать пользователя: {title}',
+	'Create User' => 'Создать пользователя',
+
+	'Added' => 'Добавить',
+
+	'ID' => 'Идентификатор',
+	'Title' => 'Заголовок',
+	'Created By' => 'Автор',
+	'Updated By' => 'Модератор',
+	'Created At' => 'Дата редактирования',
+	'Updated At' => 'Дата создания',
+	'Published' => 'Публикация',
+	'Sort Order' => 'Сортировка',
+	'Name' => 'Наименование',
+	'Content' => 'Контент',
+	'Source' => 'Источник',
+	'Slug' => 'SEO ссылка',
+	'Selected images' => 'Выбор изображений',
+	'Template' => 'Шаблон',
+	'Group number' => 'Номер группы',
+	'Machine Name' => 'Машинное имя',
+	'Category' => 'Категория',
+	'Room ID' => 'Кабинет',
 ];

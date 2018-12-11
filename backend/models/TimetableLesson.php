@@ -48,11 +48,11 @@ class TimetableLesson extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => Yii::t('backend', 'ID'),
             'timetable_id' => 'Timetable ID',
             'lesson_id' => 'Lesson ID',
             'room_id' => 'Room ID',
-            'sort_order' => 'Sort Order',
+            'sort_order' => Yii::t('backend', 'Sort Order'),
         ];
     }
 

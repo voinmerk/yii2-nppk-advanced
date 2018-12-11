@@ -59,19 +59,39 @@ class Teacher extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'title' => 'Title',
-            'content' => 'Content',
-            'room_id' => 'Room ID',
-            'published' => 'Published',
-            'sort_order' => 'Sort Order',
-            'teacher_group_id' => 'Teacher Group ID',
-            'image_id' => 'Image ID',
-            'created_by' => 'Created By',
-            'updated_by' => 'Updated By',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'id' => Yii::t('backend', 'ID'),
+            'title' => Yii::t('backend', 'Title'),
+            'content' => Yii::t('backend', 'Content'),
+            'room_id' => Yii::t('backend', 'Room ID'),
+            'published' => Yii::t('backend', 'Published'),
+            'sort_order' => Yii::t('backend', 'Sort Order'),
+            'teacher_group_id' => Yii::t('backend', 'Teacher Group ID'),
+            'image_id' => Yii::t('backend', 'Image ID'),
+            'created_by' => Yii::t('backend', 'Created By'),
+            'updated_by' => Yii::t('backend', 'Updated By'),
+            'created_at' => Yii::t('backend', 'Created At'),
+            'updated_at' => Yii::t('backend', 'Updated At'),
+
+            'statusName' => Yii::t('backend', 'Published'),
+            'createdName' => Yii::t('backend', 'Created By'),
+            'updatedName' => Yii::t('backend', 'Updated By'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRoom()
+    {
+        return $this->hasOne(Room::className(), ['id' => 'room_id']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoomName()
+    {
+        return $this->room->title;
     }
 
     /**
@@ -104,5 +124,42 @@ class Teacher extends \yii\db\ActiveRecord
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreatedName()
+    {
+        return $this->createdBy->username;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdatedName()
+    {
+        return $this->updatedBy->username;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getStatusList()
+    {
+        return [
+            'Не опубликовано',
+            'Опубликовано',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusName()
+    {
+        $status = $this->getStatusList();
+
+        return $status[$this->published];
     }
 }

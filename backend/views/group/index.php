@@ -12,13 +12,13 @@ use backend\models\Group;
 /* @var $searchModel backend\models\GroupSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Groups';
+$this->title = Yii::t('backend', 'Groups');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="group-index box box-primary">
-    <div class="box-header with-border">
-        <?= Html::a('Create Group', ['create'], ['class' => 'btn btn-success btn-flat']) ?>
-    </div>
+
+    <?= $this->render('@viewComponents/_header_index_tools') ?>
+    
     <div class="box-body table-responsive no-padding">
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
         <?= GridView::widget([
@@ -28,7 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 'name:text',
-                'createdName:text',
+                [
+                    'attribute' => 'createdName',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        return Html::a($model->createdName, ['user/view', 'id' => $model->created_by], ['class' => 'btn btn-link btn-flat', 'style' => 'width: 100%;']);
+                    },
+                ],
                 [
                     'attribute' => 'published',
                     'format' => 'html',

@@ -55,14 +55,18 @@ class Image extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'title' => 'Title',
-            'content' => 'Content',
-            'src' => 'Src',
-            'created_by' => 'Created By',
-            'updated_by' => 'Updated By',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'id' => Yii::t('backend', 'ID'),
+            'title' => Yii::t('backend', 'Title'),
+            'content' => Yii::t('backend', 'Content'),
+            'src' => Yii::t('backend', 'Source'),
+            'created_by' => Yii::t('backend', 'Created By'),
+            'updated_by' => Yii::t('backend', 'Updated By'),
+            'created_at' => Yii::t('backend', 'Created At'),
+            'updated_at' => Yii::t('backend', 'Updated At'),
+
+            'statusName' => Yii::t('backend', 'Published'),
+            'createdName' => Yii::t('backend', 'Created By'),
+            'updatedName' => Yii::t('backend', 'Updated By'),
         ];
     }
 
@@ -104,5 +108,42 @@ class Image extends \yii\db\ActiveRecord
     public function getTeachers()
     {
         return $this->hasMany(Teacher::className(), ['image_id' => 'id']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreatedName()
+    {
+        return $this->createdBy->username;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdatedName()
+    {
+        return $this->updatedBy->username;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getStatusList()
+    {
+        return [
+            'Не опубликовано',
+            'Опубликовано',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusName()
+    {
+        $status = $this->getStatusList();
+
+        return $status[$this->published];
     }
 }

@@ -59,16 +59,20 @@ class Room extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'title' => 'Title',
-            'content' => 'Content',
-            'sort_order' => 'Sort Order',
-            'published' => 'Published',
-            'image_id' => 'Image ID',
-            'created_by' => 'Created By',
-            'updated_by' => 'Updated By',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'id' => Yii::t('backend', 'ID'),
+            'title' => Yii::t('backend', 'Title'),
+            'content' => Yii::t('backend', 'Content'),
+            'sort_order' => Yii::t('backend', 'Sort Order'),
+            'published' => Yii::t('backend', 'Published'),
+            'image_id' => Yii::t('backend', 'Image ID'),
+            'created_by' => Yii::t('backend', 'Created By'),
+            'updated_by' => Yii::t('backend', 'Updated By'),
+            'created_at' => Yii::t('backend', 'Created At'),
+            'updated_at' => Yii::t('backend', 'Updated At'),
+
+            'statusName' => Yii::t('backend', 'Published'),
+            'createdName' => Yii::t('backend', 'Created By'),
+            'updatedName' => Yii::t('backend', 'Updated By'),
         ];
     }
 
@@ -102,5 +106,42 @@ class Room extends \yii\db\ActiveRecord
     public function getTimetableLessons()
     {
         return $this->hasMany(TimetableLesson::className(), ['room_id' => 'id']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreatedName()
+    {
+        return $this->createdBy->username;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdatedName()
+    {
+        return $this->updatedBy->username;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getStatusList()
+    {
+        return [
+            'Не опубликовано',
+            'Опубликовано',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusName()
+    {
+        $status = $this->getStatusList();
+
+        return $status[$this->published];
     }
 }

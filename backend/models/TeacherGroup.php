@@ -53,15 +53,19 @@ class TeacherGroup extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'slug' => 'Slug',
-            'sort_order' => 'Sort Order',
-            'published' => 'Published',
-            'created_by' => 'Created By',
-            'updated_by' => 'Updated By',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'id' => Yii::t('backend', 'ID'),
+            'name' => Yii::t('backend', 'Name'),
+            'slug' => Yii::t('backend', 'Slug'),
+            'sort_order' => Yii::t('backend', 'Sort Order'),
+            'published' => Yii::t('backend', 'Published'),
+            'created_by' => Yii::t('backend', 'Created By'),
+            'updated_by' => Yii::t('backend', 'Updated By'),
+            'created_at' => Yii::t('backend', 'Created At'),
+            'updated_at' => Yii::t('backend', 'Updated At'),
+
+            'statusName' => Yii::t('backend', 'Published'),
+            'createdName' => Yii::t('backend', 'Created By'),
+            'updatedName' => Yii::t('backend', 'Updated By'),
         ];
     }
 
@@ -87,5 +91,42 @@ class TeacherGroup extends \yii\db\ActiveRecord
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreatedName()
+    {
+        return $this->createdBy->username;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdatedName()
+    {
+        return $this->updatedBy->username;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getStatusList()
+    {
+        return [
+            'Не опубликовано',
+            'Опубликовано',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusName()
+    {
+        $status = $this->getStatusList();
+
+        return $status[$this->published];
     }
 }

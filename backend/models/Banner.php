@@ -67,19 +67,19 @@ class Banner extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Машинное имя',
-            'published' => 'Публикация',
-            'created_by' => 'Автор',
-            'updated_by' => 'Модератор',
-            'created_at' => 'Дата создания',
-            'updated_at' => 'Дата обновления',
+            'id' => Yii::t('backend', 'ID'),
+            'name' => Yii::t('backend', 'Machine Name'),
+            'published' => Yii::t('backend', 'Published'),
+            'created_by' => Yii::t('backend', 'Created By'),
+            'updated_by' => Yii::t('backend', 'Updated By'),
+            'created_at' => Yii::t('backend', 'Created At'),
+            'updated_at' => Yii::t('backend', 'Updated At'),
 
-            'image_ids' => 'Выбор изображений',
+            'image_ids' => Yii::t('backend', 'Selected images'),
 
-            'statusName' => 'Публикация',
-            'createdName' => 'Автор',
-            'updatedName' => 'Модератор',
+            'statusName' => Yii::t('backend', 'Published'),
+            'createdName' => Yii::t('backend', 'Created By'),
+            'updatedName' => Yii::t('backend', 'Updated By'),
         ];
     }
 

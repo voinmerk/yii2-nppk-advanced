@@ -60,6 +60,7 @@ class Timetable extends \yii\db\ActiveRecord
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата обновления',
 
+            'groupName' => 'Номер группы',
             'createdName' => 'Автор',
             'updatedName' => 'Модератор',
         ];
@@ -113,6 +114,14 @@ class Timetable extends \yii\db\ActiveRecord
         $groupList = \yii\helpers\ArrayHelper::map($this->groups, 'id', 'name');
 
         return $groupList;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGroupName()
+    {
+        return $this->group->name;
     }
 
     /**

@@ -12,13 +12,13 @@ use backend\models\Post;
 /* @var $searchModel backend\models\PostSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Posts';
+$this->title = Yii::t('backend', 'Posts');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="post-index box box-primary">
-    <div class="box-header with-border">
-        <?= Html::a('Create Post', ['create'], ['class' => 'btn btn-success btn-flat']) ?>
-    </div>
+
+    <?= $this->render('@viewComponents/_header_index_tools') ?>
+
     <div class="box-body table-responsive no-padding">
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
         <?= GridView::widget([
@@ -28,8 +28,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 'title:text',
-                'createdName:text',
-                'categoryName',
+                [
+                    'attribute' => 'createdName',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        return Html::a($model->createdName, ['user/view', 'id' => $model->created_by], ['class' => 'btn btn-link btn-flat', 'style' => 'width: 100%;']);
+                    },
+                ],
+                [
+                    'attribute' => 'categoryName',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        return Html::a($model->categoryName, ['category/view', 'id' => $model->category_id], ['class' => 'btn btn-link btn-flat', 'style' => 'width: 100%;']);
+                    },
+                ],
                 [
                     'attribute' => 'published',
                     'format' => 'html',

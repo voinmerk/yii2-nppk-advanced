@@ -1,19 +1,22 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use rmrevin\yii\fontawesome\FA;
+use dosamigos\datetimepicker\DateTimePicker;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Users';
+$this->title = Yii::t('backend', 'Users');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index box box-primary">
-    <div class="box-header with-border">
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success btn-flat']) ?>
-    </div>
+
+    <?= $this->render('@viewComponents/_header_index_tools') ?>
+
     <div class="box-body table-responsive no-padding">
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
         <?= GridView::widget([
@@ -23,21 +26,45 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
 
-                'id',
                 'username',
-                'auth_key',
-                'password_hash',
-                'password_reset_token',
-                // 'email:email',
-                // 'first_name',
-                // 'last_name',
+                'email:email',
+                'first_name',
+                'last_name',
                 // 'status',
-                // 'user_group_id',
-                // 'user_permission_id',
-                // 'created_at',
-                // 'updated_at',
-
-                ['class' => 'yii\grid\ActionColumn'],
+                [
+                    'attribute' => 'updated_at',
+                    'format' => 'datetime',
+                    'filter' => DateTimePicker::widget([
+                        'model' => $searchModel,
+                        'value' => $searchModel->updated_at,
+                        'attribute' => 'updated_at',
+                        'language' => 'ru',
+                        'size' => 'ms',
+                        'clientOptions' => [
+                            'autoclose' => true,
+                            'format' => 'dd MM yyyy - HH:ii P',
+                            'todayBtn' => true
+                        ]
+                    ]),
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'header' => Yii::t('backend', 'Actions'),
+                    'template' => '{view} {update} {delete}',
+                    'buttons' => [
+                        'view' => function ($url, $model) {
+                            return Html::a(FA::icon('eye'), $url, ['class' => 'btn btn-primary btn-flat']);
+                        },
+                        'update' => function ($url, $model) {
+                            return Html::a(FA::icon('pencil'), $url, ['class' => 'btn btn-warning btn-flat']);
+                        },
+                        'delete' => function ($url, $model) {
+                            return Html::a(FA::icon('trash-o'), $url, ['class' => 'btn btn-danger btn-flat']);
+                        },
+                    ],
+                    'headerOptions' => ['class' => 'text-right'],
+                    'contentOptions' => ['class' => 'text-right'],
+                ],
             ],
         ]); ?>
     </div>

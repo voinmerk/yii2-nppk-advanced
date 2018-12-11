@@ -24,12 +24,14 @@ class BlogController extends Controller
 	}
 
 	// page
-	public function actionView($post)
+	public function actionView($category)
 	{
-		$post = Post::getPostById($post);
+		$categories = Category::getCategories();
+		$posts = Category::find()->where(['slug' => $category])->with('posts')->one()->posts;
 
 		return $this->render('view', [
-			'post' => $post,
+			'posts' => $posts,
+			'categories' => $categories,
 		]);
 	}
 }

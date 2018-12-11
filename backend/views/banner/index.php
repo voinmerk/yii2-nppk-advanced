@@ -12,13 +12,13 @@ use backend\models\Banner;
 /* @var $searchModel backend\models\BannerSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Banners';
+$this->title = Yii::t('backend', 'Banners');;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="banner-index box box-primary">
-    <div class="box-header with-border">
-        <?= Html::a('Create Banner', ['create'], ['class' => 'btn btn-success btn-flat']) ?>
-    </div>
+    
+    <?= $this->render('@viewComponents/_header_index_tools') ?>
+
     <div class="box-body table-responsive no-padding">
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
         <?= GridView::widget([
@@ -28,7 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 'name:text',
-                'createdName:text',
+                [
+                    'attribute' => 'createdName',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        return Html::a($model->createdName, ['user/view', 'id' => $model->created_by], ['class' => 'btn btn-link btn-flat', 'style' => 'width: 100%;']);
+                    },
+                ],
                 [
                     'attribute' => 'published',
                     'format' => 'html',
