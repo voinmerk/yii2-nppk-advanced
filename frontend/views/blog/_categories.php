@@ -3,32 +3,23 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 // use yii\widgets\Menu;
-use valiant\widgets\ListGroupWidget as Menu;
+use valiant\widgets\ListGroupWidget;
 
 $request = Yii::$app->request;
 
 $menuItems = [];
 
-$menuItems[] = [
-    'label' => 'Новости',
-    'url' => Url::to(['blog/index']),
-    'options' => ['class' => 'list-group-item'],
-];
-
 if($categories) {
     foreach($categories as $category) {
         $menuItems[] = [
             'label' => $category->title,
-
-            'url' => Url::to(['blog/view', 'category' => $category->slug]),
-            'options' => ['class' => 'list-group-item'],
-            'active' => isset($request->get['post']) && $request->get['post'] == $category->post->slug,
+            'url' => Url::to(['blog/category', 'category' => $category->slug]),
+            'active' => isset($request->get['category']) && $request->get['category'] == $category->slug,
         ];
     }
 
-    echo Menu::widget([
+    echo ListGroupWidget::widget([
         'items' => $menuItems,
-        'options' => ['class' => 'list-group'],
         //'active' => true,
     ]);
 } else { ?>

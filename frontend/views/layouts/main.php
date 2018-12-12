@@ -146,7 +146,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/img/
                         <div class="col-sm-6 col-md-6">
                             <ul class="nav">
                                 <li><a href="<?= Url::to(['site/index']) ?>"><?= Yii::t('frontend', 'Home') ?></a></li>
-                                <li><a href="<?= Url::toRoute(['blog/index', 'id' => 'news']) ?>"><?= Yii::t('frontend', 'Information') ?></a></li>
+                                <li><a href="<?= Url::toRoute(['blog/index']) ?>"><?= Yii::t('frontend', 'Blog') ?></a></li>
                                 <li><a href="<?= Url::to(['site/timetable']) ?>"><?= Yii::t('frontend', 'Timetable') ?></a></li>
                                 <li><a href="<?= Url::to(['site/rooms']) ?>"><?= Yii::t('frontend', 'Rooms') ?></a></li>
                                 <li><a href="<?= Url::to(['site/teachers']) ?>"><?= Yii::t('frontend', 'Teachers') ?></a></li>

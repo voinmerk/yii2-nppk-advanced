@@ -11,27 +11,50 @@ use frontend\models\Category;
 
 class BlogController extends Controller
 {
-	// news
+	/**
+	 * Display page - Все записи
+	 * 
+	 * @return $string
+	 */
 	public function actionIndex()
 	{
+		$posts = Post::getPosts();
 		$categories = Category::getCategories();
-		$posts = Post::getNews();
 
-		return $this->render('index', [
-			'posts' => $posts,
-			'categories' => $categories,
-		]);
+		return $this->render('index', compact('posts', 'categories'));
 	}
 
-	// page
-	public function actionView($category)
+	/**
+	 * Display page - Все записи в рубрике
+	 * 
+	 * @return $string
+	 */
+	public function actionCategory($category)
 	{
+		$posts = Category::find()->where(['slug' => $category, 'published' => Category::PUBLISHED])->all()->posts;
+		$category = Category::find()->where(['slug' => $category, 'published' => Category::PUBLISHED])->one();
 		$categories = Category::getCategories();
-		$posts = Category::find()->where(['slug' => $category])->with('posts')->one()->posts;
 
-		return $this->render('view', [
-			'posts' => $posts,
-			'categories' => $categories,
-		]);
+		return $this->render('category', compact('categories', 'category', 'posts'));
 	}
+
+	/**
+	 * Display page - Просмотр записи
+	 * 
+	 * @return $string
+	 */
+	public function actionView($category, $post)
+	{
+		return $this->render('view');
+	}
+
+	/**
+	 * Display page - Поиск по записям
+	 * 
+	 * @return $string
+	 */
+	/*public function actionSearch($text)
+	{
+		return $this->render('search');
+	}*/
 }

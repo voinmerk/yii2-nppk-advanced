@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = 'НППК - Рубрики';
+$this->title = 'НППК - ' . $category->title;
 ?>
 <div class="row">
 	<div class="col-md-3 sidebar wow fadeInLeftBig animated" data-wow-duration="1s" data-wow-delay=".5s">

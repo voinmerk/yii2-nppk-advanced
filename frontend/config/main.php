@@ -73,10 +73,11 @@ return [
                 '' => 'site/index',
                 'teachers' => 'site/teachers',
 
-                /*'blog/<id:[\w_-]+>' => 'blog/index',
-                'blog' => 'blog/index',*/
-                'blog/<post:[\w_-]+>' => 'blog/view',
+                // 'blog/search' => 'blog/search',
+                'blog/<category:[\w_-]+>/<post:[\w_-]+>' => 'blog/view',
+                'blog/<category:[\w_-]+>' => 'blog/category',
                 'blog' => 'blog/index',
+                '' => 'blog/index',
 
                 'rooms/<id:\d+>' => 'site/rooms',
                 'rooms' => 'site/rooms',

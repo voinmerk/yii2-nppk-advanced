@@ -675,10 +675,10 @@ a.thumbnail, div.thumbnail {
 	border-color: #238acf;
 }
 
-.list-group-item > a,
-.list-group-item > a:hover,
-.list-group-item > a:focus,
-.list-group-item > a:active {
+.list-group-item,
+.list-group-item:hover,
+.list-group-item:focus,
+.list-group-item:active {
 	padding: 15px;
 	display: block;
 	color: #238acf;

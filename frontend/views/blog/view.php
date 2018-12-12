@@ -11,8 +11,7 @@ $this->title = 'НППК - ' . Yii::t('frontend', 'Information') . ' - Ново�
 	</div>
 
 	<div class="col-md-9 content wow fadeInUp animated" data-wow-duration=".5s" data-wow-delay="1s">
-		<pre><?= var_dump($posts) ?></pre>
-        <?= $this->render($post->getTemplate($post->template), ['post' => $post]) ?>
+        
 	</div>
 
 	<div class="hidden-xs hidden-sm col-md-3 sidebar wow fadeInRightBig animated" data-wow-duration="1s" data-wow-delay=".5s">

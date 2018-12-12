@@ -78,14 +78,9 @@ class Post extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getNews()
+    public static function getPosts()
     {
-        return self::find()->with(['image'])->where(['template' => self::TEMPLATE_NEWS, 'published' => self::PUBLISHED])->all();
-    }
-
-    public static function getPage($id)
-    {
-        return self::find()->where(['category_id' => $id, 'template' => self::TEMPLATE_PAGE, 'published' => self::PUBLISHED])->one();
+        return self::find()->with(['image'])->where(['template' => self::TEMPLATE_PAGE, 'published' => self::PUBLISHED])->all();
     }
 
     public static function getPostByCategoryId($id)

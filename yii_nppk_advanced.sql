@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Хост:                         127.0.0.1
--- Версия сервера:               5.7.20 - MySQL Community Server (GPL)
+-- Версия сервера:               5.7.16 - MySQL Community Server (GPL)
 -- Операционная система:         Win64
 -- HeidiSQL Версия:              9.5.0.5196
 -- --------------------------------------------------------
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   CONSTRAINT `FK_category_user_updated` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii_nppk_advanced.category: ~7 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.category: ~8 rows (приблизительно)
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
 INSERT INTO `category` (`id`, `title`, `slug`, `template`, `published`, `sort_order`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'Новости', 'news', 0, 1, 0, 1, 1, 0, 0),
@@ -459,9 +459,32 @@ CREATE TABLE IF NOT EXISTS `migration` (
   PRIMARY KEY (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii_nppk_advanced.migration: ~1 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.migration: ~0 rows (приблизительно)
 /*!40000 ALTER TABLE `migration` DISABLE KEYS */;
 /*!40000 ALTER TABLE `migration` ENABLE KEYS */;
+
+-- Дамп структуры для таблица yii_nppk_advanced.news
+CREATE TABLE IF NOT EXISTS `news` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `meta_title` varchar(255) NOT NULL,
+  `image_id` int(11) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `meta_keywords` text,
+  `meta_content` text,
+  `published` tinyint(1) NOT NULL DEFAULT '1',
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `created_at` int(11) NOT NULL DEFAULT '0',
+  `updated_at` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Дамп данных таблицы yii_nppk_advanced.news: ~0 rows (приблизительно)
+/*!40000 ALTER TABLE `news` DISABLE KEYS */;
+/*!40000 ALTER TABLE `news` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.post
 CREATE TABLE IF NOT EXISTS `post` (
@@ -490,7 +513,7 @@ CREATE TABLE IF NOT EXISTS `post` (
   CONSTRAINT `FK_post_user_updated` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='Система объявлений';
 
--- Дамп данных таблицы yii_nppk_advanced.post: ~5 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.post: ~9 rows (приблизительно)
 /*!40000 ALTER TABLE `post` DISABLE KEYS */;
 INSERT INTO `post` (`id`, `title`, `content`, `fixed`, `slug`, `template`, `published`, `created_by`, `updated_by`, `category_id`, `image_id`, `created_at`, `updated_at`) VALUES
 	(1, 'Приёмная кампания 2017', '<p><a class="thumbnail" href="/data/adverts/priyomnaya-komissiya.jpg"><img style="float: left;margin-right: 20px;" src="/data/adverts/priyomnaya-komissiya.jpg" alt="Приёмная комиссия" width="350"></a></p>\r\n<p align="center"><span style="font-size: 24px;font-family: \'Open Sans\', sans-serif;"><b>Уважаемые абитуриенты!</b></span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Каждый из вас сейчас стоит перед выбором – куда поступить учиться, с какой профессией связать свое ближайшее будущее. Это очень ответственный выбор. Именно поэтому принятие решения должно быть обдуманным и взвешенным.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Наш колледж, имеет многолетнюю историю и славные традиции. Мы предоставляем своим студентам все возможное для полноценного личностного развития и профессионального роста, проявить себя в спорте и творчестве.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Преподаватели и сотрудники нашего колледжа сделают все, чтобы период учебы запомнился вам не только сложностями, связанными с овладеванием новой профессией, но и оставил в памяти яркие впечатления о студенческих годах как лучшей поре в жизни.</span></p><p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;"><br></span></p>\r\n<p style="text-align: right;"><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Приемная комиссия</span></p>', 0, 'admission-campaign', 0, 1, 1, 1, 1, NULL, 1538104254, 1539152744),
