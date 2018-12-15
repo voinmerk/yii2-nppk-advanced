@@ -10,10 +10,12 @@ use Yii;
  * @property int $id
  * @property string $title
  * @property string $content
- * @property string $preview_content
- * @property string $image
+ * @property string $meta_title
+ * @property int $image_id
  * @property string $slug
- * @property int $publsihed
+ * @property string $meta_keywords
+ * @property string $meta_description
+ * @property int $published
  * @property int $created_by
  * @property int $updated_by
  * @property int $created_at
@@ -23,6 +25,7 @@ class News extends \yii\db\ActiveRecord
 {
     const UNPUBLISHED = 0;
     const PUBLISHED = 1;
+    
     /**
      * {@inheritdoc}
      */
@@ -37,10 +40,10 @@ class News extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'content', 'preview_content', 'image', 'slug'], 'required'],
-            [['content', 'preview_content'], 'string'],
-            [['publsihed', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['title', 'image', 'slug'], 'string', 'max' => 255],
+            [['title', 'content', 'meta_title', 'image_id', 'slug'], 'required'],
+            [['content', 'meta_keywords', 'meta_description'], 'string'],
+            [['image_id', 'published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['title', 'meta_title', 'slug'], 'string', 'max' => 255],
             [['slug'], 'unique'],
         ];
     }
@@ -51,17 +54,19 @@ class News extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'title' => 'Title',
-            'content' => 'Content',
-            'preview_content' => 'Preview Content',
-            'image' => 'Image',
-            'slug' => 'Slug',
-            'publsihed' => 'Publsihed',
-            'created_by' => 'Created By',
-            'updated_by' => 'Updated By',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'id' => Yii::t('frontend', 'ID'),
+            'title' => Yii::t('frontend', 'Title'),
+            'content' => Yii::t('frontend', 'Content'),
+            'meta_title' => Yii::t('frontend', 'Meta Title'),
+            'image_id' => Yii::t('frontend', 'Image ID'),
+            'slug' => Yii::t('frontend', 'Slug'),
+            'meta_keywords' => Yii::t('frontend', 'Meta Keywords'),
+            'meta_description' => Yii::t('frontend', 'Meta Description'),
+            'published' => Yii::t('frontend', 'Published'),
+            'created_by' => Yii::t('frontend', 'Created By'),
+            'updated_by' => Yii::t('frontend', 'Updated By'),
+            'created_at' => Yii::t('frontend', 'Created At'),
+            'updated_at' => Yii::t('frontend', 'Updated At'),
         ];
     }
 }

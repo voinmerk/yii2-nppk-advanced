@@ -14,6 +14,10 @@ use yii\widgets\Menu;
 use frontend\widgets\Alert;
 use frontend\assets\AppAsset;
 
+use frontend\models\Menu as PageMenu;
+
+$menus = PageMenu::find()->where(['published' => PageMenu::PUBLISHED])->with('page')->all();
+
 AppAsset::register($this);
 
 $request = new Yii::$app->request();
@@ -126,10 +130,18 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/img/
                       </div>
                     </nav>
                 </div>
+
+                <div class="page-menu">
+                    <?php if($menus) { ?>
+                    <?php foreach($menus as $menu) { ?>
+                    <?= Html::a($menu->title, ['site/page', 'page' => $menu->page->slug], ['class' => 'btn btn-primary']) ?>
+                    <?php } ?>
+                    <?php } ?>
+                </div>
             </header>
             <!-- END HEADER -->
 
-            <div id="content">
+            <div id="content" style="padding: 190px 0 30px 0;">
                 <div class="container">
 
                     <!-- <?= Breadcrumbs::widget([
@@ -149,11 +161,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/img/
                             <ul class="nav">
                                 <li><a href="<?= Url::to(['site/index']) ?>"><?= Yii::t('frontend', 'Home') ?></a></li>
                                 <li><a href="<?= Url::toRoute(['blog/index']) ?>"><?= Yii::t('frontend', 'Blog') ?></a></li>
-                                <li><a href="<?= Url::toRoute(['news/index']) ?>"><?= Yii::t('frontend', 'News') ?></a></li>
-                                <li><a href="<?= Url::to(['timetable/index']) ?>"><?= Yii::t('frontend', 'Timetable') ?></a></li>
-                                <li><a href="<?= Url::to(['room/index']) ?>"><?= Yii::t('frontend', 'Rooms') ?></a></li>
-                                <li><a href="<?= Url::to(['teacher/index']) ?>"><?= Yii::t('frontend', 'Teachers') ?></a></li>
-                                <!-- <li><a href="<?= Url::to('//nppk54.ru') ?>" title="nppk54.ru"><?= Yii::t('frontend', 'Our website') ?></a></li> -->
+                                <li><a href="<?= Url::to(['site/timetable']) ?>"><?= Yii::t('frontend', 'Timetable') ?></a></li>
+                                <li><a href="<?= Url::to(['site/rooms']) ?>"><?= Yii::t('frontend', 'Rooms') ?></a></li>
+                                <li><a href="<?= Url::to(['site/teachers']) ?>"><?= Yii::t('frontend', 'Teachers') ?></a></li>
+                                <li><a href="<?= Url::to('//nppk54.ru') ?>" title="nppk54.ru"><?= Yii::t('frontend', 'Our website') ?></a></li>
                             </ul>
                         </div>
 
@@ -196,7 +207,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/img/
             });
 
             $(document).ready(function() {
-                /*$('.thumbnails').magnificPopup({
+                $('.thumbnails').magnificPopup({
                     delegate: 'a.thumbnail',
                     type: 'image',
                     removalDelay: 500,
@@ -208,9 +219,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/img/
                     },
                     closeOnContentClick: true,
                     midClick: true
-                });*/
+                });
 
-                /*$('.ajax-popup').magnificPopup({
+                $('.ajax-popup').magnificPopup({
                     type: 'ajax',
                     alignTop: true,
                     overflowY: 'scroll',
@@ -225,7 +236,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/img/
                         }
                     },
                     midClick: true
-                });*/
+                });
 
                 $('.slider-for').slick({
                     slidesToShow: 1,
@@ -244,16 +255,16 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/img/
                     focusOnSelect: true
                 });
 
-                //$('.panel-body.thumbnails > span.cut').css({'display' : 'none'});
+                $('.panel-body.thumbnails > span.cut').css({'display' : 'none'});
 
-                /*$('a.btn-read-more.dop').click(function(){
+                $('a.btn-read-more.dop').click(function(){
                     var id = $(this).attr('js-id');
 
                     $(id+'.panel-body.thumbnails > span.cut').slideToggle('normal');
-                });*/
+                });
             });
 
-            /*function playSound() {
+            function playSound() {
                 var sound = new buzz.sound("/web/sounds/sound", {
                     formats: [ "wav" ]
                 });
@@ -261,7 +272,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/img/
                 sound.play();
 
                 return false;
-            }*/
+            }
         </script>
     </body>
 </html>

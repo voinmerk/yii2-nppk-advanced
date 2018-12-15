@@ -7,8 +7,16 @@ use yii\helpers\Url;
 
 $this->title = 'НППК - ' . Yii::t('frontend', 'Timetable');
 $this->params['breadcrumbs'][] = $this->title;
-?>
 
+$js = <<<JS
+$('.ajax-popup').magnificPopup({
+    type: 'ajax'
+});
+JS;
+
+$this->registerJs($js);
+
+?>
 <div class="content groups-list">
 	<?php $i = 0; $e = $groupCount; ?>
 	<?php $wow = 0; $anim = 0; ?>
@@ -26,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php } ?>
 
 		<div class="col-xs-margin-25 col-xs-12 col-sm-3 col-md-3">
-			<a class="ajax-popup btn btn-primary" data-effect="mfp-zoom-in" href="<?= Url::toRoute(['site/timetable', 'id' => $group->id]) ?>"><?= $group->name ?></a>
+			<a class="ajax-popup btn btn-primary" data-effect="mfp-zoom-in" href="<?= Url::toRoute(['timetable/ajax-view', 'id' => $group->id]) ?>"><?= $group->name ?></a>
 		</div>
 
 	<?php $i ++; ?>

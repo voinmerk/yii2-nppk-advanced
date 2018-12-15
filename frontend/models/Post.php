@@ -13,7 +13,6 @@ use common\models\User;
  * @property string $content
  * @property int $fixed
  * @property string $slug
- * @property int $template
  * @property int $published
  * @property int $created_by
  * @property int $updated_by
@@ -27,9 +26,6 @@ use common\models\User;
  */
 class Post extends \yii\db\ActiveRecord
 {
-    const TEMPLATE_NEWS = 0;
-    const TEMPLATE_PAGE = 1;
-
     const UNPUBLISHED = 0;
     const PUBLISHED = 1;
     /**
@@ -48,7 +44,7 @@ class Post extends \yii\db\ActiveRecord
         return [
             [['title', 'content', 'slug', 'created_at', 'updated_at'], 'required'],
             [['content'], 'string'],
-            [['fixed', 'template', 'published', 'created_by', 'updated_by', 'category_id', 'created_at', 'updated_at'], 'integer'],
+            [['fixed', 'published', 'created_by', 'updated_by', 'category_id', 'created_at', 'updated_at'], 'integer'],
             [['title', 'slug'], 'string', 'max' => 255],
             [['slug'], 'unique'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
@@ -68,7 +64,6 @@ class Post extends \yii\db\ActiveRecord
             'content' => 'Content',
             'fixed' => 'Fixed',
             'slug' => 'Slug',
-            'template' => 'Template',
             'published' => 'Published',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
@@ -80,7 +75,7 @@ class Post extends \yii\db\ActiveRecord
 
     public static function getPosts()
     {
-        return self::find()->with(['image'])->where(['template' => self::TEMPLATE_PAGE, 'published' => self::PUBLISHED])->all();
+        return self::find()->with(['image'])->where(['published' => self::PUBLISHED])->all();
     }
 
     public static function getPostByCategoryId($id)
@@ -118,20 +113,5 @@ class Post extends \yii\db\ActiveRecord
     public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
-    }
-
-    public static function getTamplateList()
-    {
-        return [
-            self::TAMPLATE_NEWS => '_news',
-            self::TAMPLATE_PAGE => '_page',
-        ];
-    }
-
-    public function getTamplate($id)
-    {
-        $templateList = self::getTamplateList();
-
-        return $tamplateList[$id];
     }
 }

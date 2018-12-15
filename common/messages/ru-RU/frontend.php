@@ -2,6 +2,7 @@
 
 return [
     'Home' => 'Главная',
+    'Blog' => 'Рубрики',
     'Information' => 'Информация',
     'Timetable' => 'Расписание',
     'Rooms' => 'Кабинеты',
@@ -54,4 +55,5 @@ return [
     'Close (Esc)' => 'Закрыть (Esc)',
     'Unhandled error' => 'Необрабатываемая ошибка',
     'Error' => 'Ошибка',
+    'News' => 'Новости',
 ];

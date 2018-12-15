@@ -31,7 +31,7 @@ class BlogController extends Controller
 	 */
 	public function actionCategory($category)
 	{
-		$posts = Category::find()->where(['slug' => $category, 'published' => Category::PUBLISHED])->all()->posts;
+		$posts = Category::find()->where(['slug' => $category, 'published' => Category::PUBLISHED])->with('posts')->one()->posts;
 		$category = Category::find()->where(['slug' => $category, 'published' => Category::PUBLISHED])->one();
 		$categories = Category::getCategories();
 

@@ -1,3 +1,9 @@
+<?php 
+
+
+
+?>
+
 <div id="custom-content" class="white-popup-block panel panel-primary">
 	<?php if($group) { ?>
     <div class="panel-heading">

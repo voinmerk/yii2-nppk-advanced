@@ -10,8 +10,6 @@ class NewsController extends \yii\web\Controller
     {
         $news = News::find()->where(['published' => News::PUBLISHED])->all();
 
-
-
         return $this->render('index', [
             'news' => $news,
         ]);
@@ -22,7 +20,7 @@ class NewsController extends \yii\web\Controller
         $new = News::find()->where(['publsihed' => News::PUBLSIHED, 'slug' => $id])->one();
 
         if(!$new) {
-            throw new BadRequestHttpException('');
+            throw new BadRequestHttpException('Указанная вами новость не найдена или не доступна!');
         }
 
         return $this->render('view', [

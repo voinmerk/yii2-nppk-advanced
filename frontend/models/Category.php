@@ -11,7 +11,6 @@ use common\models\User;
  * @property int $id
  * @property string $title
  * @property string $slug
- * @property int $template
  * @property int $published
  * @property int $sort_order
  * @property int $created_by
@@ -25,9 +24,6 @@ use common\models\User;
  */
 class Category extends \yii\db\ActiveRecord
 {
-    const TEMPLATE_NEWS = 0;
-    const TAMPLATE_PAGE = 1;
-
     const UNPUBLISHED = 0;
     const PUBLISHED = 1;
 
@@ -46,7 +42,7 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'slug', 'created_at', 'updated_at'], 'required'],
-            [['template', 'published', 'sort_order', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['published', 'sort_order', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['title', 'slug'], 'string', 'max' => 255],
             [['slug'], 'unique'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -63,7 +59,6 @@ class Category extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'Title',
             'slug' => 'Slug',
-            'template' => 'Template',
             'published' => 'Published',
             'sort_order' => 'Sort Order',
             'created_by' => 'Created By',
@@ -75,7 +70,7 @@ class Category extends \yii\db\ActiveRecord
 
     public static function getCategories()
     {
-        return self::find()->where(['published' => self::PUBLISHED, 'template' => self::TAMPLATE_PAGE])->all();
+        return self::find()->where(['published' => self::PUBLISHED])->all();
     }
 
     /**

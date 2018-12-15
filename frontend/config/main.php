@@ -77,7 +77,6 @@ return [
                 'blog/<category:[\w_-]+>/<post:[\w_-]+>' => 'blog/view',
                 'blog/<category:[\w_-]+>' => 'blog/category',
                 'blog' => 'blog/index',
-                '' => 'blog/index',
 
                 'rooms/<id:\d+>' => 'site/rooms',
                 'rooms' => 'site/rooms',

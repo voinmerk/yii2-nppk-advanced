@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						<h3><?= $leader->title; ?></h3>
 						<?= Html::decode($leader->content) ?>
 						<?php if($leader->room_id != 0) { ?>
-						<a class="ajax-popup btn btn-primary btn-k" data-effect="mfp-zoom-in" href="<?= Url::to(['site/rooms', 'id' => $leader->room_id]) ?>"><?= $leader->room->title ?></a>
+						<a class="ajax-popup btn btn-primary btn-k" data-effect="mfp-zoom-in" href="<?= Url::to(['room/ajax-view', 'id' => $leader->room_id]) ?>"><?= $leader->room->title ?></a>
 						<?php } ?>
 					</div>
 				</div>
@@ -95,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						<h3><?php echo $teacher->title; ?></h3>
 						<?= Html::decode($teacher->content) ?>
 						<?php if($teacher->room_id != 0) { ?>
-						<a class="ajax-popup btn btn-primary btn-k" data-effect="mfp-zoom-in" href="<?= Url::to(['site/rooms', 'id' => $teacher->room_id]) ?>"><?= $teacher->room->title ?></a>
+						<a class="ajax-popup btn btn-primary btn-k" data-effect="mfp-zoom-in" href="<?= Url::to(['roon/ajax-view', 'id' => $teacher->room_id]) ?>"><?= $teacher->room->title ?></a>
 						<?php } ?>
 					</div>
 				</div>
