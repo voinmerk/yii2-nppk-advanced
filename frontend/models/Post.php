@@ -3,37 +3,40 @@
 namespace frontend\models;
 
 use Yii;
-use common\models\User;
 
 /**
- * This is the model class for table "{{%post}}".
+ * This is the model class for table "post".
  *
  * @property int $id
  * @property string $title
  * @property string $content
- * @property int $fixed
+ * @property string $meta_title
+ * @property string $meta_keywords
+ * @property string $meta_description
  * @property string $slug
- * @property int $published
+ * @property int $status
  * @property int $created_by
  * @property int $updated_by
- * @property int $category_id
+ * @property int $image_id
  * @property int $created_at
  * @property int $updated_at
  *
  * @property Category $category
+ * @property Image $image
  * @property User $createdBy
  * @property User $updatedBy
  */
 class Post extends \yii\db\ActiveRecord
 {
-    const UNPUBLISHED = 0;
-    const PUBLISHED = 1;
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%post}}';
+        return 'post';
     }
 
     /**
@@ -42,12 +45,12 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'content', 'slug', 'created_at', 'updated_at'], 'required'],
-            [['content'], 'string'],
-            [['fixed', 'published', 'created_by', 'updated_by', 'category_id', 'created_at', 'updated_at'], 'integer'],
-            [['title', 'slug'], 'string', 'max' => 255],
+            [['title', 'content', 'meta_title', 'slug', 'created_at', 'updated_at'], 'required'],
+            [['content', 'meta_keywords', 'meta_description'], 'string'],
+            [['status', 'created_by', 'updated_by', 'image_id', 'created_at', 'updated_at'], 'integer'],
+            [['title', 'meta_title', 'slug'], 'string', 'max' => 255],
             [['slug'], 'unique'],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
         ];
@@ -62,25 +65,33 @@ class Post extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'Title',
             'content' => 'Content',
-            'fixed' => 'Fixed',
+            'meta_title' => 'Meta Title',
+            'meta_keywords' => 'Meta Keywords',
+            'meta_description' => 'Meta Content',
             'slug' => 'Slug',
-            'published' => 'Published',
+            'status' => 'Status',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
-            'category_id' => 'Category ID',
+            'image_id' => 'Image ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
 
-    public static function getPosts()
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategory()
     {
-        return self::find()->with(['image'])->where(['published' => self::PUBLISHED])->all();
+        return $this->categories[0];
     }
 
-    public static function getPostByCategoryId($id)
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategories()
     {
-        return self::find()->with(['image'])->where(['category_id' => $id, 'published' => self::PUBLISHED])->one();
+        return $this->hasMany(Category::className(), ['id' => 'category_id'])->viaTable('category_to_post', ['post_id' => 'id'])->orderBy(['updated_at' => SORT_DESC]);
     }
 
     /**
@@ -89,14 +100,6 @@ class Post extends \yii\db\ActiveRecord
     public function getImage()
     {
         return $this->hasOne(Image::className(), ['id' => 'image_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategory()
-    {
-        return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
     /**

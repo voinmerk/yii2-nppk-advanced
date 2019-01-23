@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\Timetable;
 use backend\models\TimetableSearch;
+use backend\models\TimetableLesson;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -83,12 +84,14 @@ class TimetableController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $modelLessons = $model->timetableLessons;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'modelLessons' => (empty($modelLessons)) ? [new TimetableLesson] : $modelLessons,
             ]);
         }
     }
@@ -115,7 +118,7 @@ class TimetableController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Timetable::findOne($id)) !== null) {
+        if (($model = Timetable::find()->with(['timetableLessons'])->where($id)->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

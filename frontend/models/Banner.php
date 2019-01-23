@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use common\models\User;
 
 /**
@@ -19,7 +20,7 @@ use common\models\User;
  * @property User $createdBy
  * @property User $updatedBy
  */
-class Banner extends \yii\db\ActiveRecord
+class Banner extends ActiveRecord
 {
     const UNPUBLISHED = 0;
     const PUBLISHED = 1;

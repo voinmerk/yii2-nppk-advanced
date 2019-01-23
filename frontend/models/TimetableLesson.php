@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%timetable_lesson}}".
@@ -17,7 +18,7 @@ use Yii;
  * @property Room $room
  * @property Timetable $timetable
  */
-class TimetableLesson extends \yii\db\ActiveRecord
+class TimetableLesson extends ActiveRecord
 {
     /**
      * {@inheritdoc}

@@ -2,32 +2,22 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use rmrevin\yii\fontawesome\FA;
 
 ?>
-<style type="text/css">
-	.popup-dialog {
-		max-width: 800px;
-		margin: 20px auto;
-		background: #FFF;
-		padding: 0;
-		line-height: 0;
-	}
-
-	.popup-dialog h1 {
-		font-size: 24px;
-	}
-</style>
-
-<div id="custom-content" class="popup-dialog">
-	<button title="<?= Yii::t('frontend', 'Close (Esc)') ?>" type="button" class="mfp-close pull-right"><i class="fa fa-close"></i></button>
-
+<div id="custom-content" class="teacher-dialog">
 	<div class="row">
 		<div class="col-md-5">
 			<?= Html::img($teacher->image->src, ['class' => 'img-responsive']) ?>
 		</div>
 
 		<div class="col-md-7">
+			<?= Html::button(FA::icon('close'), ['title' => Yii::t('frontend', 'Close (Esc)'), 'class' => 'mfp-close pull-right']) ?>
 			<h1><?= $teacher->title ?></h1>
+
+			<div class="teacher-content">
+				<?= Html::decode($teacher->content) ?>
+			</div>
 		</div>
 	</div>
 </div>

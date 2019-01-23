@@ -42,19 +42,3 @@ $(function() {
         $('body,html').animate({scrollTop:0},800);
     }); 
 });
-
-// CHANGE LANGUAGES
-/*$(document).ready(function(){
-	$('#lang_change > ul > li > a').click(function(){
-        var lang = $(this).attr('data-ajax');
-        var page = $('body').attr('data-ajax');
-
-        $.post('/template/ajax/change-lang.php', {lang_id : lang, page_id : page}, function(data){
-            if(data != 0) {
-                document.location.href = data;
-            }
-        });
-
-        return false;
-    });
-});*/

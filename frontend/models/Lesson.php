@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use common\models\User;
 
 /**
@@ -20,7 +21,7 @@ use common\models\User;
  * @property User $updatedBy
  * @property TimetableLesson[] $timetableLessons
  */
-class Lesson extends \yii\db\ActiveRecord
+class Lesson extends ActiveRecord
 {
     /**
      * {@inheritdoc}

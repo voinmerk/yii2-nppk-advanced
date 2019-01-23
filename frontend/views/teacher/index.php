@@ -23,7 +23,7 @@ $this->registerJs($js);
 	<?php if($i == 0) echo '<div class="row">'; ?>
 	<?php $i++; ?>
 	<div class="col-md-2">
-		<?= Html::a(Html::img($teacher->image->src, ['class' => 'img-responsive']), ['teacher/ajax-view', 'id' => $teacher->id], ['class' => 'ajax-popup-two', 'data-effect' => 'mfp-zoom-in']) ?>
+		<?= Html::a(Html::img($teacher->image->src, ['class' => 'img-responsive']), ['teacher/view', 'id' => $teacher->id], ['class' => 'ajax-popup-two']) ?>
 	</div>
 	
 	<?php if($i >= 6) {echo '</div>'; $i = 0;} ?>

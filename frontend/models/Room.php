@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use common\models\User;
 
 /**
@@ -24,7 +25,7 @@ use common\models\User;
  * @property User $updatedBy
  * @property TimetableLesson[] $timetableLessons
  */
-class Room extends \yii\db\ActiveRecord
+class Room extends ActiveRecord
 {
     const UNPUBLISHED = 0;
     const PUBLISHED = 1;

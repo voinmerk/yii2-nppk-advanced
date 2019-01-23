@@ -73,10 +73,13 @@ return [
                 '' => 'site/index',
                 'teachers' => 'site/teachers',
 
-                // 'blog/search' => 'blog/search',
-                'blog/<category:[\w_-]+>/<post:[\w_-]+>' => 'blog/view',
-                'blog/<category:[\w_-]+>' => 'blog/category',
-                'blog' => 'blog/index',
+                // 'post/search' => 'post/search',
+                'posts/<category:[\w_-]+>/<post:[\w_-]+>' => 'post/view',
+                'posts/<category:[\w_-]+>' => 'post/category',
+                'posts' => 'post/index',
+
+                'news/<id:[\w_-]+>' => 'news/view',
+                'news' => 'news/index',
 
                 'rooms/<id:\d+>' => 'site/rooms',
                 'rooms' => 'site/rooms',

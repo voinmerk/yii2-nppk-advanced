@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use common\models\User;
 
 /**
@@ -21,7 +22,7 @@ use common\models\User;
  * @property User $createdBy
  * @property User $updatedBy
  */
-class UserGroup extends \yii\db\ActiveRecord
+class UserGroup extends ActiveRecord
 {
     /**
      * {@inheritdoc}

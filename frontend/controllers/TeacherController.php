@@ -22,16 +22,16 @@ class TeacherController extends Controller
         return $this->render('index', compact('leaders', 'teachers'));
 	}
 
-	public function actionAjaxView($id)
+	public function actionView($id)
 	{
-		$request = new Yii::$app->request();
-
-		if(!$request->isAjax) {
-			throw new BadRequestHttpException(Yii::t('frontend', 'This category does not exist!'));
-		}
-
 		$teacher = Teacher::find()->where(['id' => $id, 'published' => Teacher::PUBLISHED])->one();
 
-		return $this->renderAjax('ajax_view', compact('teacher'));
+		if(Yii::$app->request->isAjax) {
+			// throw new BadRequestHttpException(Yii::t('frontend', 'This category does not exist!'));
+
+			return $this->renderAjax('ajax_view', compact('teacher'));
+		}
+
+		return $this->render('view', compact('teacher'));
 	}
 }

@@ -34,6 +34,7 @@ class AppAsset extends AssetBundle
         'js/modernizr.js',
         'js/buzz.min.js',
         'js/index.js',
+        // 'js/scripts.js',
         'js/special.js',
     ];
     public $depends = [

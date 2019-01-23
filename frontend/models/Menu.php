@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%menu}}".
@@ -14,7 +15,7 @@ use Yii;
  *
  * @property Page $page
  */
-class Menu extends \yii\db\ActiveRecord
+class Menu extends ActiveRecord
 {
     const UNPUBLISHED = 0;
     const PUBLISHED = 1;

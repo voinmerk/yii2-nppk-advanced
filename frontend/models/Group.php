@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use common\models\User;
 
 /**
@@ -21,7 +22,7 @@ use common\models\User;
  * @property User $updatedBy
  * @property Timetable[] $timetables
  */
-class Group extends \yii\db\ActiveRecord
+class Group extends ActiveRecord
 {
     const UNPUBLISHED = 0;
     const PUBLISHED = 1;

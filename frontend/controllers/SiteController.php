@@ -7,6 +7,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
 use frontend\models\Banner;
+use frontend\models\Category;
 use frontend\models\Page;
 use frontend\models\Menu;
 

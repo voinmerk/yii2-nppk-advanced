@@ -14,7 +14,7 @@ use yii\helpers\Html;
 	   	<?php if($room->images) { ?>
 		<div class="slider slider-for">
 			<?php foreach($room->images as $image) { ?>
-			<div><?= Html::img('@web' . $image->src, ['title' => $image->title, 'alt' => $image->content]) ?>
+			<div><?= Html::img('@web' . $image->src, ['title' => $image->title, 'alt' => $image->content]) ?></div>
 			<?php } ?>
 		</div>
 

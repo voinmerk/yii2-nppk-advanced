@@ -4,17 +4,22 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 ?>
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h2><?= $post->title ?></h2>
-    </div>
+<div class="col-md-3">
+	<div class="news-card">
+		<div class="news-image">
+			<?php if ($new->image) { ?>
+			<?= Html::img('@web' . $new->image->src, ['class' => 'img-responsive']) ?>
+			<?php } else { ?>
+			<?= Html::img('@web/img/logo-reduct.png', ['class' => 'img-responsive']) ?>
+			<?php } ?>
+		</div>
 
-    <div id="new_<?= $post->id; ?>" class="panel-body thumbnails">
+		<h2 class="news-title">
+			<?= Html::a(Html::encode($new->title), ['/news/view', 'id' => $new->slug]) ?>
+		</h2>
 
-        <?= Html::decode($post->content) ?>
-    </div>
-
-    <div class="panel-footer clearfix">
-        <?= html::a(Yii::t('frontend', 'Read more'), Url::to(['blog/view', 'post' => $post->slug]), ['class' => 'pull-right btn btn-read-more']) ?>
-    </div>
+		<div class="news-desc">
+			<?= Html::decode($new->content) ?>
+		</div>
+	</div>
 </div>

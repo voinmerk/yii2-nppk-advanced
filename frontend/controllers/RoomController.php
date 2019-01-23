@@ -17,6 +17,17 @@ class RoomController extends Controller
 	{
 		$rooms = Room::getRooms();
 
-		$this->render('index', compact('rooms'));
+		return $this->render('index', compact('rooms'));
+	}
+
+	public function actionView($id)
+	{
+		$room = Room::findOne($id);
+
+		if(Yii::$app->request->isAjax) {
+			return $this->renderAjax('ajax_view', compact('room'));
+		}
+
+		return $this->render('view', compact('room'));
 	}
 }

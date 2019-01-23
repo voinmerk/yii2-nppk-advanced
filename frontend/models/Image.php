@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use common\models\User;
 
 /**
@@ -22,7 +23,7 @@ use common\models\User;
  * @property Room[] $rooms
  * @property Teacher[] $teachers
  */
-class Image extends \yii\db\ActiveRecord
+class Image extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -38,7 +39,7 @@ class Image extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'src', 'created_at', 'updated_at'], 'required'],
+            [['title', 'src'], 'required'],
             [['content'], 'string'],
             [['created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['title', 'src'], 'string', 'max' => 255],

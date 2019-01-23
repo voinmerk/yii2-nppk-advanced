@@ -33,7 +33,7 @@ $this->title = 'НППК - ' . Yii::t('frontend', 'Rooms');
 			<h2><?= $room->title ?></h2>
 			<p><?= $room->content ?></p>
 
-			<a class="ajax-popup btn btn-read-more" data-effect="mfp-zoom-in" href="<?= Url::to(['site/rooms', 'id' => $room->id]) ?>"><?= Yii::t('frontend', 'Read More') ?></a>
+			<a class="ajax-popup btn btn-read-more" data-effect="mfp-zoom-in" href="<?= Url::to(['room/view', 'id' => $room->id]) ?>"><?= Yii::t('frontend', 'Read More') ?></a>
 		</div>
 
 		<?= Html::img('@web' . $room->image->src, ['class' => 'room-train-image', 'title' => $room->image->title, 'alt' => $room->image->content]) ?>

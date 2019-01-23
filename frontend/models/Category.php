@@ -1,17 +1,18 @@
 <?php
-
 namespace frontend\models;
 
 use Yii;
-use common\models\User;
 
 /**
- * This is the model class for table "{{%category}}".
+ * This is the model class for table "category".
  *
  * @property int $id
  * @property string $title
  * @property string $slug
- * @property int $published
+ * @property string $meta_title
+ * @property string $meta_description
+ * @property string $meta_keywords
+ * @property int $status
  * @property int $sort_order
  * @property int $created_by
  * @property int $updated_by
@@ -24,15 +25,15 @@ use common\models\User;
  */
 class Category extends \yii\db\ActiveRecord
 {
-    const UNPUBLISHED = 0;
-    const PUBLISHED = 1;
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
 
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%category}}';
+        return 'category';
     }
 
     /**
@@ -41,9 +42,10 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'slug', 'created_at', 'updated_at'], 'required'],
-            [['published', 'sort_order', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['title', 'slug'], 'string', 'max' => 255],
+            [['title', 'slug', 'meta_title', 'created_at', 'updated_at'], 'required'],
+            [['meta_description', 'meta_keywords'], 'string'],
+            [['status', 'sort_order', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['title', 'slug', 'meta_title'], 'string', 'max' => 255],
             [['slug'], 'unique'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
@@ -59,18 +61,16 @@ class Category extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'Title',
             'slug' => 'Slug',
-            'published' => 'Published',
+            'meta_title' => 'Meta Title',
+            'meta_description' => 'Meta Description',
+            'meta_keywords' => 'Meta Keywords',
+            'status' => 'Status',
             'sort_order' => 'Sort Order',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
-    }
-
-    public static function getCategories()
-    {
-        return self::find()->where(['published' => self::PUBLISHED])->all();
     }
 
     /**
@@ -92,8 +92,16 @@ class Category extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getPost()
+    {
+        return $this->posts[0];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getPosts()
     {
-        return $this->hasMany(Post::className(), ['category_id' => 'id']);
+        return $this->hasMany(Post::className(), ['id' => 'post_id'])->viaTable('category_to_post', ['category_id' => 'id'])->orderBy(['updated_at' => SORT_DESC]);
     }
 }
