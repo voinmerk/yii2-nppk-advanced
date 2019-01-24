@@ -22,26 +22,28 @@ $this->registerMetaTag([
 	</div>
 
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<?= $this->render('_categories', [
 				'categories' => $categories,
 			]) ?>
 		</div>
 
-		<div class="col-md-8">
-			<?php
+		<div class="col-md-9">
+			<div class="row">
+				<?php
 
-				if ($posts) {
+					if ($posts) {
 
-					foreach ($posts as $post) {
+						foreach ($posts as $post) {
 
-						echo $this->render('_post', ['post' => $post]);
+							echo $this->render('_post', ['post' => $post]);
+
+						}
 
 					}
 
-				}
-
-			?>
+				?>
+			</div>
 		</div>
 	</div>
 </div>

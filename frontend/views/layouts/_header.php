@@ -17,6 +17,15 @@ echo Nav::widget([
 ]);
 
 Navbar::end();*/
+
+$isActive = function ($controller, $action = null) {
+
+  if(Yii::$app->controller->id == $controller && Yii::$app->controller->action->id == $action) return true;
+
+  if(Yii::$app->controller->id == $controller) return true;
+
+  return false;
+};
 ?>
 <div class="new-menu">
   <nav class="navbar navbar-default">
@@ -38,11 +47,11 @@ Navbar::end();*/
         <?= Menu::widget([
             'options' => ['class' => 'nav navbar-nav wow fadeInLeftBig animated', 'data-wow-duration' => '.5s', 'data-wow-delay' => '.25s'],
             'items' => [
-              ['label' => Yii::t('frontend', 'Blog'), 'url' => ['post/index']],
-              ['label' => Yii::t('frontend', 'News'), 'url' => ['news/index']],
-              ['label' => Yii::t('frontend', 'Timetable'), 'url' => ['timetable/index']],
-              ['label' => Yii::t('frontend', 'Rooms'), 'url' => ['room/index']],
-              ['label' => Yii::t('frontend', 'Employees'), 'url' => ['teacher/index']],
+              ['label' => Yii::t('frontend', 'Blog'), 'url' => ['post/index'], 'active' => $isActive('post')],
+              ['label' => Yii::t('frontend', 'News'), 'url' => ['news/index'], 'active' => $isActive('news')],
+              ['label' => Yii::t('frontend', 'Timetable'), 'url' => ['timetable/index'], 'active' => $isActive('timetable')],
+              ['label' => Yii::t('frontend', 'Rooms'), 'url' => ['room/index'], 'active' => $isActive('room')],
+              ['label' => Yii::t('frontend', 'Employees'), 'url' => ['teacher/index'], 'active' => $isActive('teacher')],
             ],
             'activeCssClass' => 'active',
         ]); ?>

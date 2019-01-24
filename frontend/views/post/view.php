@@ -21,9 +21,13 @@ $this->registerMetaTag([
 		<h1><?= Html::encode($post->title) ?></h1>
 	</div>
 
-	<div class="post-content">
-		<div class="post-image">
-			<?= Html::img('@web' . $post->image->src) ?>
+	<div class="page-body clearfix">
+		<div class="page-image">
+			<?php if($post->image) { ?>
+			<?= Html::img('@web' . $post->image->src, ['class' => 'img-responsive']) ?>
+			<?php } else { ?>
+			<?= Html::img('@web/img/no-image.jpg', ['class' => 'img-responsive']) ?>
+			<?php } ?>
 		</div>
 
 		<?= Html::decode($post->content) ?>

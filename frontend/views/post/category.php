@@ -22,30 +22,34 @@ $this->registerMetaTag([
 	</div>
 
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<?= $this->render('_categories', [
 				'categories' => $categories,
 			]) ?>
 		</div>
 
-		<div class="col-md-8">
-			<?php
+		<div class="col-md-9">
+			<div class="row">
+				<?php
 
-				if ($posts) {
+					if ($posts) {
 
-					foreach ($posts as $post) {
+						foreach ($posts as $post) {
 
-						echo $this->render('_post', ['post' => $post]);
+							echo $this->render('_post', ['post' => $post]);
 
-					}
+						}
 
-				} else { ?>
-					<div class="alert alert-danger">
-						<p>В данной рубрике недобавлены статьи!</p>
-					</div>
-				<?php }
+					} else { ?>
+						<div class="col-lg-12">
+							<div class="alert alert-danger">
+								<p>В данной рубрике недобавлены статьи!</p>
+							</div>
+						</div>
+					<?php }
 
-			?>
+				?>
+			</div>
 		</div>
 	</div>
 </div>

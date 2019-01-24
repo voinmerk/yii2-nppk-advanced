@@ -10,12 +10,14 @@ $this->title = $new->meta_title;
 		<h2><?= Html::encode($new->title) ?></h2>
 	</div>
 
-	<div class="news-content">
-		<?php if ($new->image) { ?>
-		<?= Html::img('@web' . $new->image->src, ['class' => 'img-responsive']) ?>
-		<?php } else { ?>
-		<?= Html::img('@web/img/logo-reduct.png', ['class' => 'img-responsive']) ?>
-		<?php } ?>
+	<div class="page-body">
+		<div class="page-image">
+			<?php if ($new->image) { ?>
+			<?= Html::img('@web' . $new->image->src, ['class' => 'img-responsive']) ?>
+			<?php } else { ?>
+			<?= Html::img('@web/img/logo-reduct.png', ['class' => 'img-responsive']) ?>
+			<?php } ?>
+		</div>
 
 		<?= Html::decode($new->content) ?>
 	</div>

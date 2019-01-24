@@ -44,21 +44,11 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $banner = Banner::getBannerByName('main_slider');
-
-        $categories = Category::getCategories();
+        $categories = Category::find()->where(['status' => Category::STATUS_ACTIVE, 'on_home' => 1])->orderBy(['sort_order' => SORT_ASC, 'updated_at' => SORT_DESC])->all();
 
         return $this->render('index', [
             'banner' => $banner,
             'categories' => $categories,
         ]);
-    }
-
-    public function actionPage($page)
-    {
-        $this->layout = 'page';
-        
-        $page = Page::find()->where(['slug' => $page, 'published' => Page::PUBLISHED])->one();
-
-        return $this->render('page', compact('page', 'menu'));
     }
 }

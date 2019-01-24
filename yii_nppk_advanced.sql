@@ -56,12 +56,14 @@ INSERT INTO `banner_to_image` (`banner_id`, `image_id`, `sort_order`) VALUES
 CREATE TABLE IF NOT EXISTS `category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
+  `description` text,
   `slug` varchar(255) NOT NULL,
   `meta_title` varchar(255) NOT NULL,
   `meta_description` text,
   `meta_keywords` text,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `sort_order` int(3) NOT NULL DEFAULT '0',
+  `on_home` tinyint(1) NOT NULL DEFAULT '0',
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
   `created_at` int(11) NOT NULL,
@@ -74,17 +76,14 @@ CREATE TABLE IF NOT EXISTS `category` (
   CONSTRAINT `FK_category_user_updated` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii_nppk_advanced.category: ~8 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.category: ~5 rows (приблизительно)
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` (`id`, `title`, `slug`, `meta_title`, `meta_description`, `meta_keywords`, `status`, `sort_order`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-	(1, 'Новости', 'news', 'Новости', NULL, NULL, 0, 0, 1, 1, 0, 0),
-	(2, 'Специальности', 'professions', 'Специальности', NULL, NULL, 1, 2, 1, 1, 0, 0),
-	(3, 'Мероприятия', 'mp', 'Мероприятия', NULL, NULL, 1, 3, 1, 1, 0, 0),
-	(4, 'Галерея', 'gallery', 'Галерея', NULL, NULL, 0, 6, 1, 1, 0, 0),
-	(5, 'О нас', 'about', 'О нас', NULL, NULL, 1, 5, 1, 1, 0, 0),
-	(6, 'Платное образование', 'platnoye-obrazovaniye', 'Платное образование', NULL, NULL, 1, 1, 1, 1, 0, 0),
-	(7, 'Наши достижения', 'nashi-dostzhenia', 'Наши достижения', NULL, NULL, 1, 7, 1, 1, 0, 0),
-	(8, 'Меню', 'menu', 'Меню', NULL, NULL, 0, 123, 1, 1, 1539148972, 1539148989);
+INSERT INTO `category` (`id`, `title`, `description`, `slug`, `meta_title`, `meta_description`, `meta_keywords`, `status`, `sort_order`, `on_home`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+	(2, 'Специальности', 'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'professions', 'Специальности', NULL, NULL, 1, 2, 1, 1, 1, 0, 0),
+	(3, 'Мероприятия', 'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'mp', 'Мероприятия', NULL, NULL, 1, 3, 1, 1, 1, 0, 0),
+	(5, 'О нас', 'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'about', 'О нас', NULL, NULL, 1, 5, 1, 1, 1, 0, 0),
+	(6, 'Платное образование', 'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'platnoye-obrazovaniye', 'Платное образование', NULL, NULL, 1, 1, 0, 1, 1, 0, 0),
+	(7, 'Наши достижения', 'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'nashi-dostzhenia', 'Наши достижения', NULL, NULL, 1, 7, 1, 1, 1, 0, 0);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.category_to_post
@@ -316,7 +315,7 @@ INSERT INTO `image` (`id`, `title`, `content`, `src`, `created_by`, `updated_by`
 	(142, 'Лузан Светлана Сергеевна', NULL, '/data/teachers/luzan.jpg', 1, NULL, 0, 0),
 	(143, 'Селиванова Светлана Александровна', NULL, '/data/teachers/selivanova.jpg', 1, NULL, 0, 0),
 	(144, 'Симонова Людмила Владимировна', NULL, '/data/teachers/simonova.jpg', 1, NULL, 0, 0),
-	(145, 'title', NULL, '/data/banner/1.png', 1, NULL, 0, 0),
+	(145, 'Инклюзивное образование', NULL, '/data/banner/1.jpg', 1, NULL, 0, 0),
 	(146, 'title', NULL, '/data/banner/2.jpg', 1, NULL, 0, 0),
 	(147, 'title', NULL, '/data/banner/3.jpg', 1, NULL, 0, 0),
 	(148, 'title', NULL, '/data/banner/4.jpg', 1, NULL, 0, 0),
@@ -502,12 +501,15 @@ CREATE TABLE IF NOT EXISTS `news` (
   CONSTRAINT `FK_news_image` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_news_user` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_news_user_2` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы yii_nppk_advanced.news: ~0 rows (приблизительно)
 /*!40000 ALTER TABLE `news` DISABLE KEYS */;
 INSERT INTO `news` (`id`, `title`, `content`, `meta_title`, `meta_keywords`, `meta_description`, `slug`, `status`, `image_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-	(1, 'Приёмная кампания 2017', '<p align="center"><span style="font-size: 24px;font-family: \'Open Sans\', sans-serif;"><b>Уважаемые абитуриенты!</b></span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Каждый из вас сейчас стоит перед выбором – куда поступить учиться, с какой профессией связать свое ближайшее будущее. Это очень ответственный выбор. Именно поэтому принятие решения должно быть обдуманным и взвешенным.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Наш колледж, имеет многолетнюю историю и славные традиции. Мы предоставляем своим студентам все возможное для полноценного личностного развития и профессионального роста, проявить себя в спорте и творчестве.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Преподаватели и сотрудники нашего колледжа сделают все, чтобы период учебы запомнился вам не только сложностями, связанными с овладеванием новой профессией, но и оставил в памяти яркие впечатления о студенческих годах как лучшей поре в жизни.</span></p><p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;"><br></span></p>\r\n<p style="text-align: right;"><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Приемная комиссия</span></p>', 'Приёмная кампания 2017', ' ', ' ', 'admission-campaign', 1, 155, 1, 1, 1538104254, 1538104254);
+	(1, 'Приёмная кампания 2017', '<p align="center"><span style="font-size: 24px;font-family: \'Open Sans\', sans-serif;"><b>Уважаемые абитуриенты!</b></span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Каждый из вас сейчас стоит перед выбором – куда поступить учиться, с какой профессией связать свое ближайшее будущее. Это очень ответственный выбор. Именно поэтому принятие решения должно быть обдуманным и взвешенным.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Наш колледж, имеет многолетнюю историю и славные традиции. Мы предоставляем своим студентам все возможное для полноценного личностного развития и профессионального роста, проявить себя в спорте и творчестве.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Преподаватели и сотрудники нашего колледжа сделают все, чтобы период учебы запомнился вам не только сложностями, связанными с овладеванием новой профессией, но и оставил в памяти яркие впечатления о студенческих годах как лучшей поре в жизни.</span></p><p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;"><br></span></p>\r\n<p style="text-align: right;"><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Приемная комиссия</span></p>', 'Приёмная кампания 2017', ' ', ' ', 'admission-campaign', 1, 155, 1, 1, 1538104254, 1538104254),
+	(3, 'Приёмная кампания 2017', '<p align="center"><span style="font-size: 24px;font-family: \'Open Sans\', sans-serif;"><b>Уважаемые абитуриенты!</b></span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Каждый из вас сейчас стоит перед выбором – куда поступить учиться, с какой профессией связать свое ближайшее будущее. Это очень ответственный выбор. Именно поэтому принятие решения должно быть обдуманным и взвешенным.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Наш колледж, имеет многолетнюю историю и славные традиции. Мы предоставляем своим студентам все возможное для полноценного личностного развития и профессионального роста, проявить себя в спорте и творчестве.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Преподаватели и сотрудники нашего колледжа сделают все, чтобы период учебы запомнился вам не только сложностями, связанными с овладеванием новой профессией, но и оставил в памяти яркие впечатления о студенческих годах как лучшей поре в жизни.</span></p><p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;"><br></span></p>\r\n<p style="text-align: right;"><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Приемная комиссия</span></p>', 'Приёмная кампания 2017', ' ', ' ', 'admission-campaign-2', 1, 60, 1, 1, 1538104254, 1538104254),
+	(4, 'Приёмная кампания 2017', '<p align="center"><span style="font-size: 24px;font-family: \'Open Sans\', sans-serif;"><b>Уважаемые абитуриенты!</b></span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Каждый из вас сейчас стоит перед выбором – куда поступить учиться, с какой профессией связать свое ближайшее будущее. Это очень ответственный выбор. Именно поэтому принятие решения должно быть обдуманным и взвешенным.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Наш колледж, имеет многолетнюю историю и славные традиции. Мы предоставляем своим студентам все возможное для полноценного личностного развития и профессионального роста, проявить себя в спорте и творчестве.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Преподаватели и сотрудники нашего колледжа сделают все, чтобы период учебы запомнился вам не только сложностями, связанными с овладеванием новой профессией, но и оставил в памяти яркие впечатления о студенческих годах как лучшей поре в жизни.</span></p><p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;"><br></span></p>\r\n<p style="text-align: right;"><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Приемная комиссия</span></p>', 'Приёмная кампания 2017', ' ', ' ', 'admission-campaign-3', 1, 66, 1, 1, 1538104254, 1538104254),
+	(5, 'Приёмная кампания 2017', '<p align="center"><span style="font-size: 24px;font-family: \'Open Sans\', sans-serif;"><b>Уважаемые абитуриенты!</b></span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Каждый из вас сейчас стоит перед выбором – куда поступить учиться, с какой профессией связать свое ближайшее будущее. Это очень ответственный выбор. Именно поэтому принятие решения должно быть обдуманным и взвешенным.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Наш колледж, имеет многолетнюю историю и славные традиции. Мы предоставляем своим студентам все возможное для полноценного личностного развития и профессионального роста, проявить себя в спорте и творчестве.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Преподаватели и сотрудники нашего колледжа сделают все, чтобы период учебы запомнился вам не только сложностями, связанными с овладеванием новой профессией, но и оставил в памяти яркие впечатления о студенческих годах как лучшей поре в жизни.</span></p><p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;"><br></span></p>\r\n<p style="text-align: right;"><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Приемная комиссия</span></p>', 'Приёмная кампания 2017', ' ', ' ', 'admission-campaign-4', 1, 31, 1, 1, 1538104254, 1538104254);
 /*!40000 ALTER TABLE `news` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.post

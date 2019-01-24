@@ -71,7 +71,6 @@ return [
             'showScriptName' => false,
             'rules' => [
                 '' => 'site/index',
-                'teachers' => 'site/teachers',
 
                 // 'post/search' => 'post/search',
                 'posts/<category:[\w_-]+>/<post:[\w_-]+>' => 'post/view',
@@ -81,11 +80,15 @@ return [
                 'news/<id:[\w_-]+>' => 'news/view',
                 'news' => 'news/index',
 
-                'rooms/<id:\d+>' => 'site/rooms',
-                'rooms' => 'site/rooms',
+                'timetable/group-<id:\d+>' => 'timetable/view',
+                'timetable/group-<id:\d+>' => 'timetable/ajax-view',
+                'timetable' => 'timetable/index',
 
-                'timetable/<id:\d+>' => 'site/timetable',
-                'timetable' => 'site/timetable',
+                'rooms/<id:\d+>' => 'room/view',
+                'rooms' => 'room/index',
+
+                'teachers/<id:\d+>' => 'teacher/view',
+                'teachers' => 'teacher/index',
             ],
         ],
     ],

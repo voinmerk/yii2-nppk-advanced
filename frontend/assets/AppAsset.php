@@ -19,6 +19,8 @@ class AppAsset extends AssetBundle
         'css/magnific-popup-animate.css',
         'css/slick.css',
         'css/slick-theme.css',
+        'css/jquery.custom-scrollbar.css',
+        'css/jquery.jscrollpane.css',
         'css/style.css',
     ];
     public $js = [
@@ -29,6 +31,8 @@ class AppAsset extends AssetBundle
         'js/jquery.mousewheel.js',
         'js/jquery.magnific-popup.js',
         'js/jquery.cookie.js',
+        'js/jquery.custom-scrollbar.min.js',
+        'js/jquery.jscrollpane.min.js',
         'js/bootstrap.min.js',
         'js/slick.js',
         'js/modernizr.js',
