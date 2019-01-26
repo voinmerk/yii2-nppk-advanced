@@ -85,7 +85,7 @@ function special_refrash() {
 		sel_contrast = 0;
 
 		if($('#special-style')) $('#special-style').remove();
-		$('head').append('<link href="/web/css/' + style_contrast[sel_contrast] + '" id="special-style" rel="stylesheet" type="text/css" />');
+		$('head').append('<link href="/css/' + style_contrast[sel_contrast] + '" id="special-style" rel="stylesheet" type="text/css" />');
 
 		$.cookie('special-select-contrast', sel_contrast, { path: '/' });
 	}
@@ -141,7 +141,7 @@ $('li.sp-contrast > a').removeClass('active');
 $('#spec_contrast_'+sel_contrast).addClass('active');
 
 if($('#special-style')) $('#special-style').remove();
-$('head').append('<link href="/web/css/' + style_contrast[sel_contrast] + '" id="special-style" rel="stylesheet" type="text/css" />');
+$('head').append('<link href="/css/' + style_contrast[sel_contrast] + '" id="special-style" rel="stylesheet" type="text/css" />');
 
 // Font
 if($.cookie('special-select-font')) {
@@ -203,7 +203,7 @@ $(document).ready(function(){
 		} else {
 			if($('#special-style')) $('#special-style').remove();
 
-			$('head').append('<link href="/web/css/' + style_contrast[sel_contrast] + '" id="special-style" rel="stylesheet" type="text/css" />');
+			$('head').append('<link href="/css/' + style_contrast[sel_contrast] + '" id="special-style" rel="stylesheet" type="text/css" />');
 		}
 		
 		$.cookie('special-select-contrast', sel_contrast, { path: '/' });

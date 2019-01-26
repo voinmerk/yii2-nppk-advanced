@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   KEY `FK_category_user_updated` (`updated_by`),
   CONSTRAINT `FK_category_user_created` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_category_user_updated` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы yii_nppk_advanced.category: ~5 rows (приблизительно)
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
@@ -503,7 +503,7 @@ CREATE TABLE IF NOT EXISTS `news` (
   CONSTRAINT `FK_news_user_2` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii_nppk_advanced.news: ~0 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.news: ~4 rows (приблизительно)
 /*!40000 ALTER TABLE `news` DISABLE KEYS */;
 INSERT INTO `news` (`id`, `title`, `content`, `meta_title`, `meta_keywords`, `meta_description`, `slug`, `status`, `image_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'Приёмная кампания 2017', '<p align="center"><span style="font-size: 24px;font-family: \'Open Sans\', sans-serif;"><b>Уважаемые абитуриенты!</b></span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Каждый из вас сейчас стоит перед выбором – куда поступить учиться, с какой профессией связать свое ближайшее будущее. Это очень ответственный выбор. Именно поэтому принятие решения должно быть обдуманным и взвешенным.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Наш колледж, имеет многолетнюю историю и славные традиции. Мы предоставляем своим студентам все возможное для полноценного личностного развития и профессионального роста, проявить себя в спорте и творчестве.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Преподаватели и сотрудники нашего колледжа сделают все, чтобы период учебы запомнился вам не только сложностями, связанными с овладеванием новой профессией, но и оставил в памяти яркие впечатления о студенческих годах как лучшей поре в жизни.</span></p><p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;"><br></span></p>\r\n<p style="text-align: right;"><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Приемная комиссия</span></p>', 'Приёмная кампания 2017', ' ', ' ', 'admission-campaign', 1, 155, 1, 1, 1538104254, 1538104254),

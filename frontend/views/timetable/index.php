@@ -5,7 +5,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = 'НППК - ' . Yii::t('frontend', 'Timetable');
+$this->title = 'НППК - Расписание занятий';
 $this->params['breadcrumbs'][] = $this->title;
 
 $js = <<<JS
