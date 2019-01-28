@@ -306,7 +306,7 @@ a.thumbnail, div.thumbnail {
 }
 
 .timetable table {
-	max-width: 1000px;
+	/*max-width: 1000px;*/
 	width: 100%;
 	float: left;
 }

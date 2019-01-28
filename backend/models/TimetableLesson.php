@@ -34,11 +34,11 @@ class TimetableLesson extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['timetable_id', 'lesson_id', 'room_id'], 'required'],
-            [['timetable_id', 'lesson_id', 'room_id', 'sort_order'], 'integer'],
+            [['timetable_id', 'lesson_id', 'room_id'], 'safe'],
+            /*[['timetable_id', 'lesson_id', 'room_id', 'sort_order'], 'integer'],
             [['lesson_id'], 'exist', 'skipOnError' => true, 'targetClass' => Lesson::className(), 'targetAttribute' => ['lesson_id' => 'id']],
             [['room_id'], 'exist', 'skipOnError' => true, 'targetClass' => Room::className(), 'targetAttribute' => ['room_id' => 'id']],
-            [['timetable_id'], 'exist', 'skipOnError' => true, 'targetClass' => Timetable::className(), 'targetAttribute' => ['timetable_id' => 'id']],
+            [['timetable_id'], 'exist', 'skipOnError' => true, 'targetClass' => Timetable::className(), 'targetAttribute' => ['timetable_id' => 'id']],*/
         ];
     }
 
@@ -49,9 +49,9 @@ class TimetableLesson extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('backend', 'ID'),
-            'timetable_id' => 'Timetable ID',
-            'lesson_id' => 'Lesson ID',
-            'room_id' => 'Room ID',
+            'timetable_id' => Yii::t('backend', 'Timetable ID'),
+            'lesson_id' => Yii::t('backend', 'Lesson ID'),
+            'room_id' => Yii::t('backend', 'Room ID'),
             'sort_order' => Yii::t('backend', 'Sort Order'),
         ];
     }

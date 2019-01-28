@@ -22,6 +22,16 @@ class TimetableController extends Controller
 		return $this->render('index', compact('groups', 'groupCount'));
 	}
 
+	public function actionView($id)
+	{
+		$today = date('Y-m-d');
+
+        $group = Group::getGroupById($id);
+        $timetables = Timetable::getTimetablesByGroup($id);
+
+		return $this->render('view', compact('group', 'today', 'timetables'));
+	}
+
 	public function actionAjaxView($id)
 	{
 		$request = new Yii::$app->request();

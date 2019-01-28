@@ -8,6 +8,8 @@ use rmrevin\yii\fontawesome\FA;
 use backend\models\TimetableLesson;
 use wbraganca\dynamicform\DynamicFormWidget;
 
+use kartik\date\DatePicker;
+
 use backend\models\Lesson;
 use backend\models\Room;
 
@@ -18,13 +20,13 @@ use backend\models\Room;
 $js = '
 jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
     jQuery(".dynamicform_wrapper .panel-title-lesson").each(function(index) {
-        jQuery(this).html("Address: " + (index + 1))
+        jQuery(this).html("Lesson: " + (index + 1))
     });
 });
 
 jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
     jQuery(".dynamicform_wrapper .panel-title-lesson").each(function(index) {
-        jQuery(this).html("Address: " + (index + 1))
+        jQuery(this).html("Lesson: " + (index + 1))
     });
 });
 ';
@@ -36,13 +38,20 @@ $this->registerJs($js);
     <?php $form = ActiveForm::begin(['id' => 'timetable-form']); ?>
     <div class="box-body table-responsive">
 
-        <?= $form->field($model, 'date')->textInput() ?>
+        <?= $form->field($model, 'date')->widget(DatePicker::className(), [
+            'type' => DatePicker::TYPE_INPUT,
+            'value' => $model->date,
+            'pluginOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-dd-mm'
+            ]
+        ]) ?>
 
         <?= $form->field($model, 'group_id')->dropDownList($model->getGroupList(), ['prompt' => '-- Выбор группы --']) ?>
 
         <?php DynamicFormWidget::begin([
-            'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-            'widgetBody' => '.container-items', // required: css class selector
+            'widgetContainer' => 'dynamicform_wrapper',
+            'widgetBody' => '.container-items',
             'widgetItem' => '.item', // required: css class
             'limit' => 4, // the maximum times, an element can be cloned (default 999)
             'min' => 0, // 0 or 1 (default 1)
@@ -63,7 +72,7 @@ $this->registerJs($js);
 
                 <div class="clearfix"></div>
             </div>
-            <div class="panel-body">
+            <div class="panel-body container-items">
                 <?php if($modelLessons) { ?>
                 <?php foreach ($modelLessons as $index => $lesson) { ?>
                     <?php

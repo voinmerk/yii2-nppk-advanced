@@ -123,4 +123,7 @@ return [
 	'Machine Name' => 'Машинное имя',
 	'Category' => 'Категория',
 	'Room ID' => 'Кабинет',
+
+	'Lesson ID' => 'Предмет',
+	'Room ID' => 'Кабинет',
 ];

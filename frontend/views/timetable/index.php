@@ -34,7 +34,9 @@ $this->registerJs($js);
 	<?php } ?>
 
 		<div class="col-xs-margin-25 col-xs-12 col-sm-3 col-md-3">
-			<a class="ajax-popup btn btn-primary" data-effect="mfp-zoom-in" href="<?= Url::toRoute(['timetable/ajax-view', 'id' => $group->id]) ?>"><?= $group->name ?></a>
+			<!-- <a class="ajax-popup btn btn-primary" data-effect="mfp-zoom-in" href="<?= Url::toRoute(['timetable/ajax-view', 'id' => $group->id]) ?>"><?= $group->name ?></a> -->
+
+			<?= Html::a($group->name, ['/timetable/view', 'id' => $group->id], ['class' => 'btn btn-primary']) ?>
 		</div>
 
 	<?php $i ++; ?>

@@ -14,4 +14,7 @@ return [
 	'Sort Order' => 'Sort Order',
 
 	'Update Group' => 'Update Group',
+
+	'Lesson ID' => 'Lesson',
+	'Room ID' => 'Room',
 ];
