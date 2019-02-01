@@ -43,7 +43,7 @@ $this->registerJs($js);
             'value' => $model->date,
             'pluginOptions' => [
                 'autoclose' => true,
-                'format' => 'yyyy-dd-mm'
+                'format' => 'yyyy-mm-dd'
             ]
         ]) ?>
 
