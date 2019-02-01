@@ -82,6 +82,11 @@ class Lesson extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function getAutocompleteLessons()
+    {
+        return self::find()->select('name')->where(['published' => self::PUBLISHED])->column();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -13,7 +13,7 @@ use backend\models\Group;
 /* @var $searchModel backend\models\TimetableSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('backend', 'Timetables');;
+$this->title = Yii::t('backend', 'Timetables');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="timetable-index box box-primary">

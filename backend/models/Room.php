@@ -76,6 +76,11 @@ class Room extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function getAutocompleteRooms()
+    {
+        return self::find()->select('title')->where(['published' => self::PUBLISHED])->column();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

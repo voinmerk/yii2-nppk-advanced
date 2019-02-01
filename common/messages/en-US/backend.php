@@ -17,4 +17,6 @@ return [
 
 	'Lesson ID' => 'Lesson',
 	'Room ID' => 'Room',
+
+    'Are you sure you want to delete this item?' => 'Are you sure you want to delete this item?',
 ];

@@ -34,10 +34,28 @@ class Timetable extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => \yii\behaviors\TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => time(),
+            ],
+            'blameable' => [
+                'class' => \yii\behaviors\BlameableBehavior::className(),
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
-            [['date', 'group_id', 'created_at', 'updated_at'], 'required'],
+            [['date', 'group_id'], 'required'],
             [['date'], 'safe'],
             [['group_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
@@ -95,7 +113,7 @@ class Timetable extends \yii\db\ActiveRecord
      */
     public function getTimetableLessons()
     {
-        return $this->hasMany(TimetableLesson::className(), ['timetable_id' => 'id']);
+        return $this->hasMany(TimetableLessonBeta::className(), ['timetable_id' => 'id']);
     }
 
     /**

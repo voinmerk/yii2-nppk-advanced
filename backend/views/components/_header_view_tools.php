@@ -1,17 +1,18 @@
 <?php
 
 use yii\helpers\Html;
-
-$fa = new \rmrevin\yii\fontawesome\FontAwesome();
+use rmrevin\yii\fontawesome\FA;
 
 ?>
 <div class="box-header">
-	<?= Html::a($fa->icon('pencil'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-flat']) ?>
-    <?= Html::a($fa->icon('trash-o'), ['delete', 'id' => $model->id], [
+	<?= Html::a(FA::icon('plus'), ['create'], ['class' => 'btn btn-success btn-flat']) ?>
+	<?= Html::a(FA::icon('pencil'), ['update', 'id' => $id], ['class' => 'btn btn-primary btn-flat']) ?>
+    <?= Html::a(FA::icon('trash-o'), ['delete', 'id' => $id], [
         'class' => 'btn btn-danger btn-flat',
         'data' => [
-            'confirm' => 'Are you sure you want to delete this item?',
+            'confirm' => Yii::t('backend', 'Are you sure you want to delete this item?'),
             'method' => 'post',
         ],
     ]) ?>
+	<?= Html::a(FA::icon('reply'), ['index'], ['class' => 'btn btn-default btn-flat']) ?>
 </div>

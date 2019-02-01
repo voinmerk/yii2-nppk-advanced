@@ -819,8 +819,8 @@ CREATE TABLE IF NOT EXISTS `timetable` (
   `group_id` int(11) NOT NULL,
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
-  `created_at` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL,
+  `created_at` int(11) NOT NULL DEFAULT '0',
+  `updated_at` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK_timetable_groups` (`group_id`),
   KEY `FK_timetable_user_updated` (`updated_by`),
@@ -828,12 +828,14 @@ CREATE TABLE IF NOT EXISTS `timetable` (
   CONSTRAINT `FK_timetable_groups` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_timetable_user_created` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_timetable_user_updated` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii_nppk_advanced.timetable: ~0 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.timetable: ~3 rows (приблизительно)
 /*!40000 ALTER TABLE `timetable` DISABLE KEYS */;
 INSERT INTO `timetable` (`id`, `date`, `group_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-	(1, '2018-10-12', 1, 1, 1, 0, 0);
+	(1, '2019-01-12', 2, 1, 1, 0, 0),
+	(2, '2019-02-06', 1, 1, 1, 0, 0),
+	(3, '2019-02-22', 8, 1, 1, 1549003886, 1549004826);
 /*!40000 ALTER TABLE `timetable` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.timetable_lesson
@@ -850,15 +852,39 @@ CREATE TABLE IF NOT EXISTS `timetable_lesson` (
   CONSTRAINT `FK_timetable_lesson_lesson` FOREIGN KEY (`lesson_id`) REFERENCES `lesson` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_timetable_lesson_room` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_timetable_lesson_timetable` FOREIGN KEY (`timetable_id`) REFERENCES `timetable` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii_nppk_advanced.timetable_lesson: ~0 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.timetable_lesson: ~4 rows (приблизительно)
 /*!40000 ALTER TABLE `timetable_lesson` DISABLE KEYS */;
 INSERT INTO `timetable_lesson` (`id`, `timetable_id`, `lesson_id`, `room_id`, `sort_order`) VALUES
 	(1, 1, 111, 11, 1),
-	(2, 1, 42, 10, 2),
-	(3, 1, 50, 16, 3);
+	(2, 1, 111, 11, 2),
+	(3, 1, 98, 10, 3),
+	(4, 1, 104, 6, 0);
 /*!40000 ALTER TABLE `timetable_lesson` ENABLE KEYS */;
+
+-- Дамп структуры для таблица yii_nppk_advanced.timetable_lesson_beta
+CREATE TABLE IF NOT EXISTS `timetable_lesson_beta` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `timetable_id` int(11) NOT NULL,
+  `sort_order` int(3) NOT NULL DEFAULT '0',
+  `lesson` varchar(255) DEFAULT NULL,
+  `room` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_timetable_lesson_beta_timetable` (`timetable_id`),
+  CONSTRAINT `FK_timetable_lesson_beta_timetable` FOREIGN KEY (`timetable_id`) REFERENCES `timetable` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+-- Дамп данных таблицы yii_nppk_advanced.timetable_lesson_beta: ~6 rows (приблизительно)
+/*!40000 ALTER TABLE `timetable_lesson_beta` DISABLE KEYS */;
+INSERT INTO `timetable_lesson_beta` (`id`, `timetable_id`, `sort_order`, `lesson`, `room`) VALUES
+	(1, 1, 0, 'География', '4 кабинет'),
+	(2, 1, 0, 'Русский язык', '205 кабинет'),
+	(3, 1, 0, 'аар', 'вапвап'),
+	(4, 2, 0, '123', '123'),
+	(5, 3, 0, 'Русский язык', '5 кабинет'),
+	(6, 3, 0, 'Математика', '123');
+/*!40000 ALTER TABLE `timetable_lesson_beta` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.user
 CREATE TABLE IF NOT EXISTS `user` (

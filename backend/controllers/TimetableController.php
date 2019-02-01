@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
 use backend\base\Model;
 use backend\models\Timetable;
 use backend\models\TimetableSearch;
-use backend\models\TimetableLesson;
+use backend\models\TimetableLessonBeta as TimetableLesson;
 
 /**
  * TimetableController implements the CRUD actions for Timetable model.
@@ -82,7 +82,7 @@ class TimetableController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $modelLessons = Model::createMultiple(TimetableLesson::classname());
+            $modelLessons = Model::createMultiple(TimetableLesson::className());
             Model::loadMultiple($modelLessons, Yii::$app->request->post());
 
             // validate all models
@@ -105,13 +105,20 @@ class TimetableController extends Controller
 
                     if ($flag) {
                         $transaction->commit();
-                        return $this->redirect(['view', 'id' => $model->id]);
+                        
+                        Yii::$app->session->setFlash('success', 'Расписание на <strong>"' . $model->date . '"</strong>, для группы <strong>"' . $model->group->name . '"</strong> успено добавлено.');
+                        
+                        return $this->redirect(['index']);
+
+                        //return $this->redirect(['view', 'id' => $model->id]);
                     }
                 } catch (Exception $e) {
                     $transaction->rollBack();
                 }
             }
         }
+
+        //var_dump($modelLessons, $model);exit;
 
         return $this->render('create', [
             'model' => $model,
@@ -130,10 +137,12 @@ class TimetableController extends Controller
         $model = $this->findModel($id);
         $modelLessons = $model->timetableLessons;
 
+        if(!$modelLessons) $modelLessons = [new TimetableLesson];
+
         if ($model->load(Yii::$app->request->post())) {
 
             $oldIDs = ArrayHelper::map($modelLessons, 'id', 'id');
-            $modelLessons = Model::createMultiple(TimetableLesson::classname(), $modelLessons);
+            $modelLessons = Model::createMultiple(TimetableLesson::className(), $modelLessons);
             Model::loadMultiple($modelLessons, Yii::$app->request->post());
             $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelLessons, 'id', 'id')));
 
@@ -158,7 +167,10 @@ class TimetableController extends Controller
                     }
                     if ($flag) {
                         $transaction->commit();
-                        return $this->redirect(['view', 'id' => $model->id]);
+
+                        Yii::$app->session->setFlash('success', 'Расписание на <strong>"' . $model->date . '"</strong>, для группы <strong>"' . $model->group->name . '"</strong> успено изменено.');
+
+                        return $this->redirect(['index']);
                     }
                 } catch (Exception $e) {
                     $transaction->rollBack();
@@ -181,7 +193,7 @@ class TimetableController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $name = $model->first_name;
+        $name = $model->date;
 
         if ($model->delete()) {
             Yii::$app->session->setFlash('success', 'Record  <strong>"' . $name . '"</strong> deleted successfully.');
@@ -199,7 +211,7 @@ class TimetableController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Timetable::find()->with(['timetableLessons'])->where($id)->one()) !== null) {
+        if (($model = Timetable::find()->with(['timetableLessons'])->where(['id' => $id])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

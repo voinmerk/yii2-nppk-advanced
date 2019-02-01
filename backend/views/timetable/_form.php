@@ -6,7 +6,7 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use rmrevin\yii\fontawesome\FA;
 use backend\models\TimetableLesson;
-use wbraganca\dynamicform\DynamicFormWidget;
+use kidzen\dynamicform\DynamicFormWidget;
 
 use kartik\date\DatePicker;
 
@@ -20,13 +20,13 @@ use backend\models\Room;
 $js = '
 jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
     jQuery(".dynamicform_wrapper .panel-title-lesson").each(function(index) {
-        jQuery(this).html("Lesson: " + (index + 1))
+        jQuery(this).html("Занятие: " + (index + 1))
     });
 });
 
 jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
     jQuery(".dynamicform_wrapper .panel-title-lesson").each(function(index) {
-        jQuery(this).html("Lesson: " + (index + 1))
+        jQuery(this).html("Занятие: " + (index + 1))
     });
 });
 ';
@@ -53,15 +53,15 @@ $this->registerJs($js);
             'widgetContainer' => 'dynamicform_wrapper',
             'widgetBody' => '.container-items',
             'widgetItem' => '.item', // required: css class
-            'limit' => 4, // the maximum times, an element can be cloned (default 999)
+            'limit' => 8, // the maximum times, an element can be cloned (default 999)
             'min' => 0, // 0 or 1 (default 1)
             'insertButton' => '.add-item', // css class
             'deleteButton' => '.remove-item', // css class
             'model' => $modelLessons[0],
             'formId' => 'timetable-form',
             'formFields' => [
-                'lesson_id',
-                'room_id',
+                'lesson',
+                'room',
                 'sort_order',
             ],
         ]); ?>
@@ -89,11 +89,27 @@ $this->registerJs($js);
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-sm-5">
-                                    <?= $form->field($lesson, "[{$index}]lesson_id")->dropDownList(ArrayHelper::map(Lesson::find()->select(['id', 'name'])->where(['published' => 1])->all(), 'id', 'name')) ?>
+                                <div class="col-sm-7">
+                                    <?= $form->field($lesson, "[{$index}]lesson")->widget(\yii\jui\AutoComplete::className(), [
+                                        'clientOptions' => [
+                                            'source' => Lesson::getAutocompleteLessons(),
+                                            'autoFill' => true,
+                                        ],
+                                        'options' => [
+                                            'class' => 'form-control'
+                                        ],
+                                    ]) ?>
                                 </div>
                                 <div class="col-sm-5">
-                                    <?= $form->field($lesson, "[{$index}]room_id")->dropDownList(ArrayHelper::map(Room::find()->select(['id', 'title'])->where(['published' => 1])->all(), 'id', 'title')) ?>
+                                    <?= $form->field($lesson, "[{$index}]room")->widget(\yii\jui\AutoComplete::className(), [
+                                        'clientOptions' => [
+                                            'source' => Room::getAutocompleteRooms(),
+                                            'autoFill' => true,
+                                        ],
+                                        'options' => [
+                                            'class' => 'form-control'
+                                        ],
+                                    ]) ?>
                                 </div>
                             </div>
                         </div>

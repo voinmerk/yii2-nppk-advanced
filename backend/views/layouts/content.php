@@ -31,6 +31,7 @@ use dmstr\widgets\Alert;
 
     <section class="content">
         <?= Alert::widget() ?>
+        
         <?= $content ?>
     </section>
 </div>
@@ -39,8 +40,7 @@ use dmstr\widgets\Alert;
     <div class="pull-right hidden-xs">
         <b>Version</b> 2.0
     </div>
-    <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights
-    reserved.
+    <strong>Авторское право &copy; <?= date('Y') ?> <a href="http://nppk54.ru">ГБПОУ НСО НППК</a>.</strong> Все права защищены.
 </footer>
 
 <!-- Control Sidebar -->

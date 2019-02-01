@@ -11,9 +11,11 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('backend', 'Posts'), 'url' =
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="post-view box box-primary">
-
-    <?= $this->render('@viewComponents/_header_view_tools', ['model' => $model]) ?>
     
+    <?= $this->render('@viewComponents/_header_view_tools', [
+        'id' => $model->id,
+    ]) ?>
+
     <div class="box-body table-responsive no-padding">
         <?= DetailView::widget([
             'model' => $model,
