@@ -12,6 +12,9 @@ use backend\models\Timetable;
  */
 class TimetableSearch extends Timetable
 {
+    public $createdName;
+    public $updatedName;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +22,7 @@ class TimetableSearch extends Timetable
     {
         return [
             [['id', 'group_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['date'], 'safe'],
+            [['date', 'createdName', 'updatedName'], 'safe'],
         ];
     }
 

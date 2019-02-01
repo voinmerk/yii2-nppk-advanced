@@ -14,9 +14,18 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'image_ids')->dropDownList($model->getImageList(), ['multiple' => true, 'style' => 'height: 350px;']) ?>
+        <?= $form->field($model, 'image_ids')->checkboxList($model->getImageList(), [
+            'item' => function($index, $label, $name, $checked, $value) {
+                return Html::checkbox($name, $checked, [
+                    'value' => $value,
+                    'disabled' => $disabled,
+                    'label' => Html::img($label, ['style' => 'max-width: 150px;']),
+                ]);
+            },
+            'encode' => false,
+        ]); ?>
 
-        <?= $form->field($model, 'published')->textInput() ?>
+        <?= $form->field($model, 'published')->dropDownList($model->getStatusList()) ?>
 
     </div>
     <div class="box-footer">

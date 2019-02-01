@@ -40,7 +40,7 @@ class Image extends \yii\db\ActiveRecord
     {
         return [
             [['content'], 'string'],
-            [['src', 'created_at', 'updated_at'], 'required'],
+            [['src'], 'required'],
             [['created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['title', 'src'], 'string', 'max' => 255],
             [['src'], 'unique'],

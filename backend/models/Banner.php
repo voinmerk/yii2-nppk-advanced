@@ -88,11 +88,7 @@ class Banner extends \yii\db\ActiveRecord
      */
     public function getImages()
     {
-        return $this->hasMany(Image::className(), ['id' => 'image_id'])->viaTable('banner_to_image', ['banner_id' => 'id']);/*, function ($query) {
-            // @var $query \yii\db\ActiveQuery
-
-            $query->orderBy(['sort_order' => SORT_ASC]);
-        });*/
+        return $this->hasMany(Image::className(), ['id' => 'image_id'])->viaTable('banner_to_image', ['banner_id' => 'id']);
     }
 
     /**
@@ -118,7 +114,7 @@ class Banner extends \yii\db\ActiveRecord
         $imageList = [];
 
         foreach($images as $image) {
-            $imageList[$image['id']] = $image['title'] . ' (' . $image['src'] . ')';
+            $imageList[$image['id']] = $image->src; // $image['title'] . ' (' . $image['src'] . ')';
         }
 
         return $imageList;

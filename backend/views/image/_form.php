@@ -16,15 +16,7 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'content')->textarea(['rows' => 6]) ?>
 
-        <?= $form->field($model, 'src')->textInput(['maxlength' => true]) ?>
-
-        <?= $form->field($model, 'created_by')->textInput() ?>
-
-        <?= $form->field($model, 'updated_by')->textInput() ?>
-
-        <?= $form->field($model, 'created_at')->textInput() ?>
-
-        <?= $form->field($model, 'updated_at')->textInput() ?>
+        <?= $form->field($model, 'src')->fileInput() ?>
 
     </div>
     <div class="box-footer">

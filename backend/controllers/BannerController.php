@@ -3,11 +3,13 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Banner;
-use backend\models\BannerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
+use backend\models\Banner;
+use backend\models\BannerSearch;
+use backend\models\Image;
 
 /**
  * BannerController implements the CRUD actions for Banner model.
@@ -65,8 +67,16 @@ class BannerController extends Controller
     {
         $model = new Banner();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                foreach($model->image_ids as $image_id) {
+                    $image = Image::findOne($image_id);
+
+                    $model->link('images', $image);
+                }
+
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -84,11 +94,25 @@ class BannerController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $model->image_ids = $model->images;
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save(false)) {
+                foreach($model->images as $image) {
+                    $model->unlink('images', $image, true);
+                }
+
+                foreach($model->image_ids as $image_id) {
+                    $image = Image::findOne($image_id);
+
+                    $model->link('images', $image);
+                }
+
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
-            foreach($model->images as $image) {
-                $model->image_ids[$image['id']] = null;
+            foreach ($model->images as $image) {
+                $model->image_ids[] = $image->id;
             }
 
             return $this->render('update', [
@@ -105,7 +129,13 @@ class BannerController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        if($model->delete()) {
+            foreach($model->images as $image) {
+                $model->unlink('images', $image, true);
+            }
+        }
 
         return $this->redirect(['index']);
     }
@@ -119,7 +149,7 @@ class BannerController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Banner::findOne($id)) !== null) {
+        if (($model = Banner::find()->where(['id' => $id])->with(['images'])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
