@@ -36,24 +36,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
                 [
-                    'attribute' => 'published',
-                    'format' => 'html',
-                    'value' => function($model) {
-                        $class = $model->published ? ' label-success' : ' label-danger';
-                        $name = $model->statusName;
-
-                        return '<span class="label' . $class . '">' . $name . '</span>';
-                    },
-                    'filter' => Lesson::getStatusList(),
-                ],
-                [
                     'attribute' => 'updated_at',
                     'format' => 'datetime',
                     'filter' => DateTimePicker::widget([
                         'model' => $searchModel,
                         'value' => $searchModel->updated_at,
                         'attribute' => 'updated_at',
-                        'language' => 'ru',
+                        'language' => Yii::$app->language,
                         'size' => 'ms',
                         'clientOptions' => [
                             'autoclose' => true,
@@ -61,6 +50,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             'todayBtn' => true
                         ]
                     ]),
+                ],
+                [
+                    'attribute' => 'status',
+                    'format' => 'html',
+                    'value' => function ($model) {
+                        $class = $model->status ? ' label-success' : ' label-danger';
+                        $name = $model->statusName;
+
+                        return '<span class="label' . $class . '">' . $name . '</span>';
+                    },
+                    'filter' => $searchModel->getStatusList(),
                 ],
                 [
                     'class' => 'yii\grid\ActionColumn',
@@ -74,7 +74,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::a(FA::icon('pencil'), $url, ['class' => 'btn btn-warning btn-flat']);
                         },
                         'delete' => function ($url, $model) {
-                            return Html::a(FA::icon('trash-o'), $url, ['class' => 'btn btn-danger btn-flat']);
+                            return Html::a(FA::icon('trash-o'), $url, [
+                                'class' => 'btn btn-danger btn-flat', 
+                                'data' => [
+                                    'confirm' => Yii::t('backend', 'Are you sure you want to delete this item?'),
+                                    'method' => 'post',
+                                ],
+                            ]);
                         },
                     ],
                     'headerOptions' => ['class' => 'text-right'],

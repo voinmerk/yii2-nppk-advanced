@@ -30,7 +30,8 @@
         "kartik-v/yii2-widget-datepicker": "dev-master",
         "yiisoft/yii2-jui": "^2.0",
         "symfony/dom-crawler": "~3.0",
-        "kidzen/yii2-dynamicform": "*"
+        "kidzen/yii2-dynamicform": "*",
+        "kartik-v/yii2-widget-fileinput": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

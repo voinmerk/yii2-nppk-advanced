@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\widgets\FileInput;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Image */
@@ -16,7 +17,9 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'content')->textarea(['rows' => 6]) ?>
 
-        <?= $form->field($model, 'src')->fileInput() ?>
+        <?= $form->field($model, 'src')->widget(FileInput::classname(), [
+            'options' => ['accept' => 'uploads/*'],
+        ]); ?>
 
     </div>
     <div class="box-footer">

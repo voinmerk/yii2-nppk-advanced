@@ -31,12 +31,13 @@ CREATE TABLE IF NOT EXISTS `banner` (
   KEY `FK_banner_image_user_updated` (`updated_by`),
   CONSTRAINT `FK_banner_image_user_created` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_banner_image_user_updated` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы yii_nppk_advanced.banner: ~0 rows (приблизительно)
 /*!40000 ALTER TABLE `banner` DISABLE KEYS */;
 INSERT INTO `banner` (`id`, `name`, `published`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-	(1, 'main_slider', 1, 1, 1, 0, 0);
+	(1, 'main_slider', 1, 1, 1, 0, 1549009047),
+	(2, 'new_slider', 0, 1, 1, 1549008949, 1549008949);
 /*!40000 ALTER TABLE `banner` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.banner_to_image
@@ -46,9 +47,15 @@ CREATE TABLE IF NOT EXISTS `banner_to_image` (
   `sort_order` tinyint(3) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii_nppk_advanced.banner_to_image: ~0 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.banner_to_image: ~6 rows (приблизительно)
 /*!40000 ALTER TABLE `banner_to_image` DISABLE KEYS */;
 INSERT INTO `banner_to_image` (`banner_id`, `image_id`, `sort_order`) VALUES
+	(2, 145, 0),
+	(2, 146, 0),
+	(2, 147, 0),
+	(2, 148, 0),
+	(2, 153, 0),
+	(2, 154, 0),
 	(1, 145, 0);
 /*!40000 ALTER TABLE `banner_to_image` ENABLE KEYS */;
 
@@ -332,11 +339,11 @@ INSERT INTO `image` (`id`, `title`, `content`, `src`, `created_by`, `updated_by`
 CREATE TABLE IF NOT EXISTS `lesson` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `published` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
-  `created_at` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL,
+  `created_at` int(11) NOT NULL DEFAULT '0',
+  `updated_at` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK_lesson_user_created` (`created_by`),
   KEY `FK_lesson_user_updated` (`updated_by`),
@@ -346,7 +353,7 @@ CREATE TABLE IF NOT EXISTS `lesson` (
 
 -- Дамп данных таблицы yii_nppk_advanced.lesson: ~118 rows (приблизительно)
 /*!40000 ALTER TABLE `lesson` DISABLE KEYS */;
-INSERT INTO `lesson` (`id`, `name`, `published`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+INSERT INTO `lesson` (`id`, `name`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'Русский язык', 1, 1, NULL, 0, 0),
 	(2, 'Литература', 1, 1, NULL, 0, 0),
 	(3, 'Математика', 1, 1, NULL, 0, 0),
@@ -828,14 +835,15 @@ CREATE TABLE IF NOT EXISTS `timetable` (
   CONSTRAINT `FK_timetable_groups` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_timetable_user_created` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_timetable_user_updated` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы yii_nppk_advanced.timetable: ~3 rows (приблизительно)
 /*!40000 ALTER TABLE `timetable` DISABLE KEYS */;
 INSERT INTO `timetable` (`id`, `date`, `group_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, '2019-01-12', 2, 1, 1, 0, 0),
 	(2, '2019-02-06', 1, 1, 1, 0, 0),
-	(3, '2019-02-22', 8, 1, 1, 1549003886, 1549004826);
+	(3, '2019-02-22', 8, 1, 1, 1549003886, 1549004826),
+	(4, '2019-02-02', 9, 1, 1, 1549009312, 1549009343);
 /*!40000 ALTER TABLE `timetable` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.timetable_lesson
@@ -873,7 +881,7 @@ CREATE TABLE IF NOT EXISTS `timetable_lesson_beta` (
   PRIMARY KEY (`id`),
   KEY `FK_timetable_lesson_beta_timetable` (`timetable_id`),
   CONSTRAINT `FK_timetable_lesson_beta_timetable` FOREIGN KEY (`timetable_id`) REFERENCES `timetable` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы yii_nppk_advanced.timetable_lesson_beta: ~6 rows (приблизительно)
 /*!40000 ALTER TABLE `timetable_lesson_beta` DISABLE KEYS */;
@@ -883,7 +891,8 @@ INSERT INTO `timetable_lesson_beta` (`id`, `timetable_id`, `sort_order`, `lesson
 	(3, 1, 0, 'аар', 'вапвап'),
 	(4, 2, 0, '123', '123'),
 	(5, 3, 0, 'Русский язык', '5 кабинет'),
-	(6, 3, 0, 'Математика', '123');
+	(6, 3, 0, 'Математика', '123'),
+	(7, 4, 0, 'Русский язык', '5 кабинет');
 /*!40000 ALTER TABLE `timetable_lesson_beta` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.user
