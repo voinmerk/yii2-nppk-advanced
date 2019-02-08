@@ -3,12 +3,11 @@ namespace backend\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\helpers\Inflector;
 
 use common\models\User;
 
 /**
- * This is the model class for table "{{%post}}".
+ * This is the model class for table "{{%news}}".
  *
  * @property int $id
  * @property string $title
@@ -18,9 +17,9 @@ use common\models\User;
  * @property string $meta_description
  * @property string $slug
  * @property int $status
+ * @property int $image_id
  * @property int $created_by
  * @property int $updated_by
- * @property int $image_id
  * @property int $created_at
  * @property int $updated_at
  *
@@ -28,24 +27,23 @@ use common\models\User;
  * @property User $createdBy
  * @property User $updatedBy
  */
-class Post extends ActiveRecord
+class News extends ActiveRecord
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
 
     public $image_file;
-    public $category_ids;
 
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%post}}';
+        return '{{%news}}';
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function behaviors()
     {
@@ -62,8 +60,8 @@ class Post extends ActiveRecord
                 /*'thumbs' => [
                     'thumb' => ['width' => 700, 'height' => 700],
                 ],*/
-                'filePath' => '@uploads/post/[[filename]].[[extension]]',
-                'fileUrl' => '/data/post/[[filename]].[[extension]]',
+                'filePath' => '@uploads/news/[[filename]].[[extension]]',
+                'fileUrl' => '/data/news/[[filename]].[[extension]]',
                 //'thumbPath' => '@uploads/news/[[profile]]_[[filename]].[[extension]]',
                 //'thumbUrl' => '/data/news/[[profile]]_[[filename]].[[extension]]',
             ],
@@ -89,12 +87,11 @@ class Post extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'content', 'meta_title', 'category_ids', 'image_file'], 'required'],
+            [['title', 'content', 'meta_title', 'slug', 'image_file'], 'required'],
             [['content', 'meta_keywords', 'meta_description'], 'string'],
-            [['status', 'created_by', 'updated_by', 'image_id', 'created_at', 'updated_at'], 'integer'],
+            [['status', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['title', 'meta_title', 'slug'], 'string', 'max' => 255],
             [['slug'], 'unique'],
-            [['category_ids'], 'safe'],
             [['image_file'], 'file', 'extensions' => 'jpeg, gif, png, jpg'],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -116,9 +113,9 @@ class Post extends ActiveRecord
             'meta_description' => Yii::t('backend', 'Meta Description'),
             'slug' => Yii::t('backend', 'Slug'),
             'status' => Yii::t('backend', 'Status'),
+            'image_id' => Yii::t('backend', 'Image ID'),
             'created_by' => Yii::t('backend', 'Created By'),
             'updated_by' => Yii::t('backend', 'Updated By'),
-            'image_id' => Yii::t('backend', 'Image ID'),
             'created_at' => Yii::t('backend', 'Created At'),
             'updated_at' => Yii::t('backend', 'Updated At'),
         ];
@@ -135,7 +132,7 @@ class Post extends ActiveRecord
 
         $imageModel = new Image;
 
-        $imageModel->src = '/data/post/' . $this->image_file;
+        $imageModel->src = '/data/news/' . $this->image_file;
 
         if ($imageModel->save()) {
             $this->image_id = $imageModel->id;
@@ -150,30 +147,6 @@ class Post extends ActiveRecord
     public function getImage()
     {
         return $this->hasOne(Image::className(), ['id' => 'image_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategory()
-    {
-        return $this->hasOne(Category::className(), ['id' => 'category_id'])->viaTable('category_to_post', ['post_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategories()
-    {
-        return $this->hasMany(Category::className(), ['id' => 'category_id'])->viaTable('category_to_post', ['post_id' => 'id']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCategoryName()
-    {
-        return $this->category->title;
     }
 
     /**
@@ -231,10 +204,10 @@ class Post extends ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return PostQuery the active query used by this AR class.
+     * @return NewsQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new PostQuery(get_called_class());
+        return new NewsQuery(get_called_class());
     }
 }

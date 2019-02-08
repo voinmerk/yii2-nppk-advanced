@@ -13,6 +13,9 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
+        'options' => [
+            'data-pjax' => 1
+        ],
     ]); ?>
 
     <?= $form->field($model, 'id') ?>
@@ -21,15 +24,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'content') ?>
 
-    <?= $form->field($model, 'fixed') ?>
+    <?= $form->field($model, 'meta_title') ?>
 
-    <?= $form->field($model, 'slug') ?>
+    <?= $form->field($model, 'meta_keywords') ?>
 
-    <?php // echo $form->field($model, 'template') ?>
+    <?php // echo $form->field($model, 'meta_description') ?>
 
-    <?php // echo $form->field($model, 'published') ?>
+    <?php // echo $form->field($model, 'slug') ?>
 
-    <?php // echo $form->field($model, 'cut') ?>
+    <?php // echo $form->field($model, 'status') ?>
 
     <?php // echo $form->field($model, 'created_by') ?>
 
@@ -37,13 +40,15 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'category_id') ?>
 
+    <?php // echo $form->field($model, 'image_id') ?>
+
     <?php // echo $form->field($model, 'created_at') ?>
 
     <?php // echo $form->field($model, 'updated_at') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton(Yii::t('backend', 'Search'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton(Yii::t('backend', 'Reset'), ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

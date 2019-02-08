@@ -1,12 +1,11 @@
 <?php
 
-use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
+
 use rmrevin\yii\fontawesome\FA;
 use dosamigos\datetimepicker\DateTimePicker;
-
-use backend\models\Post;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\PostSearch */
@@ -16,9 +15,10 @@ $this->title = Yii::t('backend', 'Posts');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="post-index box box-primary">
-
-    <?= $this->render('@viewComponents/_header_index_tools') ?>
-
+    <?php Pjax::begin(); ?>
+    <div class="box-header with-border">
+        <?= Html::a(Yii::t('backend', 'Create Post'), ['create'], ['class' => 'btn btn-success btn-flat']) ?>
+    </div>
     <div class="box-body table-responsive no-padding">
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
         <?= GridView::widget([
@@ -27,32 +27,31 @@ $this->params['breadcrumbs'][] = $this->title;
             'layout' => "{items}\n{summary}\n{pager}",
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-                'title:text',
+                // 'id',
+                'title',
+                // 'content:ntext',
+                // 'meta_title',
+                // 'meta_keywords:ntext',
+                // 'meta_description:ntext',
+                // 'slug',
+                'categoryName',
+                'createdName',
                 [
-                    'attribute' => 'createdName',
+                    'attribute' => 'status',
                     'format' => 'html',
                     'value' => function($model) {
-                        return Html::a($model->createdName, ['user/view', 'id' => $model->created_by], ['class' => 'btn btn-link btn-flat', 'style' => 'width: 100%;']);
-                    },
-                ],
-                [
-                    'attribute' => 'categoryName',
-                    'format' => 'html',
-                    'value' => function($model) {
-                        return Html::a($model->categoryName, ['category/view', 'id' => $model->category_id], ['class' => 'btn btn-link btn-flat', 'style' => 'width: 100%;']);
-                    },
-                ],
-                [
-                    'attribute' => 'published',
-                    'format' => 'html',
-                    'value' => function($model) {
-                        $class = $model->published ? ' label-success' : ' label-danger';
+                        $class = $model->status ? ' label-success' : ' label-danger';
                         $name = $model->statusName;
 
                         return '<span class="label' . $class . '">' . $name . '</span>';
                     },
-                    'filter' => Post::getStatusList(),
+                    'filter' => $searchModel->getStatusList(),
                 ],
+                // 'created_by',
+                // 'updated_by',
+                // 'updated_by',
+                // 'image_id',
+                // 'created_at',
                 [
                     'attribute' => 'updated_at',
                     'format' => 'datetime',
@@ -81,7 +80,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::a(FA::icon('pencil'), $url, ['class' => 'btn btn-warning btn-flat']);
                         },
                         'delete' => function ($url, $model) {
-                            return Html::a(FA::icon('trash-o'), $url, ['class' => 'btn btn-danger btn-flat']);
+                            return Html::a(FA::icon('trash-o'), $url, [
+                                'class' => 'btn btn-danger btn-flat', 
+                                'data' => [
+                                    'confirm' => Yii::t('backend', 'Are you sure you want to delete this item?'),
+                                    'method' => 'post',
+                                ],
+                            ]);
                         },
                     ],
                     'headerOptions' => ['class' => 'text-right'],
@@ -90,4 +95,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]); ?>
     </div>
+    <?php Pjax::end(); ?>
 </div>

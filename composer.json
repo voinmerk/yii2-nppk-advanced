@@ -31,7 +31,9 @@
         "yiisoft/yii2-jui": "^2.0",
         "symfony/dom-crawler": "~3.0",
         "kidzen/yii2-dynamicform": "*",
-        "kartik-v/yii2-widget-fileinput": "dev-master"
+        "kartik-v/yii2-widget-fileinput": "dev-master",
+        "wokster/yii2-adminlte-widgets": "*",
+        "yii-dream-team/yii2-upload-behavior": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

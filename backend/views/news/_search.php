@@ -4,39 +4,34 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\CategorySearch */
+/* @var $model backend\models\NewsSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="category-search">
+<div class="news-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
-        'options' => [
-            'data-pjax' => 1
-        ],
     ]); ?>
 
     <?= $form->field($model, 'id') ?>
 
     <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'description') ?>
-
-    <?= $form->field($model, 'slug') ?>
+    <?= $form->field($model, 'content') ?>
 
     <?= $form->field($model, 'meta_title') ?>
 
+    <?= $form->field($model, 'meta_keywords') ?>
+
     <?php // echo $form->field($model, 'meta_description') ?>
 
-    <?php // echo $form->field($model, 'meta_keywords') ?>
+    <?php // echo $form->field($model, 'slug') ?>
 
     <?php // echo $form->field($model, 'status') ?>
 
-    <?php // echo $form->field($model, 'sort_order') ?>
-
-    <?php // echo $form->field($model, 'on_home') ?>
+    <?php // echo $form->field($model, 'image_id') ?>
 
     <?php // echo $form->field($model, 'created_by') ?>
 

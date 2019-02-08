@@ -6,17 +6,18 @@ use yii\widgets\Pjax;
 
 use rmrevin\yii\fontawesome\FA;
 use dosamigos\datetimepicker\DateTimePicker;
+
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\CategorySearch */
+/* @var $searchModel backend\models\NewsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('backend', 'Categories');
+$this->title = Yii::t('backend', 'News');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="category-index box box-primary">
+<div class="news-index box box-primary">
     <?php Pjax::begin(); ?>
     <div class="box-header with-border">
-        <?= Html::a(Yii::t('backend', 'Create Category'), ['create'], ['class' => 'btn btn-success btn-flat']) ?>
+        <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success btn-flat']) ?>
     </div>
     <div class="box-body table-responsive no-padding">
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -26,13 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'layout' => "{items}\n{summary}\n{pager}",
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-                //'id',
+                // 'id',
                 'title',
-                // 'description:ntext',
-                // 'slug',
+                // 'content:ntext',
                 // 'meta_title',
-                // 'meta_description:ntext',
                 // 'meta_keywords:ntext',
+                // 'meta_description:ntext',
+                // 'slug',
+                // 'image_id',
                 'createdName',
                 [
                     'attribute' => 'status',
@@ -45,10 +47,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'filter' => $searchModel->getStatusList(),
                 ],
-                // 'sort_order',
-                // 'on_home',
-                // 'created_by',
-                // 'updated_by',
                 // 'created_at',
                 [
                     'attribute' => 'updated_at',

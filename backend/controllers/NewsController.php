@@ -3,18 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
+use backend\models\News;
+use backend\models\NewsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-use backend\models\Post;
-use backend\models\PostSearch;
-use backend\models\Category;
-
 /**
- * PostController implements the CRUD actions for Post model.
+ * NewsController implements the CRUD actions for News model.
  */
-class PostController extends Controller
+class NewsController extends Controller
 {
     /**
      * @inheritdoc
@@ -32,12 +30,12 @@ class PostController extends Controller
     }
 
     /**
-     * Lists all Post models.
+     * Lists all News models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new PostSearch();
+        $searchModel = new NewsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -47,7 +45,7 @@ class PostController extends Controller
     }
 
     /**
-     * Displays a single Post model.
+     * Displays a single News model.
      * @param integer $id
      * @return mixed
      */
@@ -59,26 +57,16 @@ class PostController extends Controller
     }
 
     /**
-     * Creates a new Post model.
+     * Creates a new News model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Post();
+        $model = new News();
 
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                foreach($model->category_ids as $category_id) {
-                    $category = Category::findOne($category_id);
-
-                    $model->link('categories', $category);
-                }
-
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                var_dump($model);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -87,7 +75,7 @@ class PostController extends Controller
     }
 
     /**
-     * Updates an existing Post model.
+     * Updates an existing News model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -96,23 +84,10 @@ class PostController extends Controller
     {
         $model = $this->findModel($id);
 
-        $model->category_ids = $model->categories;
         $model->image_file = $model->image->src;
 
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save(false)) {
-                foreach($model->categories as $category) {
-                    $model->unlink('categories', $category, true);
-                }
-
-                foreach($model->category_ids as $category_id) {
-                    $category = Category::findOne($category_id);
-
-                    $model->link('categories', $category);
-                }
-
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -121,7 +96,7 @@ class PostController extends Controller
     }
 
     /**
-     * Deletes an existing Post model.
+     * Deletes an existing News model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -133,10 +108,6 @@ class PostController extends Controller
         $name = $model->title;
 
         if($model->delete()) {
-            foreach($model->categories as $category) {
-                $model->unlink('categories', $category, true);
-            }
-
             Yii::$app->session->setFlash('success', Yii::t('backend', 'The entry "{name}" was successfully removed', ['name' => $name]));
         }
 
@@ -144,15 +115,15 @@ class PostController extends Controller
     }
 
     /**
-     * Finds the Post model based on its primary key value.
+     * Finds the News model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Post the loaded model
+     * @return News the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Post::findOne($id)) !== null) {
+        if (($model = News::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

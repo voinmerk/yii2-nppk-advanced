@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use common\models\User;
 
 /**
@@ -10,23 +11,26 @@ use common\models\User;
  *
  * @property int $id
  * @property string $title
+ * @property string $description
  * @property string $slug
- * @property int $template
- * @property int $published
+ * @property string $meta_title
+ * @property string $meta_description
+ * @property string $meta_keywords
+ * @property int $status
  * @property int $sort_order
+ * @property int $on_home
  * @property int $created_by
  * @property int $updated_by
  * @property int $created_at
  * @property int $updated_at
  *
- * @property Blog[] $blogs
  * @property User $createdBy
  * @property User $updatedBy
  */
-class Category extends \yii\db\ActiveRecord
+class Category extends ActiveRecord
 {
-    const UNPUBLISHED = 0;
-    const PUBLISHED = 1;
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
 
     /**
      * {@inheritdoc}
@@ -39,33 +43,13 @@ class Category extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-     public function behaviors()
-    {
-        return [
-            'sluggable' => [
-                'class' => \yii\behaviors\SluggableBehavior::className(),
-                'attribute' => 'title',
-                'slugAttribute' => 'slug',
-                'ensureUnique' => true,
-            ],
-            'blame' => [
-                'class' => \yii\behaviors\BlameableBehavior::className(),
-            ],
-            'timestamp' => [
-                'class' => \yii\behaviors\TimestampBehavior::className(),
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
-            [['template', 'published', 'sort_order', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['title'], 'required'],
-            [['title', 'slug'], 'string', 'max' => 255],
+            [['title', 'meta_title'], 'required'],
+            [['description', 'meta_description', 'meta_keywords'], 'string'],
+            [['status', 'sort_order', 'on_home', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['title', 'slug', 'meta_title'], 'string', 'max' => 255],
             [['slug'], 'unique'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
@@ -80,28 +64,24 @@ class Category extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('backend', 'ID'),
             'title' => Yii::t('backend', 'Title'),
+            'description' => Yii::t('backend', 'Description'),
             'slug' => Yii::t('backend', 'Slug'),
-            'template' => Yii::t('backend', 'Template'),
-            'published' => Yii::t('backend', 'Published'),
+            'meta_title' => Yii::t('backend', 'Meta Title'),
+            'meta_description' => Yii::t('backend', 'Meta Description'),
+            'meta_keywords' => Yii::t('backend', 'Meta Keywords'),
+            'status' => Yii::t('backend', 'Status'),
             'sort_order' => Yii::t('backend', 'Sort Order'),
+            'on_home' => Yii::t('backend', 'On Home'),
             'created_by' => Yii::t('backend', 'Created By'),
             'updated_by' => Yii::t('backend', 'Updated By'),
             'created_at' => Yii::t('backend', 'Created At'),
             'updated_at' => Yii::t('backend', 'Updated At'),
-
-            'statusName' => Yii::t('backend', 'Published'),
-            'createdName' => Yii::t('backend', 'Created By'),
-            'updatedName' => Yii::t('backend', 'Updated By'),
-            'templateName' => Yii::t('backend', 'Template'),
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBlogs()
+    public static function getCategoryList()
     {
-        return $this->hasMany(Blog::className(), ['category_id' => 'id']);
+        return self::find()->where(['status' => self::STATUS_ACTIVE])->orderBy(['title' => SORT_ASC])->all();
     }
 
     /**
@@ -113,19 +93,19 @@ class Category extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUpdatedBy()
-    {
-        return $this->hasOne(User::className(), ['id' => 'updated_by']);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getCreatedName()
     {
         return $this->createdBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by']);
     }
 
     /**
@@ -142,8 +122,8 @@ class Category extends \yii\db\ActiveRecord
     public static function getStatusList()
     {
         return [
-            'Не опубликовано',
-            'Опубликовано',
+            self::STATUS_INACTIVE => Yii::t('backend', 'Unpublished'),
+            self::STATUS_ACTIVE => Yii::t('backend', 'Published'),
         ];
     }
 
@@ -152,29 +132,17 @@ class Category extends \yii\db\ActiveRecord
      */
     public function getStatusName()
     {
-        $status = $this->getStatusList();
+        $statusList = self::getStatusList();
 
-        return $status[$this->published];
+        return $statusList[$this->status];
     }
 
     /**
      * {@inheritdoc}
+     * @return CategoryQuery the active query used by this AR class.
      */
-    public static function getTemplateList()
+    public static function find()
     {
-        return [
-            'Новости',
-            'Страницы сайта',
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTemplateName()
-    {
-        $templates = $this->getTemplateList();
-
-        return $templates[$this->template];
+        return new CategoryQuery(get_called_class());
     }
 }

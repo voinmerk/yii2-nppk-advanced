@@ -14,15 +14,25 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
+        <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
+
+        <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'meta_title')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'meta_description')->textarea(['rows' => 6]) ?>
+
+        <?= $form->field($model, 'meta_keywords')->textarea(['rows' => 6]) ?>
+
+        <?= $form->field($model, 'status')->dropDownList($model->getStatusList()) ?>
+
         <?= $form->field($model, 'sort_order')->textInput() ?>
 
-        <?= $form->field($model, 'template')->dropDownList($model->getTemplateList(), ['prompt' => '-- Выбор шаблона --']) ?>
-
-        <?= $form->field($model, 'published')->dropDownList($model->getStatusList()) ?>
+        <?= $form->field($model, 'on_home')->textInput() ?>
 
     </div>
     <div class="box-footer">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success btn-flat']) ?>
+        <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success btn-flat']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 </div>

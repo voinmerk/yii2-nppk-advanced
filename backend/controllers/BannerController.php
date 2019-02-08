@@ -111,10 +111,6 @@ class BannerController extends Controller
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
-            foreach ($model->images as $image) {
-                $model->image_ids[] = $image->id;
-            }
-
             return $this->render('update', [
                 'model' => $model,
             ]);

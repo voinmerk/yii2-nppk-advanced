@@ -16,12 +16,13 @@ $menuItems = [
     ['label' => 'Меню', 'options' => ['class' => 'header']],
     ['label' => 'Панель состояния', 'icon' => 'tachometer', 'url' => ['/site/index'], 'active' => $isActive('site', 'index', true)],
     [
-        'label' => 'Информация',
+        'label' => 'Контент',
         'icon' => 'newspaper-o',
         'url' => '#',
         'items' => [
-            ['label' => 'Записи', 'icon' => 'circle-o', 'url' => ['/post'], 'active' => $isActive('post', '', true)],
-            ['label' => 'Категории', 'icon' => 'circle-o', 'url' => ['/category'], 'active' => $isActive('category', '', true)],
+            ['label' => 'Записи', 'icon' => 'circle-o', 'url' => ['/post/index'], 'active' => $isActive('post', '', true)],
+            ['label' => 'Категории', 'icon' => 'circle-o', 'url' => ['/category/index'], 'active' => $isActive('category', '', true)],
+            ['label' => 'Новости', 'icon' => 'circle-o', 'url' => ['/news/index'], 'active' => $isActive('news', '', true)],
         ],
     ],
     [
@@ -29,9 +30,9 @@ $menuItems = [
         'icon' => 'th',
         'url' => '#',
         'items' => [
-            ['label' => 'Группы', 'icon' => 'circle-o', 'url' => ['/group'], 'active' => $isActive('group', '', true)],
-            ['label' => 'Предметы', 'icon' => 'circle-o', 'url' => ['/lesson'], 'active' => $isActive('lesson', '', true)],
-            ['label' => 'Расписание', 'icon' => 'circle-o', 'url' => ['/timetable'], 'active' => $isActive('timetable', '', true)],
+            ['label' => 'Группы', 'icon' => 'circle-o', 'url' => ['/group/index'], 'active' => $isActive('group', '', true)],
+            ['label' => 'Предметы', 'icon' => 'circle-o', 'url' => ['/lesson/index'], 'active' => $isActive('lesson', '', true)],
+            ['label' => 'Расписание', 'icon' => 'circle-o', 'url' => ['/timetable/index'], 'active' => $isActive('timetable', '', true)],
         ],
     ],
     [
@@ -39,8 +40,8 @@ $menuItems = [
         'icon' => 'picture-o',
         'url' => '#',
         'items' => [
-            ['label' => 'Баннеры', 'icon' => 'circle-o', 'url' => ['/banner'], 'active' => $isActive('banner', '', true)],
-            ['label' => 'Изображения', 'icon' => 'circle-o', 'url' => ['/image'], 'active' => $isActive('image', '', true)],
+            ['label' => 'Баннеры', 'icon' => 'circle-o', 'url' => ['/banner/index'], 'active' => $isActive('banner', '', true)],
+            ['label' => 'Изображения', 'icon' => 'circle-o', 'url' => ['/image/index'], 'active' => $isActive('image', '', true)],
         ],
     ],
     [
@@ -48,8 +49,8 @@ $menuItems = [
         'icon' => 'user',
         'url' => '#',
         'items' => [
-            ['label' => 'Сотрудники', 'icon' => 'circle-o', 'url' => ['/teacher'], 'active' => $isActive('teacher', '', true)],
-            ['label' => 'Группы', 'icon' => 'circle-o', 'url' => ['/teacher-group'], 'active' => $isActive('teacher-group', '', true)],
+            ['label' => 'Сотрудники', 'icon' => 'circle-o', 'url' => ['/teacher/index'], 'active' => $isActive('teacher', '', true)],
+            ['label' => 'Группы', 'icon' => 'circle-o', 'url' => ['/teacher-group/index'], 'active' => $isActive('teacher-group', '', true)],
         ],
     ],
     [
@@ -57,8 +58,8 @@ $menuItems = [
         'icon' => 'users',
         'url' => '#',
         'items' => [
-            ['label' => 'Пользователи', 'icon' => 'circle-o', 'url' => ['/user'], 'active' => $isActive('user', '', true)],
-            ['label' => 'Группы', 'icon' => 'circle-o', 'url' => ['/user-group'], 'active' => $isActive('user-group', '', true)],
+            ['label' => 'Пользователи', 'icon' => 'circle-o', 'url' => ['/user/index'], 'active' => $isActive('user', '', true)],
+            ['label' => 'Группы', 'icon' => 'circle-o', 'url' => ['/user-group/index'], 'active' => $isActive('user-group', '', true)],
             //['label' => 'Роли', 'icon' => 'circle-o', 'url' => ['/user-permission']],
         ],
     ],

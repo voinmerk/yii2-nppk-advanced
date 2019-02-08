@@ -5,12 +5,12 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Category;
+use backend\models\News;
 
 /**
- * CategorySearch represents the model behind the search form of `backend\models\Category`.
+ * NewsSearch represents the model behind the search form of `backend\models\News`.
  */
-class CategorySearch extends Category
+class NewsSearch extends News
 {
     public $createdName;
     public $updatedName;
@@ -21,8 +21,8 @@ class CategorySearch extends Category
     public function rules()
     {
         return [
-            [['id', 'status', 'sort_order', 'on_home', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['title', 'description', 'slug', 'meta_title', 'meta_description', 'meta_keywords', 'createdName', 'updatedName'], 'safe'],
+            [['id', 'status', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['title', 'content', 'meta_title', 'meta_keywords', 'meta_description', 'slug', 'createdName', 'updatedName'], 'safe'],
         ];
     }
 
@@ -44,7 +44,7 @@ class CategorySearch extends Category
      */
     public function search($params)
     {
-        $query = Category::find();
+        $query = News::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -62,13 +62,13 @@ class CategorySearch extends Category
             'attributes' => [
                 'id',
                 'title',
-                'description',
+                'content',
                 'meta_title',
                 'meta_keywords',
                 'meta_description',
                 'slug',
                 'status',
-                'on_home',
+                'image_id',
                 'createdName' => [
                     'asc' => ['{{%user}}.username' => SORT_ASC],
                     'desc' => ['{{%user}}.username' => SORT_DESC],
@@ -77,7 +77,6 @@ class CategorySearch extends Category
                     'asc' => ['{{%user}}.username' => SORT_ASC],
                     'desc' => ['{{%user}}.username' => SORT_DESC],
                 ],
-                'sort_order',
                 'created_by',
                 'updated_by',
                 'created_at',
@@ -89,20 +88,19 @@ class CategorySearch extends Category
             return $dataProvider;
         }
 
-        $this->addCondition($query, '{{%post}}.id');
-        $this->addCondition($query, '{{%post}}.title', true);
-        $this->addCondition($query, '{{%post}}.description', true);
-        $this->addCondition($query, '{{%post}}.meta_title', true);
-        $this->addCondition($query, '{{%post}}.meta_keywords', true);
-        $this->addCondition($query, '{{%post}}.meta_description', true);
-        $this->addCondition($query, '{{%post}}.slug', true);
-        $this->addCondition($query, '{{%post}}.status');
-        $this->addCondition($query, '{{%post}}.sort_order');
-        $this->addCondition($query, '{{%post}}.on_home');
-        $this->addCondition($query, '{{%post}}.created_by');
-        $this->addCondition($query, '{{%post}}.updated_by');
-        $this->addCondition($query, '{{%post}}.created_at');
-        $this->addCondition($query, '{{%post}}.updated_at');
+        $this->addCondition($query, '{{%news}}.id');
+        $this->addCondition($query, '{{%news}}.title', true);
+        $this->addCondition($query, '{{%news}}.content', true);
+        $this->addCondition($query, '{{%news}}.meta_title', true);
+        $this->addCondition($query, '{{%news}}.meta_keywords', true);
+        $this->addCondition($query, '{{%news}}.meta_description', true);
+        $this->addCondition($query, '{{%news}}.slug', true);
+        $this->addCondition($query, '{{%news}}.status');
+        $this->addCondition($query, '{{%news}}.image_id');
+        $this->addCondition($query, '{{%news}}.created_by');
+        $this->addCondition($query, '{{%news}}.updated_by');
+        $this->addCondition($query, '{{%news}}.created_at');
+        $this->addCondition($query, '{{%news}}.updated_at');
 
         $query->joinWith(['createdBy' => function ($q) {
             $q->from('{{%user}} createdUser')->where('createdUser.username LIKE "%' . $this->createdName . '%"');

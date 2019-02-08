@@ -5,7 +5,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Post */
 
-$this->title = Yii::t('backend', 'Update Post: {title}', ['title' => $model->title]);
+$this->title = Yii::t('backend', 'Update {modelClass}: ', [
+    'modelClass' => 'Post',
+]) . $model->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('backend', 'Posts'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('backend', 'Update');
