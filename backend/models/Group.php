@@ -11,7 +11,7 @@ use common\models\User;
  * @property int $id
  * @property string $name
  * @property int $sort_order
- * @property int $published
+ * @property int $status
  * @property int $created_by
  * @property int $updated_by
  * @property int $created_at
@@ -23,8 +23,8 @@ use common\models\User;
  */
 class Group extends \yii\db\ActiveRecord
 {
-    const UNPUBLISHED = 0;
-    const PUBLISHED = 1;
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
     
     /**
      * {@inheritdoc}
@@ -41,7 +41,7 @@ class Group extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['sort_order', 'published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['sort_order', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
@@ -72,7 +72,7 @@ class Group extends \yii\db\ActiveRecord
             'id' => Yii::t('backend', 'ID'),
             'name' => Yii::t('backend', 'Group number'),
             'sort_order' => Yii::t('backend', 'Sort Order'),
-            'published' => Yii::t('backend', 'Published'),
+            'status' => Yii::t('backend', 'Published'),
             'created_by' => Yii::t('backend', 'Created By'),
             'updated_by' => Yii::t('backend', 'Updated By'),
             'created_at' => Yii::t('backend', 'Created At'),
@@ -87,25 +87,17 @@ class Group extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCreatedBy()
-    {
-        return $this->hasOne(User::className(), ['id' => 'created_by']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUpdatedBy()
-    {
-        return $this->hasOne(User::className(), ['id' => 'updated_by']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getTimetables()
     {
         return $this->hasMany(Timetable::className(), ['group_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by']);
     }
 
     /**
@@ -114,6 +106,14 @@ class Group extends \yii\db\ActiveRecord
     public function getCreatedName()
     {
         return $this->createdBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by']);
     }
 
     /**
@@ -130,8 +130,8 @@ class Group extends \yii\db\ActiveRecord
     public static function getStatusList()
     {
         return [
-            'Не опубликовано',
-            'Опубликовано',
+            self::STATUS_INACTIVE => Yii::t('backend', 'Unpublished'),
+            self::STATUS_ACTIVE => Yii::t('backend', 'Published'),
         ];
     }
 
@@ -140,8 +140,8 @@ class Group extends \yii\db\ActiveRecord
      */
     public function getStatusName()
     {
-        $status = $this->getStatusList();
+        $statusList = self::getStatusList();
 
-        return $status[$this->published];
+        return $statusList[$this->status];
     }
 }

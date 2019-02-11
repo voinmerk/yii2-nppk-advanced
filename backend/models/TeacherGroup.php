@@ -12,7 +12,7 @@ use common\models\User;
  * @property string $name
  * @property string $slug
  * @property int $sort_order
- * @property int $published
+ * @property int $status
  * @property int $created_by
  * @property int $updated_by
  * @property int $created_at
@@ -39,7 +39,7 @@ class TeacherGroup extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'slug', 'created_at', 'updated_at'], 'required'],
-            [['sort_order', 'published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['sort_order', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['name', 'slug'], 'string', 'max' => 255],
             [['slug'], 'unique'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -57,7 +57,7 @@ class TeacherGroup extends \yii\db\ActiveRecord
             'name' => Yii::t('backend', 'Name'),
             'slug' => Yii::t('backend', 'Slug'),
             'sort_order' => Yii::t('backend', 'Sort Order'),
-            'published' => Yii::t('backend', 'Published'),
+            'status' => Yii::t('backend', 'Published'),
             'created_by' => Yii::t('backend', 'Created By'),
             'updated_by' => Yii::t('backend', 'Updated By'),
             'created_at' => Yii::t('backend', 'Created At'),
@@ -86,19 +86,19 @@ class TeacherGroup extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUpdatedBy()
-    {
-        return $this->hasOne(User::className(), ['id' => 'updated_by']);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getCreatedName()
     {
         return $this->createdBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by']);
     }
 
     /**
@@ -115,8 +115,8 @@ class TeacherGroup extends \yii\db\ActiveRecord
     public static function getStatusList()
     {
         return [
-            'Не опубликовано',
-            'Опубликовано',
+            self::STATUS_INACTIVE => Yii::t('backend', 'Unpublished'),
+            self::STATUS_ACTIVE => Yii::t('backend', 'Published'),
         ];
     }
 
@@ -125,8 +125,8 @@ class TeacherGroup extends \yii\db\ActiveRecord
      */
     public function getStatusName()
     {
-        $status = $this->getStatusList();
+        $statusList = self::getStatusList();
 
-        return $status[$this->published];
+        return $statusList[$this->status];
     }
 }

@@ -50,16 +50,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'header' => Yii::t('backend', 'Actions'),
-                    'template' => '{view} {update} {delete}',
+                    'template' => '{view} {update}',
                     'buttons' => [
                         'view' => function ($url, $model) {
                             return Html::a(FA::icon('eye'), $url, ['class' => 'btn btn-primary btn-flat']);
                         },
                         'update' => function ($url, $model) {
                             return Html::a(FA::icon('pencil'), $url, ['class' => 'btn btn-warning btn-flat']);
-                        },
-                        'delete' => function ($url, $model) {
-                            return Html::a(FA::icon('trash-o'), $url, ['class' => 'btn btn-danger btn-flat']);
                         },
                     ],
                     'headerOptions' => ['class' => 'text-right'],

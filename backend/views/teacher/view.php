@@ -20,16 +20,25 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= DetailView::widget([
             'model' => $model,
             'attributes' => [
-                'id',
+                // 'id',
                 'title',
-                'content:ntext',
-                'room_id',
-                'published',
+                // 'content:ntext',
+                'teacherGroupName',
+                'roomName',
+                [
+                    'attribute' => 'status',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        $class = $model->status ? ' label-success' : ' label-danger';
+                        $name = $model->statusName;
+
+                        return '<span class="label' . $class . '">' . $name . '</span>';
+                    },
+                ],
                 'sort_order',
-                'teacher_group_id',
-                'image_id',
-                'created_by',
-                'updated_by',
+                // 'image_id',
+                'createdName',
+                'updatedName',
                 'created_at:datetime',
                 'updated_at:datetime',
             ],

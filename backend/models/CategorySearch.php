@@ -89,20 +89,20 @@ class CategorySearch extends Category
             return $dataProvider;
         }
 
-        $this->addCondition($query, '{{%post}}.id');
-        $this->addCondition($query, '{{%post}}.title', true);
-        $this->addCondition($query, '{{%post}}.description', true);
-        $this->addCondition($query, '{{%post}}.meta_title', true);
-        $this->addCondition($query, '{{%post}}.meta_keywords', true);
-        $this->addCondition($query, '{{%post}}.meta_description', true);
-        $this->addCondition($query, '{{%post}}.slug', true);
-        $this->addCondition($query, '{{%post}}.status');
-        $this->addCondition($query, '{{%post}}.sort_order');
-        $this->addCondition($query, '{{%post}}.on_home');
-        $this->addCondition($query, '{{%post}}.created_by');
-        $this->addCondition($query, '{{%post}}.updated_by');
-        $this->addCondition($query, '{{%post}}.created_at');
-        $this->addCondition($query, '{{%post}}.updated_at');
+        $this->addCondition($query, '{{%category}}.id');
+        $this->addCondition($query, '{{%category}}.title', true);
+        $this->addCondition($query, '{{%category}}.description', true);
+        $this->addCondition($query, '{{%category}}.meta_title', true);
+        $this->addCondition($query, '{{%category}}.meta_keywords', true);
+        $this->addCondition($query, '{{%category}}.meta_description', true);
+        $this->addCondition($query, '{{%category}}.slug', true);
+        $this->addCondition($query, '{{%category}}.status');
+        $this->addCondition($query, '{{%category}}.sort_order');
+        $this->addCondition($query, '{{%category}}.on_home');
+        $this->addCondition($query, '{{%category}}.created_by');
+        $this->addCondition($query, '{{%category}}.updated_by');
+        $this->addCondition($query, '{{%category}}.created_at');
+        $this->addCondition($query, '{{%category}}.updated_at');
 
         $query->joinWith(['createdBy' => function ($q) {
             $q->from('{{%user}} createdUser')->where('createdUser.username LIKE "%' . $this->createdName . '%"');

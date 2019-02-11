@@ -84,9 +84,8 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
+    const STATUS_BANNED = 0;
     const STATUS_ACTIVE = 10;
-
 
     /**
      * {@inheritdoc}
@@ -276,6 +275,27 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getStatusList()
+    {
+        return [
+            self::STATUS_BANNED => Yii::t('common', 'Is banned'),
+            self::STATUS_ACTIVE => Yii::t('common', 'Active'),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusName()
+    {
+        $statusList = self::getStatusList();
+
+        return $statusList[$this->status];
     }
 
     //-------------------------------------------------------------------------------------------------

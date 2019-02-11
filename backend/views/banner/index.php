@@ -36,10 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
                 [
-                    'attribute' => 'published',
+                    'attribute' => 'status',
                     'format' => 'html',
                     'value' => function($model) {
-                        $class = $model->published ? ' label-success' : ' label-danger';
+                        $class = $model->status ? ' label-success' : ' label-danger';
                         $name = $model->statusName;
 
                         return '<span class="label' . $class . '">' . $name . '</span>';

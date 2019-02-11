@@ -22,7 +22,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'attributes' => [
                 //'id',
                 'name',
-                'statusName',
+                [
+                    'attribute' => 'status',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        $class = $model->status ? ' label-success' : ' label-danger';
+                        $name = $model->statusName;
+
+                        return '<span class="label' . $class . '">' . $name . '</span>';
+                    },
+                ],
                 'createdName',
                 'updatedName',
                 'created_at:datetime',

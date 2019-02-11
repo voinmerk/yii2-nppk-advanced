@@ -12,7 +12,7 @@ use common\models\User;
  * @property string $title
  * @property string $content
  * @property int $room_id
- * @property int $published
+ * @property int $status
  * @property int $sort_order
  * @property int $teacher_group_id
  * @property int $image_id
@@ -28,6 +28,9 @@ use common\models\User;
  */
 class Teacher extends \yii\db\ActiveRecord
 {
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+
     /**
      * {@inheritdoc}
      */
@@ -44,7 +47,7 @@ class Teacher extends \yii\db\ActiveRecord
         return [
             [['title', 'room_id', 'created_at', 'updated_at'], 'required'],
             [['content'], 'string'],
-            [['room_id', 'published', 'sort_order', 'teacher_group_id', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['room_id', 'status', 'sort_order', 'teacher_group_id', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['title'], 'string', 'max' => 50],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
             [['teacher_group_id'], 'exist', 'skipOnError' => true, 'targetClass' => TeacherGroup::className(), 'targetAttribute' => ['teacher_group_id' => 'id']],
@@ -63,7 +66,7 @@ class Teacher extends \yii\db\ActiveRecord
             'title' => Yii::t('backend', 'Title'),
             'content' => Yii::t('backend', 'Content'),
             'room_id' => Yii::t('backend', 'Room ID'),
-            'published' => Yii::t('backend', 'Published'),
+            'status' => Yii::t('backend', 'Published'),
             'sort_order' => Yii::t('backend', 'Sort Order'),
             'teacher_group_id' => Yii::t('backend', 'Teacher Group ID'),
             'image_id' => Yii::t('backend', 'Image ID'),
@@ -119,19 +122,19 @@ class Teacher extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUpdatedBy()
-    {
-        return $this->hasOne(User::className(), ['id' => 'updated_by']);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getCreatedName()
     {
         return $this->createdBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by']);
     }
 
     /**
@@ -148,8 +151,8 @@ class Teacher extends \yii\db\ActiveRecord
     public static function getStatusList()
     {
         return [
-            'Не опубликовано',
-            'Опубликовано',
+            self::STATUS_INACTIVE => Yii::t('backend', 'Unpublished'),
+            self::STATUS_ACTIVE => Yii::t('backend', 'Published'),
         ];
     }
 
@@ -158,8 +161,8 @@ class Teacher extends \yii\db\ActiveRecord
      */
     public function getStatusName()
     {
-        $status = $this->getStatusList();
+        $statusList = self::getStatusList();
 
-        return $status[$this->published];
+        return $statusList[$this->status];
     }
 }

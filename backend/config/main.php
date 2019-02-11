@@ -15,6 +15,9 @@ return [
     'sourceLanguage' => 'ru-RU',
     'language' => 'ru',
     'modules' => [],
+    'controllerMap' => [
+        'files' => 'jakharbek\filemanager\controllers\FilesController',
+    ],
     'components' => [
         'assetManager' => [
             'bundles' => [
@@ -97,9 +100,9 @@ return [
                 'logout' => 'auth/logout',
 
                 // normal routes for CRUD operations
-                '<controller:\w+>s' => '<controller>/index',
-                '<controller:\w+>s/create' => '<controller>/create',
-                '<controller:\w+>s/<action:view|update|delete>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>' => '<controller>/index',
+                '<controller:\w+>/create' => '<controller>/create',
+                '<controller:\w+>/<action:view|update|delete>/<id:\d+>' => '<controller>/<action>',
             ],
         ],
     ],

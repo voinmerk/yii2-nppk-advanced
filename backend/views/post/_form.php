@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use dosamigos\tinymce\TinyMce;
 
 use backend\models\Category;
 
@@ -24,7 +25,18 @@ use backend\models\Category;
 
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'content')->textarea(['rows' => 6]) ?>
+        <?=  $form->field($model, 'content')->widget(TinyMce::className(), [
+            'options' => ['rows' => 12],
+            'language' => 'ru',
+            'clientOptions' => [
+                'plugins' => [
+                    'advlist autolink lists link charmap  print hr preview pagebreak',
+                    'searchreplace wordcount textcolor visualblocks visualchars code fullscreen nonbreaking',
+                    'save insertdatetime media table contextmenu template paste image'
+                ],
+                'toolbar' => 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
+            ]
+        ]); ?>
 
         <?= $form->field($model, 'category_ids')->dropDownList(ArrayHelper::map(Category::getCategoryList(), 'id', 'title'), ['multiple' => 'multiple']) ?>
 

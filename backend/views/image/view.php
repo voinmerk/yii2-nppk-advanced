@@ -20,12 +20,18 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= DetailView::widget([
             'model' => $model,
             'attributes' => [
-                'id',
-                'title',
-                'content:ntext',
-                'src',
-                'created_by',
-                'updated_by',
+                // 'id',
+                // 'title',
+                // 'content:ntext',
+                [
+                    'attribute' => 'src',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        return Html::img($model->src, ['style' => 'max-width: 150px;']);
+                    },
+                ],
+                'createdName',
+                'updatedName',
                 'created_at:datetime',
                 'updated_at:datetime',
             ],

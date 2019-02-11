@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
             'encode' => false,
         ]); ?>
 
-        <?= $form->field($model, 'published')->dropDownList($model->getStatusList()) ?>
+        <?= $form->field($model, 'status')->dropDownList($model->getStatusList()) ?>
 
     </div>
     <div class="box-footer">

@@ -12,7 +12,7 @@ use common\models\User;
  * @property string $title
  * @property string $content
  * @property int $sort_order
- * @property int $published
+ * @property int $status
  * @property int $image_id
  * @property int $created_by
  * @property int $updated_by
@@ -26,8 +26,8 @@ use common\models\User;
  */
 class Room extends \yii\db\ActiveRecord
 {
-    const UNPUBLISHED = 0;
-    const PUBLISHED = 1;
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
     
     /**
      * {@inheritdoc}
@@ -45,7 +45,7 @@ class Room extends \yii\db\ActiveRecord
         return [
             [['title', 'created_at', 'updated_at'], 'required'],
             [['content'], 'string'],
-            [['sort_order', 'published', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['sort_order', 'status', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['title'], 'string', 'max' => 255],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -63,7 +63,7 @@ class Room extends \yii\db\ActiveRecord
             'title' => Yii::t('backend', 'Title'),
             'content' => Yii::t('backend', 'Content'),
             'sort_order' => Yii::t('backend', 'Sort Order'),
-            'published' => Yii::t('backend', 'Published'),
+            'status' => Yii::t('backend', 'Published'),
             'image_id' => Yii::t('backend', 'Image ID'),
             'created_by' => Yii::t('backend', 'Created By'),
             'updated_by' => Yii::t('backend', 'Updated By'),
@@ -78,7 +78,7 @@ class Room extends \yii\db\ActiveRecord
 
     public static function getAutocompleteRooms()
     {
-        return self::find()->select('title')->where(['published' => self::PUBLISHED])->column();
+        return self::find()->select('title')->where(['status' => self::STATUS_ACTIVE])->column();
     }
 
     /**
@@ -92,25 +92,17 @@ class Room extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCreatedBy()
-    {
-        return $this->hasOne(User::className(), ['id' => 'created_by']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUpdatedBy()
-    {
-        return $this->hasOne(User::className(), ['id' => 'updated_by']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getTimetableLessons()
     {
         return $this->hasMany(TimetableLesson::className(), ['room_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by']);
     }
 
     /**
@@ -119,6 +111,14 @@ class Room extends \yii\db\ActiveRecord
     public function getCreatedName()
     {
         return $this->createdBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by']);
     }
 
     /**
@@ -135,8 +135,8 @@ class Room extends \yii\db\ActiveRecord
     public static function getStatusList()
     {
         return [
-            'Не опубликовано',
-            'Опубликовано',
+            self::STATUS_INACTIVE => Yii::t('backend', 'Unpublished'),
+            self::STATUS_ACTIVE => Yii::t('backend', 'Published'),
         ];
     }
 
@@ -145,8 +145,8 @@ class Room extends \yii\db\ActiveRecord
      */
     public function getStatusName()
     {
-        $status = $this->getStatusList();
+        $statusList = self::getStatusList();
 
-        return $status[$this->published];
+        return $statusList[$this->status];
     }
 }

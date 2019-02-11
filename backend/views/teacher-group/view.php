@@ -20,13 +20,22 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= DetailView::widget([
             'model' => $model,
             'attributes' => [
-                'id',
+                // 'id',
                 'name',
                 'slug',
+                [
+                    'attribute' => 'status',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        $class = $model->status ? ' label-success' : ' label-danger';
+                        $name = $model->statusName;
+
+                        return '<span class="label' . $class . '">' . $name . '</span>';
+                    },
+                ],
                 'sort_order',
-                'published',
-                'created_by',
-                'updated_by',
+                'createdName',
+                'updatedName',
                 'created_at:datetime',
                 'updated_at:datetime',
             ],

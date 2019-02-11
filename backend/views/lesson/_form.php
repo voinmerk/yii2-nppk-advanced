@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'published')->dropDownList($model->getStatusList()) ?>
+        <?= $form->field($model, 'status')->dropDownList($model->getStatusList()) ?>
 
     </div>
     <div class="box-footer">

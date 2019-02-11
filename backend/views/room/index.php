@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 'title',
-                'content:ntext',
+                // 'content:ntext',
                 'sort_order',
                 [
                     'attribute' => 'createdName',
@@ -75,7 +75,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::a(FA::icon('pencil'), $url, ['class' => 'btn btn-warning btn-flat']);
                         },
                         'delete' => function ($url, $model) {
-                            return Html::a(FA::icon('trash-o'), $url, ['class' => 'btn btn-danger btn-flat']);
+                            return Html::a(FA::icon('trash-o'), $url, [
+                                'class' => 'btn btn-danger btn-flat', 
+                                'data' => [
+                                    'confirm' => Yii::t('backend', 'Are you sure you want to delete this item?'),
+                                    'method' => 'post',
+                                ],
+                            ]);
                         },
                     ],
                     'headerOptions' => ['class' => 'text-right'],

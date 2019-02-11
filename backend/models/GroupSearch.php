@@ -13,6 +13,7 @@ use backend\models\Group;
 class GroupSearch extends Group
 {
     public $createdName;
+    public $updatedName;
 
     /**
      * @inheritdoc
@@ -20,8 +21,8 @@ class GroupSearch extends Group
     public function rules()
     {
         return [
-            [['id', 'sort_order', 'published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['name', 'createdName'], 'safe'],
+            [['id', 'sort_order', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['name', 'createdName', 'updatedName'], 'safe'],
         ];
     }
 
@@ -47,7 +48,14 @@ class GroupSearch extends Group
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['updated_at' => SORT_DESC]],
+            'sort' => [
+                'defaultOrder' => [
+                    'updated_at' => SORT_DESC,
+                ],
+            ],
+            'pagination' => [
+                'pageSize' => 50,
+            ],
         ]);
 
         $dataProvider->setSort([
@@ -58,25 +66,28 @@ class GroupSearch extends Group
                     'desc' => ['{{%user}}.username' => SORT_DESC],
                     'label' => 'Created Name',
                 ],
-                'published',
+                'status',
                 'updated_at',
             ],
         ]);
 
         if (!($this->load($params) && $this->validate())) {
-            $query->joinWith(['createdBy']);
-
             return $dataProvider;
         }
 
         $this->addCondition($query, '{{%group}}.name', true);
         $this->addCondition($query, '{{%group}}.created_by');
-        $this->addCondition($query, '{{%group}}.published');
+        $this->addCondition($query, '{{%group}}.status');
         $this->addCondition($query, '{{%group}}.updated_at');
-
-        $query->joinWith(['createdBy' => function ($q) {
-            $q->where('{{%user}}.username LIKE "%' . $this->createdName . '%"');
+        
+        $query->joinWith(['updatedBy' => function ($q) {
+            $q->from('{{%user}} updatedUser')->where('updatedUser.username LIKE "%' . $this->updatedName . '%"');
         }]);
+
+        $query->joinWith(['category' => function ($q) {
+            $q->where('{{%category}}.title LIKE "%' . $this->categoryName . '%"');
+        }]);
+        
 
         return $dataProvider;
     }

@@ -12,14 +12,17 @@ use backend\models\UserGroup;
  */
 class UserGroupSearch extends UserGroup
 {
+    public $createdName;
+    public $updatedName;
+    
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'sort_order', 'published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['name'], 'safe'],
+            [['id', 'sort_order', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['name', 'createdName', 'updatedName'], 'safe'],
         ];
     }
 
@@ -47,14 +50,17 @@ class UserGroupSearch extends UserGroup
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['id' => SORT_DESC]]
+            'sort' => [
+                'defaultOrder' => [
+                    'updated_at' => SORT_DESC,
+                ],
+            ],
+            'pagination' => [
+                'pageSize' => 50,
+            ],
         ]);
 
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+        if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
 
@@ -62,7 +68,7 @@ class UserGroupSearch extends UserGroup
         $query->andFilterWhere([
             'id' => $this->id,
             'sort_order' => $this->sort_order,
-            'published' => $this->published,
+            'status' => $this->status,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
             'created_at' => $this->created_at,
@@ -71,6 +77,39 @@ class UserGroupSearch extends UserGroup
 
         $query->andFilterWhere(['like', 'name', $this->name]);
 
+        $query->joinWith(['updatedBy' => function ($q) {
+            $q->from('{{%user}} updatedUser')->where('updatedUser.username LIKE "%' . $this->updatedName . '%"');
+        }]);
+
+        $query->joinWith(['category' => function ($q) {
+            $q->where('{{%category}}.title LIKE "%' . $this->categoryName . '%"');
+        }]);
+
         return $dataProvider;
+    }
+
+    protected function addCondition($query, $attribute, $partialMatch = false)
+    {
+        if (($pos = strrpos($attribute, '.')) !== false) {
+            $modelAttribute = substr($attribute, $pos + 1);
+        } else {
+            $modelAttribute = $attribute;
+        }
+
+        $value = $this->$modelAttribute;
+        if (trim($value) === '') {
+            return;
+        }
+
+        /*
+         * Для корректной работы фильтра со связью со
+         * свой же моделью делаем:
+         */
+
+        if ($partialMatch) {
+            $query->andWhere(['like', $attribute, $value]);
+        } else {
+            $query->andWhere([$attribute => $value]);
+        }
     }
 }

@@ -20,17 +20,26 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= DetailView::widget([
             'model' => $model,
             'attributes' => [
-                'id',
+                // 'id',
                 'username',
-                'auth_key',
-                'password_hash',
-                'password_reset_token',
+                // 'auth_key',
+                // 'password_hash',
+                // 'password_reset_token',
                 'email:email',
                 'first_name',
                 'last_name',
-                'status',
-                'user_group_id',
-                'user_permission_id',
+                [
+                    'attribute' => 'status',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        $class = $model->status ? ' label-success' : ' label-danger';
+                        $name = $model->statusName;
+
+                        return '<span class="label' . $class . '">' . $name . '</span>';
+                    },
+                ],
+                'userGroupName',
+                // 'user_permission_id',
                 'created_at:datetime',
                 'updated_at:datetime',
             ],

@@ -10,7 +10,7 @@ use common\models\User;
  *
  * @property int $id
  * @property string $name
- * @property int $published
+ * @property int $status
  * @property int $created_by
  * @property int $updated_by
  * @property int $created_at
@@ -21,6 +21,9 @@ use common\models\User;
  */
 class Banner extends \yii\db\ActiveRecord
 {
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+
     public $image_ids = [];
 
     /**
@@ -37,7 +40,7 @@ class Banner extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['status', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['name', 'image_ids'], 'required'],
             [['name'], 'string', 'max' => 32],
             [['name'], 'unique'],
@@ -69,7 +72,7 @@ class Banner extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('backend', 'ID'),
             'name' => Yii::t('backend', 'Machine Name'),
-            'published' => Yii::t('backend', 'Published'),
+            'status' => Yii::t('backend', 'Published'),
             'created_by' => Yii::t('backend', 'Created By'),
             'updated_by' => Yii::t('backend', 'Updated By'),
             'created_at' => Yii::t('backend', 'Created At'),
@@ -81,6 +84,22 @@ class Banner extends \yii\db\ActiveRecord
             'createdName' => Yii::t('backend', 'Created By'),
             'updatedName' => Yii::t('backend', 'Updated By'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getImageList()
+    {
+        $images = Image::find()->orderBy(['updated_at' => SORT_DESC, 'created_at' => SORT_DESC])->all();
+
+        $imageList = [];
+
+        foreach($images as $image) {
+            $imageList[$image['id']] = $image->src; // $image['title'] . ' (' . $image['src'] . ')';
+        }
+
+        return $imageList;
     }
 
     /**
@@ -100,32 +119,19 @@ class Banner extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUpdatedBy()
-    {
-        return $this->hasOne(User::className(), ['id' => 'updated_by']);
-    }
-
-    public function getImageList()
-    {
-        $images = Image::find()->orderBy(['updated_at' => SORT_DESC, 'created_at' => SORT_DESC])->all();
-
-        $imageList = [];
-
-        foreach($images as $image) {
-            $imageList[$image['id']] = $image->src; // $image['title'] . ' (' . $image['src'] . ')';
-        }
-
-        return $imageList;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getCreatedName()
     {
         return $this->createdBy->username;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by']);
     }
 
     /**
@@ -142,8 +148,8 @@ class Banner extends \yii\db\ActiveRecord
     public static function getStatusList()
     {
         return [
-            'Не опубликовано',
-            'Опубликовано',
+            self::STATUS_INACTIVE => Yii::t('backend', 'Unpublished'),
+            self::STATUS_ACTIVE => Yii::t('backend', 'Published'),
         ];
     }
 
@@ -152,8 +158,8 @@ class Banner extends \yii\db\ActiveRecord
      */
     public function getStatusName()
     {
-        $status = $this->getStatusList();
+        $statusList = self::getStatusList();
 
-        return $status[$this->published];
+        return $statusList[$this->status];
     }
 }

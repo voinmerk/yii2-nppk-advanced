@@ -54,7 +54,7 @@ class LessonSearch extends Lesson
                 ],
             ],
             'pagination' => [
-                'pageSize' => 40,
+                'pageSize' => 50,
             ],
         ]);
 
@@ -88,12 +88,12 @@ class LessonSearch extends Lesson
         $this->addCondition($query, '{{%lesson}}.created_at');
         $this->addCondition($query, '{{%lesson}}.updated_at');
 
-        $query->joinWith(['createdBy' => function ($q) {
-            $q->from('{{%user}} createdUser')->where('createdUser.username LIKE "%' . $this->createdName . '%"');
-        }]);
-
         $query->joinWith(['updatedBy' => function ($q) {
             $q->from('{{%user}} updatedUser')->where('updatedUser.username LIKE "%' . $this->updatedName . '%"');
+        }]);
+
+        $query->joinWith(['category' => function ($q) {
+            $q->where('{{%category}}.title LIKE "%' . $this->categoryName . '%"');
         }]);
 
         return $dataProvider;

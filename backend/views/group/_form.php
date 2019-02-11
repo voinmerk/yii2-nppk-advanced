@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'sort_order')->textInput() ?>
 
-        <?= $form->field($model, 'published')->dropDownList($model->getStatusList()) ?>
+        <?= $form->field($model, 'status')->dropDownList($model->getStatusList()) ?>
 
     </div>
     <div class="box-footer">
