@@ -20,7 +20,7 @@ USE `yii_nppk_advanced`;
 CREATE TABLE IF NOT EXISTS `banner` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) DEFAULT NULL,
-  `published` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
   `created_at` int(11) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `banner` (
 
 -- Дамп данных таблицы yii_nppk_advanced.banner: ~0 rows (приблизительно)
 /*!40000 ALTER TABLE `banner` DISABLE KEYS */;
-INSERT INTO `banner` (`id`, `name`, `published`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+INSERT INTO `banner` (`id`, `name`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'main_slider', 1, 1, 1, 0, 1549009047),
 	(2, 'new_slider', 0, 1, 1, 1549008949, 1549008949);
 /*!40000 ALTER TABLE `banner` ENABLE KEYS */;
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `category_to_post` (
   `post_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii_nppk_advanced.category_to_post: ~16 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.category_to_post: ~18 rows (приблизительно)
 /*!40000 ALTER TABLE `category_to_post` DISABLE KEYS */;
 INSERT INTO `category_to_post` (`category_id`, `post_id`) VALUES
 	(3, 3),
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
-  `published` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
   `created_at` int(11) NOT NULL,
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `group` (
 
 -- Дамп данных таблицы yii_nppk_advanced.group: ~30 rows (приблизительно)
 /*!40000 ALTER TABLE `group` DISABLE KEYS */;
-INSERT INTO `group` (`id`, `name`, `sort_order`, `published`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+INSERT INTO `group` (`id`, `name`, `sort_order`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, '101', 0, 1, 1, 1, 1538454740, 1538454740),
 	(2, '121', 0, 1, 1, 1, 1538454740, 1538454740),
 	(3, '141', 0, 1, 1, 1, 1538454740, 1538454740),
@@ -570,7 +570,7 @@ CREATE TABLE IF NOT EXISTS `post` (
   CONSTRAINT `FK_post_user_updated` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COMMENT='Система объявлений';
 
--- Дамп данных таблицы yii_nppk_advanced.post: ~7 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.post: ~8 rows (приблизительно)
 /*!40000 ALTER TABLE `post` DISABLE KEYS */;
 INSERT INTO `post` (`id`, `title`, `content`, `meta_title`, `meta_keywords`, `meta_description`, `slug`, `status`, `created_by`, `updated_by`, `image_id`, `created_at`, `updated_at`) VALUES
 	(2, 'О колледже', '<p style="font-size: 16px;"><b>Новосибирский профессионально-педагогический колледж основан в 1956 году и на протяжении всего периода ведёт подготовку специалистов, востребованных на рынке труда. Воспитательно-образовательный процесс в колледже осуществляется на русском языке.</b></p>', 'О колледже', '', '', 'about-college', 1, 1, 1, 60, 1538104254, 1538104254),
@@ -588,7 +588,7 @@ CREATE TABLE IF NOT EXISTS `room` (
   `title` varchar(255) NOT NULL,
   `content` text,
   `sort_order` int(3) NOT NULL DEFAULT '0',
-  `published` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `image_id` int(11) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
@@ -605,7 +605,7 @@ CREATE TABLE IF NOT EXISTS `room` (
 
 -- Дамп данных таблицы yii_nppk_advanced.room: ~26 rows (приблизительно)
 /*!40000 ALTER TABLE `room` DISABLE KEYS */;
-INSERT INTO `room` (`id`, `title`, `content`, `sort_order`, `published`, `image_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+INSERT INTO `room` (`id`, `title`, `content`, `sort_order`, `status`, `image_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, '4 кабинет', 'Кабинет теории информации, операционных систем и сред<br>\r\nЛаборатория технических средств обучения, компьютеризации профессиональной деятельности', 1, 1, 9, 1, NULL, 0, 0),
 	(2, '5 кабинет', 'Кабинет архитектуры электронно-вычислительных машин и вычислительных систем<br>\r\nЛаборатория обработки информации отраслевой направлинности', 2, 1, 13, 1, NULL, 0, 0),
 	(3, 'Гимнастический зал', 'Гимнастический зал', 18, 1, 1, 1, NULL, 0, 0),
@@ -743,7 +743,7 @@ CREATE TABLE IF NOT EXISTS `teacher` (
   `title` varchar(50) NOT NULL,
   `content` text,
   `room_id` int(11) NOT NULL,
-  `published` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `sort_order` int(3) NOT NULL DEFAULT '0',
   `teacher_group_id` int(11) DEFAULT NULL,
   `image_id` int(11) DEFAULT NULL,
@@ -764,7 +764,7 @@ CREATE TABLE IF NOT EXISTS `teacher` (
 
 -- Дамп данных таблицы yii_nppk_advanced.teacher: ~52 rows (приблизительно)
 /*!40000 ALTER TABLE `teacher` DISABLE KEYS */;
-INSERT INTO `teacher` (`id`, `title`, `content`, `room_id`, `published`, `sort_order`, `teacher_group_id`, `image_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+INSERT INTO `teacher` (`id`, `title`, `content`, `room_id`, `status`, `sort_order`, `teacher_group_id`, `image_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'Ануфриева Ольга Юриевна', '&lt;p&gt;Должность: Преподаватель&lt;/p&gt;\r\n&lt;p&gt;Уровень образования: высшее&lt;/p&gt;\r\n&lt;p&gt;Высшая квалификационная категория&lt;/p&gt;', 9, 1, 1, 2, 95, 1, NULL, 0, 0),
 	(2, 'Артемова Наталья Александровна', '<p>Должность: Воспитатель</p>\r\n<p>Уровень образования: высшее</p>\r\n<p>Первая квалификационная категория</p>', 0, 1, 2, 2, 96, 1, NULL, 0, 0),
 	(3, 'Виниченко Елена Петровна', '<p>Должность: Преподаватель</p>\r\n<p>Уровень образования: высшее</p>\r\n<p>Высшая квалификационная категория</p>', 16, 1, 3, 2, 97, 1, NULL, 0, 0),
@@ -825,7 +825,7 @@ CREATE TABLE IF NOT EXISTS `teacher_group` (
   `name` varchar(255) NOT NULL,
   `slug` varchar(255) NOT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
-  `published` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
   `created_at` int(11) NOT NULL,
@@ -840,7 +840,7 @@ CREATE TABLE IF NOT EXISTS `teacher_group` (
 
 -- Дамп данных таблицы yii_nppk_advanced.teacher_group: ~2 rows (приблизительно)
 /*!40000 ALTER TABLE `teacher_group` DISABLE KEYS */;
-INSERT INTO `teacher_group` (`id`, `name`, `slug`, `sort_order`, `published`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+INSERT INTO `teacher_group` (`id`, `name`, `slug`, `sort_order`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'Администрация', 'administration', 1000, 1, 1, 1, 0, 0),
 	(2, 'Преподаватели', 'teachers', 2000, 1, 1, 1, 0, 0);
 /*!40000 ALTER TABLE `teacher_group` ENABLE KEYS */;
@@ -956,7 +956,7 @@ CREATE TABLE IF NOT EXISTS `user_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT '0',
-  `published` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
   `created_at` int(11) NOT NULL,
@@ -970,7 +970,7 @@ CREATE TABLE IF NOT EXISTS `user_group` (
 
 -- Дамп данных таблицы yii_nppk_advanced.user_group: ~0 rows (приблизительно)
 /*!40000 ALTER TABLE `user_group` DISABLE KEYS */;
-INSERT INTO `user_group` (`id`, `name`, `sort_order`, `published`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+INSERT INTO `user_group` (`id`, `name`, `sort_order`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'Администратор', 10, 1, 1, NULL, 0, 0),
 	(2, 'Редактор', 11, 1, 1, NULL, 0, 0),
 	(3, 'Редактор расписания', 12, 1, 1, NULL, 0, 0);
