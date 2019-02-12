@@ -11,7 +11,7 @@ use common\models\User;
  *
  * @property int $id
  * @property string $name
- * @property int $published
+ * @property int $status
  * @property int $created_by
  * @property int $updated_by
  * @property int $created_at
@@ -23,6 +23,9 @@ use common\models\User;
  */
 class Lesson extends ActiveRecord
 {
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+
     /**
      * {@inheritdoc}
      */
@@ -38,7 +41,7 @@ class Lesson extends ActiveRecord
     {
         return [
             [['name', 'created_at', 'updated_at'], 'required'],
-            [['published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['status', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
@@ -53,7 +56,7 @@ class Lesson extends ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'published' => 'Published',
+            'status' => 'Published',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
             'created_at' => 'Created At',

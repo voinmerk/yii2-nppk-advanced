@@ -11,7 +11,7 @@ use common\models\User;
  *
  * @property int $id
  * @property string $name
- * @property int $published
+ * @property int $status
  * @property int $created_by
  * @property int $updated_by
  * @property int $created_at
@@ -22,8 +22,8 @@ use common\models\User;
  */
 class Banner extends ActiveRecord
 {
-    const UNPUBLISHED = 0;
-    const PUBLISHED = 1;
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
 
     /**
      * {@inheritdoc}
@@ -39,7 +39,7 @@ class Banner extends ActiveRecord
     public function rules()
     {
         return [
-            [['published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['status', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['created_at', 'updated_at'], 'required'],
             [['name'], 'string', 'max' => 32],
             [['name'], 'unique'],
@@ -56,7 +56,7 @@ class Banner extends ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'published' => 'Published',
+            'status' => 'Published',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
             'created_at' => 'Created At',
@@ -66,7 +66,7 @@ class Banner extends ActiveRecord
 
     public static function getBannerByName($name)
     {
-        return self::find()->with(['images'])->where(['name' => $name, 'published' => self::PUBLISHED])->one();
+        return self::find()->with(['images'])->where(['name' => $name, 'status' => self::STATUS_ACTIVE])->one();
     }
 
     /**

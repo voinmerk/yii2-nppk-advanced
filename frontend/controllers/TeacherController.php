@@ -24,11 +24,13 @@ class TeacherController extends Controller
 
 	public function actionView($id)
 	{
-		$teacher = Teacher::find()->where(['id' => $id, 'published' => Teacher::PUBLISHED])->one();
+		$teacher = Teacher::find()->where(['id' => $id, 'status' => Teacher::STATUS_ACTIVE])->one();
+
+		if(!$teacher) {
+			throw new BadRequestHttpException(Yii::t('frontend', 'This page does not exist!'));
+		}
 
 		if(Yii::$app->request->isAjax) {
-			// throw new BadRequestHttpException(Yii::t('frontend', 'This category does not exist!'));
-
 			return $this->renderAjax('ajax_view', compact('teacher'));
 		}
 

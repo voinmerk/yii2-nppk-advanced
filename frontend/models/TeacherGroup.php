@@ -13,7 +13,7 @@ use common\models\User;
  * @property string $name
  * @property string $slug
  * @property int $sort_order
- * @property int $published
+ * @property int $status
  * @property int $created_by
  * @property int $updated_by
  * @property int $created_at
@@ -25,6 +25,9 @@ use common\models\User;
  */
 class TeacherGroup extends ActiveRecord
 {
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+
     /**
      * {@inheritdoc}
      */
@@ -40,7 +43,7 @@ class TeacherGroup extends ActiveRecord
     {
         return [
             [['name', 'slug', 'created_at', 'updated_at'], 'required'],
-            [['sort_order', 'published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['sort_order', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['name', 'slug'], 'string', 'max' => 255],
             [['slug'], 'unique'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -58,7 +61,7 @@ class TeacherGroup extends ActiveRecord
             'name' => 'Name',
             'slug' => 'Slug',
             'sort_order' => 'Sort Order',
-            'published' => 'Published',
+            'status' => 'Published',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
             'created_at' => 'Created At',

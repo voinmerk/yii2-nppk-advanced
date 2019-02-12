@@ -13,7 +13,7 @@ use common\models\User;
  * @property string $title
  * @property string $content
  * @property int $room_id
- * @property int $published
+ * @property int $status
  * @property int $sort_order
  * @property int $teacher_group_id
  * @property int $image_id
@@ -29,8 +29,8 @@ use common\models\User;
  */
 class Teacher extends ActiveRecord
 {
-    const UNPUBLISHED = 0;
-    const PUBLISHED = 1;
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
 
     /**
      * {@inheritdoc}
@@ -48,7 +48,7 @@ class Teacher extends ActiveRecord
         return [
             [['title', 'room_id', 'created_at', 'updated_at'], 'required'],
             [['content'], 'string'],
-            [['room_id', 'published', 'sort_order', 'teacher_group_id', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['room_id', 'status', 'sort_order', 'teacher_group_id', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['title'], 'string', 'max' => 50],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
             [['teacher_group_id'], 'exist', 'skipOnError' => true, 'targetClass' => TeacherGroup::className(), 'targetAttribute' => ['teacher_group_id' => 'id']],
@@ -67,7 +67,7 @@ class Teacher extends ActiveRecord
             'title' => 'Title',
             'content' => 'Content',
             'room_id' => 'Room ID',
-            'published' => 'Published',
+            'status' => 'Published',
             'sort_order' => 'Sort Order',
             'teacher_group_id' => 'Teacher Group ID',
             'image_id' => 'Image ID',
@@ -80,7 +80,7 @@ class Teacher extends ActiveRecord
 
     public static function getCollaboratorsByGroup($group)
     {
-        return self::find()->with(['image', 'room'])->where(['teacher_group_id' => $group, 'published' => self::PUBLISHED])->all();
+        return self::find()->with(['image', 'room'])->where(['teacher_group_id' => $group, 'status' => self::STATUS_ACTIVE])->all();
     }
 
     /**

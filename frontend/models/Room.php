@@ -13,7 +13,7 @@ use common\models\User;
  * @property string $title
  * @property string $content
  * @property int $sort_order
- * @property int $published
+ * @property int $status
  * @property int $image_id
  * @property int $created_by
  * @property int $updated_by
@@ -27,8 +27,8 @@ use common\models\User;
  */
 class Room extends ActiveRecord
 {
-    const UNPUBLISHED = 0;
-    const PUBLISHED = 1;
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
 
     /**
      * {@inheritdoc}
@@ -46,7 +46,7 @@ class Room extends ActiveRecord
         return [
             [['title', 'created_at', 'updated_at'], 'required'],
             [['content'], 'string'],
-            [['sort_order', 'published', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['sort_order', 'status', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['title'], 'string', 'max' => 255],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -64,7 +64,7 @@ class Room extends ActiveRecord
             'title' => 'Title',
             'content' => 'Content',
             'sort_order' => 'Sort Order',
-            'published' => 'Published',
+            'status' => 'Published',
             'image_id' => 'Image ID',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
@@ -75,12 +75,12 @@ class Room extends ActiveRecord
 
     public static function getRooms()
     {
-        return self::find()->with(['image'])->where(['published' => self::PUBLISHED])->all();
+        return self::find()->with(['image'])->where(['status' => self::STATUS_ACTIVE])->all();
     }
 
     public static function getRoomById($id)
     {
-        return self::find()->with(['images'])->where(['id' => $id, 'published' => self::PUBLISHED])->one();
+        return self::find()->with(['images'])->where(['id' => $id, 'status' => self::STATUS_ACTIVE])->one();
     }
 
     /**
