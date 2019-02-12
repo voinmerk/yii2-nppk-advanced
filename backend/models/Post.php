@@ -121,6 +121,7 @@ class Post extends ActiveRecord
             'image_id' => Yii::t('backend', 'Image ID'),
             'created_at' => Yii::t('backend', 'Created At'),
             'updated_at' => Yii::t('backend', 'Updated At'),
+            'image_file' => Yii::t('backend', 'Image File'),
         ];
     }
 

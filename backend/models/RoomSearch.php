@@ -60,31 +60,50 @@ class RoomSearch extends Room
             ],
         ]);
 
+        $dataProvider->setSort([
+            'attributes' => [
+                'id',
+                'title',
+                'content',
+                'sort_order',
+                'status',
+                'image_id',
+                'createdName' => [
+                    'asc' => ['{{%user}}.username' => SORT_ASC],
+                    'desc' => ['{{%user}}.username' => SORT_DESC],
+                ],
+                'updatedName' => [
+                    'asc' => ['{{%user}}.username' => SORT_ASC],
+                    'desc' => ['{{%user}}.username' => SORT_DESC],
+                ],
+                'created_by',
+                'updated_by',
+                'created_at',
+                'updated_at',
+            ],
+        ]);
+
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
+;
+        $this->addCondition($query, '{{%room}}.id');
+        $this->addCondition($query, '{{%room}}.title', true);
+        $this->addCondition($query, '{{%room}}.content', true);
+        $this->addCondition($query, '{{%room}}.image_id');
+        $this->addCondition($query, '{{%room}}.sort_order');
+        $this->addCondition($query, '{{%room}}.status');
+        $this->addCondition($query, '{{%room}}.created_by');
+        $this->addCondition($query, '{{%room}}.updated_by');
+        $this->addCondition($query, '{{%room}}.created_at');
+        $this->addCondition($query, '{{%room}}.updated_at');
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'sort_order' => $this->sort_order,
-            'status' => $this->status,
-            'image_id' => $this->image_id,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ]);
-
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'content', $this->content]);
+        $query->joinWith(['createdBy' => function ($q) {
+            $q->from('{{%user}} createdUser')->where('createdUser.username LIKE "%' . $this->createdName . '%"');
+        }]);
 
         $query->joinWith(['updatedBy' => function ($q) {
             $q->from('{{%user}} updatedUser')->where('updatedUser.username LIKE "%' . $this->updatedName . '%"');
-        }]);
-
-        $query->joinWith(['category' => function ($q) {
-            $q->where('{{%category}}.title LIKE "%' . $this->categoryName . '%"');
         }]);
 
         return $dataProvider;

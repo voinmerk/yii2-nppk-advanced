@@ -60,13 +60,20 @@ class GroupSearch extends Group
 
         $dataProvider->setSort([
             'attributes' => [
+                'id',
                 'name',
                 'createdName' => [
                     'asc' => ['{{%user}}.username' => SORT_ASC],
                     'desc' => ['{{%user}}.username' => SORT_DESC],
-                    'label' => 'Created Name',
+                ],
+                'updatedName' => [
+                    'asc' => ['{{%user}}.username' => SORT_ASC],
+                    'desc' => ['{{%user}}.username' => SORT_DESC],
                 ],
                 'status',
+                'created_by',
+                'updated_by',
+                'created_at',
                 'updated_at',
             ],
         ]);
@@ -75,19 +82,21 @@ class GroupSearch extends Group
             return $dataProvider;
         }
 
+        $this->addCondition($query, '{{%group}}.id');
         $this->addCondition($query, '{{%group}}.name', true);
-        $this->addCondition($query, '{{%group}}.created_by');
         $this->addCondition($query, '{{%group}}.status');
+        $this->addCondition($query, '{{%group}}.created_by');
+        $this->addCondition($query, '{{%group}}.updated_by');
+        $this->addCondition($query, '{{%group}}.created_at');
         $this->addCondition($query, '{{%group}}.updated_at');
         
+        $query->joinWith(['createdBy' => function ($q) {
+            $q->from('{{%user}} createdUser')->where('createdUser.username LIKE "%' . $this->createdName . '%"');
+        }]);
+
         $query->joinWith(['updatedBy' => function ($q) {
             $q->from('{{%user}} updatedUser')->where('updatedUser.username LIKE "%' . $this->updatedName . '%"');
         }]);
-
-        $query->joinWith(['category' => function ($q) {
-            $q->where('{{%category}}.title LIKE "%' . $this->categoryName . '%"');
-        }]);
-        
 
         return $dataProvider;
     }

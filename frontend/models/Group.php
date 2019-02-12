@@ -12,7 +12,7 @@ use common\models\User;
  * @property int $id
  * @property string $name
  * @property int $sort_order
- * @property int $published
+ * @property int $status
  * @property int $created_by
  * @property int $updated_by
  * @property int $created_at
@@ -24,8 +24,8 @@ use common\models\User;
  */
 class Group extends ActiveRecord
 {
-    const UNPUBLISHED = 0;
-    const PUBLISHED = 1;
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
 
     /**
      * {@inheritdoc}
@@ -42,7 +42,7 @@ class Group extends ActiveRecord
     {
         return [
             [['name', 'created_at', 'updated_at'], 'required'],
-            [['sort_order', 'published', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
+            [['sort_order', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
@@ -58,7 +58,7 @@ class Group extends ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'sort_order' => 'Sort Order',
-            'published' => 'Published',
+            'status' => 'status',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
             'created_at' => 'Created At',
@@ -68,17 +68,17 @@ class Group extends ActiveRecord
 
     public static function getGroupById($id)
     {
-        return self::find()->where(['id' => $id, 'published' => self::PUBLISHED])->one();
+        return self::find()->where(['id' => $id, 'status' => self::STATUS_ACTIVE])->one();
     }
 
     public static function getGroups()
     {
-        return self::find()->where(['published' => self::PUBLISHED])->all();
+        return self::find()->where(['status' => self::STATUS_ACTIVE])->all();
     }
 
     public static function getGroupCount()
     {
-        return self::find()->where(['published' => self::PUBLISHED])->count();
+        return self::find()->where(['status' => self::STATUS_ACTIVE])->count();
     }
 
     /**

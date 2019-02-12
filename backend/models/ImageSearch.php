@@ -46,8 +46,6 @@ class ImageSearch extends Image
     {
         $query = Image::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => [
@@ -60,29 +58,45 @@ class ImageSearch extends Image
             ],
         ]);
 
+        $dataProvider->setSort([
+            'attributes' => [
+                'id',
+                'title',
+                'content',
+                'src',
+                'createdName' => [
+                    'asc' => ['{{%user}}.username' => SORT_ASC],
+                    'desc' => ['{{%user}}.username' => SORT_DESC],
+                ],
+                'updatedName' => [
+                    'asc' => ['{{%user}}.username' => SORT_ASC],
+                    'desc' => ['{{%user}}.username' => SORT_DESC],
+                ],
+                'created_by',
+                'updated_by',
+                'created_at',
+                'updated_at',
+            ],
+        ]);
+
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ]);
+        $this->addCondition($query, '{{%image}}.src', true);
+        $this->addCondition($query, '{{%image}}.title', true);
+        $this->addCondition($query, '{{%image}}.content', true);
+        $this->addCondition($query, '{{%image}}.created_by');
+        $this->addCondition($query, '{{%image}}.updated_by');
+        $this->addCondition($query, '{{%image}}.created_at');
+        $this->addCondition($query, '{{%image}}.updated_at');
 
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'content', $this->content])
-            ->andFilterWhere(['like', 'src', $this->src]);
+        $query->joinWith(['createdBy' => function ($q) {
+            $q->from('{{%user}} createdUser')->where('createdUser.username LIKE "%' . $this->createdName . '%"');
+        }]);
 
         $query->joinWith(['updatedBy' => function ($q) {
             $q->from('{{%user}} updatedUser')->where('updatedUser.username LIKE "%' . $this->updatedName . '%"');
-        }]);
-
-        $query->joinWith(['category' => function ($q) {
-            $q->where('{{%category}}.title LIKE "%' . $this->categoryName . '%"');
         }]);
 
         return $dataProvider;

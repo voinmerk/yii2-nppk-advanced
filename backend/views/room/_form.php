@@ -15,7 +15,7 @@ use dosamigos\tinymce\TinyMce;
 
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-        <?=  $form->field($model, 'content')->widget(TinyMce::className(), [
+        <?php/*  $form->field($model, 'content')->widget(TinyMce::className(), [
             'options' => ['rows' => 12],
             'language' => 'ru',
             'clientOptions' => [
@@ -26,13 +26,15 @@ use dosamigos\tinymce\TinyMce;
                 ],
                 'toolbar' => 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
             ]
-        ]); ?>
+        ]); */?>
+
+        <?= $form->field($model, 'content')->textarea(['rows' => 12]) ?>
 
         <?= $form->field($model, 'sort_order')->textInput() ?>
 
-        <?= $form->field($model, 'status')->dropDownList($model->getStatusList()) ?>
+        <?= $form->field($model, 'image_file')->fileInput() ?>
 
-        <?= $form->field($model, 'image_id')->textInput() ?>
+        <?= $form->field($model, 'status')->dropDownList($model->getStatusList()) ?>
 
     </div>
     <div class="box-footer">

@@ -28,6 +28,8 @@ class Room extends \yii\db\ActiveRecord
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
+
+    public $image_file;
     
     /**
      * {@inheritdoc}
@@ -38,15 +40,42 @@ class Room extends \yii\db\ActiveRecord
     }
 
     /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => '\yii\behaviors\TimestampBehavior',
+            ],
+            'blame' => [
+                'class' => '\yii\behaviors\BlameableBehavior',
+            ],
+            'imageUpload' => [
+                'class' => '\yiidreamteam\upload\ImageUploadBehavior',
+                'attribute' => 'image_file',
+                /*'thumbs' => [
+                    'thumb' => ['width' => 700, 'height' => 700],
+                ],*/
+                'filePath' => '@uploads/rooms/[[filename]].[[extension]]',
+                'fileUrl' => '/data/rooms/[[filename]].[[extension]]',
+                //'thumbPath' => '@uploads/news/[[profile]]_[[filename]].[[extension]]',
+                //'thumbUrl' => '/data/news/[[profile]]_[[filename]].[[extension]]',
+            ],
+        ];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['title', 'created_at', 'updated_at'], 'required'],
+            [['title', 'created_at', 'updated_at', 'image_file'], 'required'],
             [['content'], 'string'],
             [['sort_order', 'status', 'image_id', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
             [['title'], 'string', 'max' => 255],
+            [['image_file'], 'file', 'extensions' => 'jpeg, gif, png, jpg'],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
@@ -73,7 +102,28 @@ class Room extends \yii\db\ActiveRecord
             'statusName' => Yii::t('backend', 'Published'),
             'createdName' => Yii::t('backend', 'Created By'),
             'updatedName' => Yii::t('backend', 'Updated By'),
+            'image_file' => Yii::t('backend', 'Image File'),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        $imageModel = new Image;
+
+        $imageModel->src = '/data/rooms/' . $this->image_file;
+
+        if ($imageModel->save()) {
+            $this->image_id = $imageModel->id;
+        }
+
+        return true;
     }
 
     public static function getAutocompleteRooms()

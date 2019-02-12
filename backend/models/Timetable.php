@@ -121,7 +121,7 @@ class Timetable extends \yii\db\ActiveRecord
      */
     public function getGroups()
     {
-        return Group::find()->where(['published' => Group::PUBLISHED])->all();
+        return Group::find()->where(['status' => Group::STATUS_ACTIVE])->all();
     }
 
     /**

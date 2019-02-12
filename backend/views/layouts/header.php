@@ -36,29 +36,20 @@ use yii\helpers\Html;
                                 <small>Member since Nov. 2012</small>
                             </p>
                         </li>
-                        <!-- Menu Body -->
-                        <!-- <li class="user-body">
-
-                        </li> -->
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="<?= Url::to(['account/index']) ?>" class="btn btn-default btn-flat">Profile</a>
+                                <?= Html::a(Yii::t('backend', 'Profile'), ['/account/index'], ['class' => 'btn btn-default btn-flat']) ?>
                             </div>
                             <div class="pull-right">
                                 <?= Html::a(
-                                    'Sign out',
+                                    Yii::t('backend', 'Sign out'),
                                     ['/auth/logout'],
                                     ['data-method' => 'post', 'class' => 'btn btn-default btn-flat']
                                 ) ?>
                             </div>
                         </li>
                     </ul>
-                </li>
-
-                <!-- User Account: style can be found in dropdown.less -->
-                <li>
-                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                 </li>
             </ul>
         </div>
