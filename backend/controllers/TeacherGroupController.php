@@ -3,11 +3,13 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\TeacherGroup;
-use backend\models\TeacherGroupSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+
+use common\models\TeacherGroup;
+use common\models\TeacherGroupSearch;
 
 /**
  * TeacherGroupController implements the CRUD actions for TeacherGroup model.
@@ -20,6 +22,16 @@ class TeacherGroupController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

@@ -5,13 +5,15 @@ namespace backend\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 
+use common\models\Timetable;
+use common\models\TimetableSearch;
+use common\models\TimetableLesson;
+
 use backend\base\Model;
-use backend\models\Timetable;
-use backend\models\TimetableSearch;
-use backend\models\TimetableLessonBeta as TimetableLesson;
 
 /**
  * TimetableController implements the CRUD actions for Timetable model.
@@ -24,6 +26,16 @@ class TimetableController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -67,16 +79,6 @@ class TimetableController extends Controller
      */
     public function actionCreate()
     {
-        /*$model = new Timetable();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }*/
-
         $model = new Timetable;
         $modelLessons = [new TimetableLesson];
 
@@ -117,8 +119,6 @@ class TimetableController extends Controller
                 }
             }
         }
-
-        //var_dump($modelLessons, $model);exit;
 
         return $this->render('create', [
             'model' => $model,

@@ -6,10 +6,8 @@ use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
-use frontend\models\Banner;
-use frontend\models\Category;
-use frontend\models\Page;
-use frontend\models\Menu;
+use common\models\Banner;
+use common\models\Category;
 
 /**
  * Site controller

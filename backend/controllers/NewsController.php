@@ -3,11 +3,13 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\News;
-use backend\models\NewsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+
+use common\models\News;
+use common\models\NewsSearch;
 
 /**
  * NewsController implements the CRUD actions for News model.
@@ -20,6 +22,16 @@ class NewsController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -84,8 +96,6 @@ class NewsController extends Controller
     {
         $model = $this->findModel($id);
 
-        $model->image_file = $model->image->src;
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -103,13 +113,7 @@ class NewsController extends Controller
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-
-        $name = $model->title;
-
-        if($model->delete()) {
-            Yii::$app->session->setFlash('success', Yii::t('backend', 'The entry "{name}" was successfully removed', ['name' => $name]));
-        }
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }

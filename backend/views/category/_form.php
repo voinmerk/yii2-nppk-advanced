@@ -10,7 +10,7 @@ use dosamigos\tinymce\TinyMce;
 ?>
 
 <div class="category-form box box-primary">
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
     <div class="box-body table-responsive">
 
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>

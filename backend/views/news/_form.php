@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use dosamigos\tinymce\TinyMce;
+use kartik\file\FileInput;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\News */
@@ -43,7 +44,9 @@ use dosamigos\tinymce\TinyMce;
 
         <?= $form->field($model, 'status')->dropDownList($model->getStatusList()) ?>
 
-        <?= $form->field($model, 'image_file')->fileInput() ?>
+        <?= $form->field($model, 'imageFile')->widget(FileInput::classname(), [
+            'options' => ['accept' => 'image/*'],
+        ]); ?>
 
     </div>
     <div class="box-footer">

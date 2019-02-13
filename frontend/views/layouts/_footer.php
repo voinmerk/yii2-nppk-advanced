@@ -3,8 +3,8 @@
 use yii\bootstrap\Html;
 use yii\helpers\Url;
 
-$categories = \frontend\models\Category::find()->where([
-  'status' => \frontend\models\Category::STATUS_ACTIVE,
+$categories = \common\models\Category::find()->where([
+  'status' => \common\models\Category::STATUS_ACTIVE,
 ])->all();
 ?>
 <footer id="footer">

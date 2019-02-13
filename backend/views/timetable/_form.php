@@ -4,14 +4,13 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
-use rmrevin\yii\fontawesome\FA;
-use backend\models\TimetableLesson;
-use kidzen\dynamicform\DynamicFormWidget;
 
+use rmrevin\yii\fontawesome\FA;
+use kidzen\dynamicform\DynamicFormWidget;
 use kartik\date\DatePicker;
 
-use backend\models\Lesson;
-use backend\models\Room;
+use common\models\Lesson;
+use common\models\Room;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Timetable */
@@ -122,7 +121,7 @@ $this->registerJs($js);
 
     </div>
     <div class="box-footer">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success btn-flat']) ?>
+        <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success btn-flat']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 </div>

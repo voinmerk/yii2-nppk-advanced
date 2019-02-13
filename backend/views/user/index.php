@@ -3,34 +3,41 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
+
 use rmrevin\yii\fontawesome\FA;
 use dosamigos\datetimepicker\DateTimePicker;
-
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\UserSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('backend', 'Users');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index box box-primary">
+    <?php Pjax::begin(); ?>
 
     <?= $this->render('@viewComponents/_header_index_tools') ?>
 
     <div class="box-body table-responsive no-padding">
-        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'layout' => "{items}\n{summary}\n{pager}",
+            'layout' => "{items}\n{pager}",
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-
                 'username',
                 'email:email',
                 'first_name',
                 'last_name',
-                // 'status',
+                [
+                    'attribute' => 'status',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        $class = $model->status ? ' label-success' : ' label-danger';
+                        $name = $model->statusName;
+
+                        return '<span class="label' . $class . '">' . $name . '</span>';
+                    },
+                    'filter' => $searchModel->getStatusList(),
+                ],
                 [
                     'attribute' => 'updated_at',
                     'format' => 'datetime',
@@ -65,4 +72,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]); ?>
     </div>
+    <?php Pjax::end(); ?>
 </div>

@@ -2,9 +2,10 @@
 namespace backend\base;
 
 use Yii;
+use yii\base\Model as BaseModel;
 use yii\helpers\ArrayHelper;
 
-class Model extends \yii\base\Model
+class Model extends BaseModel
 {
     /**
      * Creates and populates a set of models.

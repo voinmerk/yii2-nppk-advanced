@@ -3,27 +3,24 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
+
 use rmrevin\yii\fontawesome\FA;
 use dosamigos\datetimepicker\DateTimePicker;
-use backend\models\TeacherGroup;
-
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\TeacherGroupSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('backend', 'Employees Groups');;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="teacher-group-index box box-primary">
+    <?php Pjax::begin(); ?>
 
     <?= $this->render('@viewComponents/_header_index_tools') ?>
 
     <div class="box-body table-responsive no-padding">
-        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'layout' => "{items}\n{summary}\n{pager}",
+            'layout' => "{items}\n{pager}",
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
 
@@ -34,8 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'createdName',
                     'format' => 'html',
                     'value' => function($model) {
-                        return Html::a($model->createdName, ['user/view', 'id' => $model->created_by], ['class' => 'btn btn-link btn-flat', 'style' => 'width: 100%;']);
+                        return Html::a($model->createdName, ['/user/view', 'id' => $model->created_by], ['class' => 'btn btn-link btn-flat btn-block']);
                     },
+                    'filter' => $searchModel->getCreatedName(),
                 ],
                 [
                     'attribute' => 'status',
@@ -46,11 +44,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         return '<span class="label' . $class . '">' . $name . '</span>';
                     },
-                    'filter' => TeacherGroup::getStatusList(),
+                    'filter' => $searchModel->getStatusList(),
                 ],
-                // 'created_by',
-                // 'updated_by',
-                // 'created_at',
                 [
                     'attribute' => 'updated_at',
                     'format' => 'datetime',
@@ -94,4 +89,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]); ?>
     </div>
+    <?php Pjax::end(); ?>
 </div>

@@ -3,31 +3,26 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
+
 use rmrevin\yii\fontawesome\FA;
 use dosamigos\datetimepicker\DateTimePicker;
-
-use backend\models\UserGroup;
-
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\UserGroupSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('backend', 'Users Groups');;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-group-index box box-primary">
+    <?php Pjax::begin(); ?>
     
     <?= $this->render('@viewComponents/_header_index_tools') ?>
 
     <div class="box-body table-responsive no-padding">
-        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'layout' => "{items}\n{summary}\n{pager}",
+            'layout' => "{items}\n{pager}",
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-
                 'name',
                 'sort_order',
                 [
@@ -46,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         return '<span class="label' . $class . '">' . $name . '</span>';
                     },
-                    'filter' => UserGroup::getStatusList(),
+                    'filter' => $searchModel->getStatusList(),
                 ],
                 [
                     'attribute' => 'updated_at',
@@ -91,4 +86,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]); ?>
     </div>
+    <?php Pjax::end(); ?>
 </div>

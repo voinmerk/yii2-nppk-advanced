@@ -3,11 +3,13 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Lesson;
-use backend\models\LessonSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+
+use common\models\Lesson;
+use common\models\LessonSearch;
 
 /**
  * LessonController implements the CRUD actions for Lesson model.
@@ -20,6 +22,16 @@ class LessonController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -37,8 +49,6 @@ class LessonController extends Controller
     {
         $searchModel = new LessonSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        //var_dump($dataProvider);exit;
 
         return $this->render('index', [
             'searchModel' => $searchModel,

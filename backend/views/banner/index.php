@@ -6,8 +6,6 @@ use yii\grid\GridView;
 use rmrevin\yii\fontawesome\FA;
 use dosamigos\datetimepicker\DateTimePicker;
 
-use backend\models\Banner;
-
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\BannerSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -44,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         return '<span class="label' . $class . '">' . $name . '</span>';
                     },
-                    'filter' => Banner::getStatusList(),
+                    'filter' => $searchModel->getStatusList(),
                 ],
                 [
                     'attribute' => 'updated_at',

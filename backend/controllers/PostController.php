@@ -5,11 +5,11 @@ namespace backend\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
-use backend\models\Post;
-use backend\models\PostSearch;
-use backend\models\Category;
+use common\models\Post;
+use common\models\PostSearch;
 
 /**
  * PostController implements the CRUD actions for Post model.
@@ -22,6 +22,16 @@ class PostController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -67,18 +77,8 @@ class PostController extends Controller
     {
         $model = new Post();
 
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                foreach($model->category_ids as $category_id) {
-                    $category = Category::findOne($category_id);
-
-                    $model->link('categories', $category);
-                }
-
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                var_dump($model);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -96,23 +96,8 @@ class PostController extends Controller
     {
         $model = $this->findModel($id);
 
-        $model->category_ids = $model->categories;
-        $model->image_file = $model->image->src;
-
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save(false)) {
-                foreach($model->categories as $category) {
-                    $model->unlink('categories', $category, true);
-                }
-
-                foreach($model->category_ids as $category_id) {
-                    $category = Category::findOne($category_id);
-
-                    $model->link('categories', $category);
-                }
-
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -128,17 +113,7 @@ class PostController extends Controller
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-
-        $name = $model->title;
-
-        if($model->delete()) {
-            foreach($model->categories as $category) {
-                $model->unlink('categories', $category, true);
-            }
-
-            Yii::$app->session->setFlash('success', Yii::t('backend', 'The entry "{name}" was successfully removed', ['name' => $name]));
-        }
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }

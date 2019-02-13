@@ -6,8 +6,8 @@ use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
-use frontend\models\Group;
-use frontend\models\Timetable;
+use common\models\Group;
+use common\models\Timetable;
 
 /**
  * Site controller

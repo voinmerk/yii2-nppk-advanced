@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
 
     </div>
     <div class="box-footer">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success btn-flat']) ?>
+        <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success btn-flat']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 </div>

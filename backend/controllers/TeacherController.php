@@ -3,11 +3,13 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Teacher;
-use backend\models\TeacherSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+
+use common\models\Teacher;
+use common\models\TeacherSearch;
 
 /**
  * TeacherController implements the CRUD actions for Teacher model.
@@ -20,6 +22,16 @@ class TeacherController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

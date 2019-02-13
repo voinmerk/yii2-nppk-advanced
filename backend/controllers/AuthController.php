@@ -3,20 +3,19 @@ namespace backend\controllers;
 
 use Yii;
 use yii\base\InvalidParamException;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+
 use common\models\LoginForm;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
-use frontend\models\ContactForm;
+// use common\models\PasswordResetRequestForm;
+// use common\models\ResetPasswordForm;
 
 /**
  * Auth controller
  */
-class AuthController extends \yii\web\Controller
+class AuthController extends Controller
 {
 	public $layout = 'auth';
 	

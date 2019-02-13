@@ -71,8 +71,6 @@ $menuItems = [
     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
 ];
 
-$model = new \backend\models\forms\SearchForm;
-
 ?>
 <aside class="main-sidebar">
 

@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'sort_order') ?>
 
-    <?= $form->field($model, 'published') ?>
+    <?= $form->field($model, 'status') ?>
 
     <?= $form->field($model, 'created_by') ?>
 

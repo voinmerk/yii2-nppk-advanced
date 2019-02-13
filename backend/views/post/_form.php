@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use dosamigos\tinymce\TinyMce;
+use kartik\file\FileInput;
 
 use backend\models\Category;
 
@@ -14,7 +15,7 @@ use backend\models\Category;
 
 <div class="post-form box box-primary">
     <?php $form = ActiveForm::begin([
-        'enableClientValidation' => false,
+        // 'enableClientValidation' => false,
         'options' => [
             'enctype' => 'multipart/form-data',
         ],
@@ -40,7 +41,11 @@ use backend\models\Category;
 
         <?= $form->field($model, 'category_ids')->dropDownList(ArrayHelper::map(Category::getCategoryList(), 'id', 'title'), ['multiple' => 'multiple']) ?>
 
-        <?= $form->field($model, 'image_file')->fileInput() ?>
+        <?php // $form->field($model, 'image_file')->fileInput() ?>
+
+        <?= $form->field($model, 'imageFile')->widget(FileInput::classname(), [
+            'options' => ['accept' => 'image/*'],
+        ]); ?>
 
         <?= $form->field($model, 'slug')->textInput() ?>
 

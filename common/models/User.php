@@ -8,7 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * This is the model class for table "{{%users}}".
+ * This is the model class for table "{{%user}}".
  *
  * @property int $id
  * @property string $username
@@ -24,68 +24,40 @@ use yii\web\IdentityInterface;
  * @property int $created_at
  * @property int $updated_at
  *
- * @property BannersImage[] $frontendBannersImages
- * @property BannersImage[] $frontendBannersImages0
- * @property Blogs[] $frontendBlogs
- * @property Blogs[] $frontendBlogs0
- * @property BlogsMenu[] $frontendBlogsMenus
- * @property BlogsMenu[] $frontendBlogsMenus0
- * @property Groups[] $frontendGroups
- * @property Groups[] $frontendGroups0
- * @property Images[] $frontendImages
- * @property Images[] $frontendImages0
- * @property Languages[] $frontendLanguages
- * @property Languages[] $frontendLanguages0
- * @property LanguagesPhrase[] $frontendLanguagesPhrases
- * @property LanguagesPhrase[] $frontendLanguagesPhrases0
- * @property Lessons[] $frontendLessons
- * @property Lessons[] $frontendLessons0
- * @property Rooms[] $frontendRooms
- * @property Rooms[] $frontendRooms0
- * @property Teachers[] $frontendTeachers
- * @property Teachers[] $frontendTeachers0
- * @property TeachersGroup[] $frontendTeachersGroups
- * @property TeachersGroup[] $frontendTeachersGroups0
- * @property Timetables[] $frontendTimetables
- * @property Timetables[] $frontendTimetables0
- * @property UsersGroup $frontendUserGroup
- * @property UsersPermission $frontendUserPermission
- * @property UsersGroup[] $frontendUsersGroups
- * @property UsersGroup[] $frontendUsersGroups0
- *
- * @property BannersImage[] $backendBannersImages
- * @property BannersImage[] $backendBannersImages0
- * @property Blogs[] $backendBlogs
- * @property Blogs[] $backendBlogs0
- * @property BlogsMenu[] $backendBlogsMenus
- * @property BlogsMenu[] $backendBlogsMenus0
- * @property Groups[] $backendGroups
- * @property Groups[] $backendGroups0
- * @property Images[] $backendImages
- * @property Images[] $backendImages0
- * @property Languages[] $backendLanguages
- * @property Languages[] $backendLanguages0
- * @property LanguagesPhrase[] $backendLanguagesPhrases
- * @property LanguagesPhrase[] $backendLanguagesPhrases0
- * @property Lessons[] $backendLessons
- * @property Lessons[] $backendLessons0
- * @property Rooms[] $backendRooms
- * @property Rooms[] $backendRooms0
- * @property Teachers[] $backendTeachers
- * @property Teachers[] $backendTeachers0
- * @property TeachersGroup[] $backendTeachersGroups
- * @property TeachersGroup[] $backendTeachersGroups0
- * @property Timetables[] $backendTimetables
- * @property Timetables[] $backendTimetables0
- * @property UsersGroup $backendUserGroup
- * @property UsersPermission $backendUserPermission
- * @property UsersGroup[] $backendUsersGroups
- * @property UsersGroup[] $backendUsersGroups0
+ * @property Banner[] $banners
+ * @property Banner[] $banners0
+ * @property Category[] $categories
+ * @property Category[] $categories0
+ * @property Group[] $groups
+ * @property Group[] $groups0
+ * @property Image[] $images
+ * @property Image[] $images0
+ * @property Lesson[] $lessons
+ * @property Lesson[] $lessons0
+ * @property News[] $news
+ * @property News[] $news0
+ * @property Post[] $posts
+ * @property Post[] $posts0
+ * @property Room[] $rooms
+ * @property Room[] $rooms0
+ * @property Teacher[] $teachers
+ * @property Teacher[] $teachers0
+ * @property TeacherGroup[] $teacherGroups
+ * @property TeacherGroup[] $teacherGroups0
+ * @property Timetable[] $timetables
+ * @property Timetable[] $timetables0
+ * @property UserGroup $userGroup
+ * @property UserGroup[] $userGroups
+ * @property UserGroup[] $userGroups0
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_BANNED = 0;
     const STATUS_ACTIVE = 10;
+
+    public $current_password;
+    public $password;
+    public $repeat_password;
 
     /**
      * {@inheritdoc}
@@ -101,7 +73,9 @@ class User extends ActiveRecord implements IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            'timestamp' => [
+                'class' => \yii\behaviors\TimestampBehavior::className(),
+            ],
         ];
     }
 
@@ -119,8 +93,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
-            [['user_group_id'], 'exist', 'skipOnError' => true, 'targetClass' => \frontend\models\UserGroup::className(), 'targetAttribute' => ['user_group_id' => 'id']],
-            [['user_permission_id'], 'exist', 'skipOnError' => true, 'targetClass' => \frontend\models\UserPermission::className(), 'targetAttribute' => ['user_permission_id' => 'id']],
+            [['user_group_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserGroup::className(), 'targetAttribute' => ['user_group_id' => 'id']],
         ];
     }
 
@@ -143,6 +116,8 @@ class User extends ActiveRecord implements IdentityInterface
             'user_permission_id' => Yii::t('common', 'User Permission ID'),
             'created_at' => Yii::t('common', 'Created At'),
             'updated_at' => Yii::t('common', 'Updated At'),
+
+            'statusName' => Yii::t('common', 'User Status'),
         ];
     }
 
@@ -298,457 +273,212 @@ class User extends ActiveRecord implements IdentityInterface
         return $statusList[$this->status];
     }
 
-    //-------------------------------------------------------------------------------------------------
-    // Связи для frontend
-
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendBannersImages()
+    public function getBanners()
     {
-        return $this->hasMany(\frontend\models\BannerImage::className(), ['created_by' => 'id']);
+        return $this->hasMany(Banner::className(), ['created_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendBannersImages0()
+    public function getBanners0()
     {
-        return $this->hasMany(\frontend\models\BannerImage::className(), ['updated_by' => 'id']);
+        return $this->hasMany(Banner::className(), ['updated_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendBlogs()
+    public function getCategories()
     {
-        return $this->hasMany(\frontend\models\Blog::className(), ['created_by' => 'id']);
+        return $this->hasMany(Category::className(), ['created_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendBlogs0()
+    public function getCategories0()
     {
-        return $this->hasMany(\frontend\models\Blog::className(), ['updated_by' => 'id']);
+        return $this->hasMany(Category::className(), ['updated_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendBlogsMenus()
+    public function getGroups()
     {
-        return $this->hasMany(\frontend\models\BlogMenu::className(), ['created_by' => 'id']);
+        return $this->hasMany(Group::className(), ['created_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendBlogsMenus0()
+    public function getGroups0()
     {
-        return $this->hasMany(\frontend\models\BlogMenu::className(), ['updated_by' => 'id']);
+        return $this->hasMany(Group::className(), ['updated_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendGroups()
+    public function getImages()
     {
-        return $this->hasMany(\frontend\models\Group::className(), ['created_by' => 'id']);
+        return $this->hasMany(Image::className(), ['created_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendGroups0()
+    public function getImages0()
     {
-        return $this->hasMany(\frontend\models\Group::className(), ['updated_by' => 'id']);
+        return $this->hasMany(Image::className(), ['updated_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendImages()
+    public function getLessons()
     {
-        return $this->hasMany(\frontend\models\Image::className(), ['created_by' => 'id']);
+        return $this->hasMany(Lesson::className(), ['created_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendImages0()
+    public function getLessons0()
     {
-        return $this->hasMany(\frontend\models\Image::className(), ['updated_by' => 'id']);
+        return $this->hasMany(Lesson::className(), ['updated_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendLanguages()
+    public function getNews()
     {
-        return $this->hasMany(\frontend\models\Language::className(), ['created_by' => 'id']);
+        return $this->hasMany(News::className(), ['created_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendLanguages0()
+    public function getNews0()
     {
-        return $this->hasMany(\frontend\models\Language::className(), ['updated_by' => 'id']);
+        return $this->hasMany(News::className(), ['updated_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendLanguagesPhrases()
+    public function getPosts()
     {
-        return $this->hasMany(\frontend\models\LanguagePhrase::className(), ['created_by' => 'id']);
+        return $this->hasMany(Post::className(), ['created_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendLanguagesPhrases0()
+    public function getPosts0()
     {
-        return $this->hasMany(\frontend\models\LanguagePhrase::className(), ['updated_by' => 'id']);
+        return $this->hasMany(Post::className(), ['updated_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendLessons()
+    public function getRooms()
     {
-        return $this->hasMany(\frontend\models\Lesson::className(), ['created_by' => 'id']);
+        return $this->hasMany(Room::className(), ['created_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendLessons0()
+    public function getRooms0()
     {
-        return $this->hasMany(\frontend\models\Lesson::className(), ['updated_by' => 'id']);
+        return $this->hasMany(Room::className(), ['updated_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendRooms()
+    public function getTeachers()
     {
-        return $this->hasMany(\frontend\models\Room::className(), ['created_by' => 'id']);
+        return $this->hasMany(Teacher::className(), ['created_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendRooms0()
+    public function getTeachers0()
     {
-        return $this->hasMany(\frontend\models\Room::className(), ['updated_by' => 'id']);
+        return $this->hasMany(Teacher::className(), ['updated_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendTeachers()
+    public function getTeacherGroups()
     {
-        return $this->hasMany(\frontend\models\Teacher::className(), ['created_by' => 'id']);
+        return $this->hasMany(TeacherGroup::className(), ['created_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendTeachers0()
+    public function getTeacherGroups0()
     {
-        return $this->hasMany(\frontend\models\Teacher::className(), ['updated_by' => 'id']);
+        return $this->hasMany(TeacherGroup::className(), ['updated_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendTeachersGroups()
+    public function getTimetables()
     {
-        return $this->hasMany(\frontend\models\TeacherGroup::className(), ['created_by' => 'id']);
+        return $this->hasMany(Timetable::className(), ['created_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendTeachersGroups0()
+    public function getTimetables0()
     {
-        return $this->hasMany(\frontend\models\TeacherGroup::className(), ['updated_by' => 'id']);
+        return $this->hasMany(Timetable::className(), ['updated_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendTimetables()
+    public function getUserGroup()
     {
-        return $this->hasMany(\frontend\models\Timetable::className(), ['created_by' => 'id']);
+        return $this->hasOne(UserGroup::className(), ['id' => 'user_group_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendTimetables0()
+    public function getUserGroups()
     {
-        return $this->hasMany(\frontend\models\Timetable::className(), ['updated_by' => 'id']);
+        return $this->hasMany(UserGroup::className(), ['created_by' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFrontendUserGroup()
+    public function getUserGroups0()
     {
-        return $this->hasOne(\frontend\models\UserGroup::className(), ['id' => 'user_group_id']);
+        return $this->hasMany(UserGroup::className(), ['updated_by' => 'id']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * {@inheritdoc}
+     * @return \common\models\query\UserQuery the active query used by this AR class.
      */
-    public function getFrontendUserPermission()
+    public static function find()
     {
-        return $this->hasOne(\frontend\models\UserPermission::className(), ['id' => 'user_permission_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFrontendUsersGroups()
-    {
-        return $this->hasMany(\frontend\models\UserGroup::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFrontendUsersGroups0()
-    {
-        return $this->hasMany(\frontend\models\UserGroup::className(), ['updated_by' => 'id']);
-    }
-
-    //-------------------------------------------------------------------------------------------------
-    // Связи для backend
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendBannersImages()
-    {
-        return $this->hasMany(\backend\models\BannerImage::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendBannersImages0()
-    {
-        return $this->hasMany(\backend\models\BannerImage::className(), ['updated_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendBlogs()
-    {
-        return $this->hasMany(\backend\models\Blog::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendBlogs0()
-    {
-        return $this->hasMany(\backend\models\Blog::className(), ['updated_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendBlogsMenus()
-    {
-        return $this->hasMany(\backend\models\BlogMenu::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendBlogsMenus0()
-    {
-        return $this->hasMany(\backend\models\BlogMenu::className(), ['updated_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendGroups()
-    {
-        return $this->hasMany(\backend\models\Group::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendGroups0()
-    {
-        return $this->hasMany(\backend\models\Group::className(), ['updated_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendImages()
-    {
-        return $this->hasMany(\backend\models\Image::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendImages0()
-    {
-        return $this->hasMany(\backend\models\Image::className(), ['updated_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendLanguages()
-    {
-        return $this->hasMany(\backend\models\Language::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendLanguages0()
-    {
-        return $this->hasMany(\backend\models\Language::className(), ['updated_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendLanguagesPhrases()
-    {
-        return $this->hasMany(\backend\models\LanguagePhrase::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendLanguagesPhrases0()
-    {
-        return $this->hasMany(\backend\models\LanguagePhrase::className(), ['updated_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendLessons()
-    {
-        return $this->hasMany(\backend\models\Lesson::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendLessons0()
-    {
-        return $this->hasMany(\backend\models\Lesson::className(), ['updated_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendRooms()
-    {
-        return $this->hasMany(\backend\models\Room::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendRooms0()
-    {
-        return $this->hasMany(\backend\models\Room::className(), ['updated_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendTeachers()
-    {
-        return $this->hasMany(\backend\models\Teacher::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendTeachers0()
-    {
-        return $this->hasMany(\backend\models\Teacher::className(), ['updated_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendTeachersGroups()
-    {
-        return $this->hasMany(\backend\models\TeacherGroup::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendTeachersGroups0()
-    {
-        return $this->hasMany(\backend\models\TeacherGroup::className(), ['updated_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendTimetables()
-    {
-        return $this->hasMany(\backend\models\Timetable::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendTimetables0()
-    {
-        return $this->hasMany(\backend\models\Timetable::className(), ['updated_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendUserGroup()
-    {
-        return $this->hasOne(\backend\models\UserGroup::className(), ['id' => 'user_group_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendUserPermission()
-    {
-        return $this->hasOne(\backend\models\UserPermission::className(), ['id' => 'user_permission_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendUsersGroups()
-    {
-        return $this->hasMany(\backend\models\UserGroup::className(), ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBackendUsersGroups0()
-    {
-        return $this->hasMany(\backend\models\UserGroup::className(), ['updated_by' => 'id']);
+        return new \common\models\query\UserQuery(get_called_class());
     }
 }

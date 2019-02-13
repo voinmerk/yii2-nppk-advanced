@@ -3,11 +3,13 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\User;
-use backend\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+
+use common\models\User;
+use common\models\UserSearch;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -20,6 +22,16 @@ class UserController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -101,7 +113,15 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        $name = $model->username;
+
+        $model->status = User::STATUS_BANNED;
+
+        if ($model->save(false)) {
+            Yii::$app->session->setFlash('success', 'User {name}, successfully blocked!', ['name' => $name]);
+        }
 
         return $this->redirect(['index']);
     }

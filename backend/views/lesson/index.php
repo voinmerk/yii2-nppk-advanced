@@ -3,37 +3,45 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
+
 use rmrevin\yii\fontawesome\FA;
 use dosamigos\datetimepicker\DateTimePicker;
-
-use backend\models\Lesson;
-
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\LessonSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('backend', 'Lessons');;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="lesson-index box box-primary">
+    <?php Pjax::begin(); ?>
 
     <?= $this->render('@viewComponents/_header_index_tools') ?>
 
     <div class="box-body table-responsive no-padding">
-        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'layout' => "{items}\n{summary}\n{pager}",
+            'layout' => "{items}\n{pager}",
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-                'name:text',
+                'name',
+                [
+                    'attribute' => 'status',
+                    'format' => 'html',
+                    'value' => function ($model) {
+                        $class = $model->status ? ' label-success' : ' label-danger';
+                        $name = $model->statusName;
+
+                        return '<span class="label' . $class . '">' . $name . '</span>';
+                    },
+                    'filter' => $searchModel->getStatusList(),
+                ],
                 [
                     'attribute' => 'createdName',
                     'format' => 'html',
                     'value' => function($model) {
-                        return Html::a($model->createdName, ['user/view', 'id' => $model->created_by], ['class' => 'btn btn-link btn-flat', 'style' => 'width: 100%;']);
+                        return Html::a($model->createdName, ['/user/view', 'id' => $model->created_by], ['class' => 'btn btn-link btn-flat btn-block']);
                     },
+                    'filter' => $searchModel->getCreatedName(),
                 ],
                 [
                     'attribute' => 'updated_at',
@@ -50,17 +58,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'todayBtn' => true
                         ]
                     ]),
-                ],
-                [
-                    'attribute' => 'status',
-                    'format' => 'html',
-                    'value' => function ($model) {
-                        $class = $model->status ? ' label-success' : ' label-danger';
-                        $name = $model->statusName;
-
-                        return '<span class="label' . $class . '">' . $name . '</span>';
-                    },
-                    'filter' => $searchModel->getStatusList(),
                 ],
                 [
                     'class' => 'yii\grid\ActionColumn',
@@ -89,4 +86,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]); ?>
     </div>
+    <?php Pjax::end(); ?>
 </div>

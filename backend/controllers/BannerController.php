@@ -3,13 +3,14 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\base\InvalidParamException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
-use backend\models\Banner;
-use backend\models\BannerSearch;
-use backend\models\Image;
+use common\models\Banner;
+use common\models\BannerSearch;
 
 /**
  * BannerController implements the CRUD actions for Banner model.
@@ -22,6 +23,16 @@ class BannerController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -39,6 +50,8 @@ class BannerController extends Controller
     {
         $searchModel = new BannerSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        // var_dump($dataProvider);exit;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -67,16 +80,8 @@ class BannerController extends Controller
     {
         $model = new Banner();
 
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                foreach($model->image_ids as $image_id) {
-                    $image = Image::findOne($image_id);
-
-                    $model->link('images', $image);
-                }
-
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -94,22 +99,8 @@ class BannerController extends Controller
     {
         $model = $this->findModel($id);
 
-        $model->image_ids = $model->images;
-
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save(false)) {
-                foreach($model->images as $image) {
-                    $model->unlink('images', $image, true);
-                }
-
-                foreach($model->image_ids as $image_id) {
-                    $image = Image::findOne($image_id);
-
-                    $model->link('images', $image);
-                }
-
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -125,13 +116,7 @@ class BannerController extends Controller
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-
-        if($model->delete()) {
-            foreach($model->images as $image) {
-                $model->unlink('images', $image, true);
-            }
-        }
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
@@ -145,7 +130,7 @@ class BannerController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Banner::find()->where(['id' => $id])->with(['images'])->one()) !== null) {
+        if (($model = Banner::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -7,35 +8,30 @@ use yii\widgets\Pjax;
 use rmrevin\yii\fontawesome\FA;
 use dosamigos\datetimepicker\DateTimePicker;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\NewsSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = Yii::t('backend', 'News');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="news-index box box-primary">
     <?php Pjax::begin(); ?>
-    <div class="box-header with-border">
-        <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success btn-flat']) ?>
-    </div>
+
+    <?= $this->render('@viewComponents/_header_index_tools') ?>
+
     <div class="box-body table-responsive no-padding">
-        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'layout' => "{items}\n{summary}\n{pager}",
+            'layout' => "{items}\n{pager}",
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-                // 'id',
                 'title',
-                // 'content:ntext',
-                // 'meta_title',
-                // 'meta_keywords:ntext',
-                // 'meta_description:ntext',
-                // 'slug',
-                // 'image_id',
-                'createdName',
+                [
+                    'attribute' => 'createdName',
+                    'format' => 'html',
+                    'value' => function($model) {
+                        return Html::a($model->createdName, ['/user/view', 'id' => $model->created_by], ['class' => 'btn btn-link btn-flat btn-block']);
+                    },
+                    'filter' => $searchModel->getCreatedName(),
+                ],
                 [
                     'attribute' => 'status',
                     'format' => 'html',
@@ -47,7 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'filter' => $searchModel->getStatusList(),
                 ],
-                // 'created_at',
                 [
                     'attribute' => 'updated_at',
                     'format' => 'datetime',

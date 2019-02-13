@@ -6,8 +6,8 @@ use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
-use frontend\models\Teacher;
-use frontend\models\TeacherGroup;
+use common\models\Teacher;
+use common\models\TeacherGroup;
 
 /**
  * Site controller

@@ -6,7 +6,7 @@ use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
-use frontend\models\Room;
+use common\models\Room;
 
 /**
  * Site controller

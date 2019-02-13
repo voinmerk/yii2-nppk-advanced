@@ -3,11 +3,14 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Category;
-use backend\models\CategorySearch;
+use yii\base\InvalidParamException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+
+use common\models\Category;
+use common\models\CategorySearch;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
@@ -20,6 +23,16 @@ class CategoryController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

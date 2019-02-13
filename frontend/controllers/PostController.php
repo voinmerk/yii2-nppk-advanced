@@ -5,8 +5,8 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-use frontend\models\Post;
-use frontend\models\Category;
+use common\models\Post;
+use common\models\Category;
 
 /**
  * Post controller

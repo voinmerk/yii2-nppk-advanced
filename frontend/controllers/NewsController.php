@@ -5,7 +5,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-use frontend\models\News;
+use common\models\News;
 
 /**
  * News controller
