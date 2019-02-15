@@ -12,6 +12,10 @@ use kartik\date\DatePicker;
 use common\models\Lesson;
 use common\models\Room;
 
+
+$lessonData = Lesson::getAutocompleteLessons();
+$roomData = Room::getAutocompleteRooms();
+
 /* @var $this yii\web\View */
 /* @var $model backend\models\Timetable */
 /* @var $form yii\widgets\ActiveForm */
@@ -80,39 +84,8 @@ $this->registerJs($js);
                             echo Html::activeHiddenInput($lesson, "[{$index}]id");
                         }
                     ?>
-                    <div class="item panel panel-default">
-                        <div class="panel-heading">
-                            <span class="panel-title-lesson">Занятие: <?= ($index + 1) ?></span>
-                            <button type="button" class="pull-right remove-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-sm-7">
-                                    <?= $form->field($lesson, "[{$index}]lesson")->widget(\yii\jui\AutoComplete::className(), [
-                                        'clientOptions' => [
-                                            'source' => Lesson::getAutocompleteLessons(),
-                                            'autoFill' => true,
-                                        ],
-                                        'options' => [
-                                            'class' => 'form-control'
-                                        ],
-                                    ]) ?>
-                                </div>
-                                <div class="col-sm-5">
-                                    <?= $form->field($lesson, "[{$index}]room")->widget(\yii\jui\AutoComplete::className(), [
-                                        'clientOptions' => [
-                                            'source' => Room::getAutocompleteRooms(),
-                                            'autoFill' => true,
-                                        ],
-                                        'options' => [
-                                            'class' => 'form-control'
-                                        ],
-                                    ]) ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+                    <?= $this->render('_lesson', compact('form', 'lesson', 'index', 'lessonData', 'roomData')) ?>
                 <?php } ?>
                 <?php } ?>
             </div>

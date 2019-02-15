@@ -1,46 +1,43 @@
 <?php
+
 namespace common\models;
 
 use Yii;
-use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "{{%post}}".
+ * This is the model class for table "{{%banner_caption}}".
  *
  * @property int $id
  * @property string $title
- * @property string $content
- * @property string $meta_title
- * @property string $meta_keywords
- * @property string $meta_description
- * @property string $slug
+ * @property string $btn_caption
+ * @property string $btn_link
+ * @property int $btn_status
  * @property int $status
+ * @property int $banner_id
+ * @property int $image_id
  * @property int $created_by
  * @property int $updated_by
- * @property int $image_id
  * @property int $created_at
  * @property int $updated_at
  *
+ * @property Banner $banner
  * @property Image $image
- * @property Category $category
- * @property Category[] $categories
  * @property User $createdBy
  * @property User $updatedBy
  */
-class Post extends ActiveRecord
+class BannerCaption extends \yii\db\ActiveRecord
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
 
     public $imageFile;
-    public $category_ids;
 
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%post}}';
+        return '{{%banner_caption}}';
     }
 
     /**
@@ -55,20 +52,11 @@ class Post extends ActiveRecord
             'timestamp' => [
                 'class' => \yii\behaviors\TimestampBehavior::className(),
             ],
-            'slug' => [
-                'class' => \yii\behaviors\SluggableBehavior::className(),
-                'attribute' => 'title',
-                'slugAttribute' => 'slug',
-                'ensureUnique' => true,
-                'value'  => function ($event)  {
-                    return $event->sender->slug;
-                },
-            ],
             'imageUpload' => [
                 'class' => \yiidreamteam\upload\ImageUploadBehavior::className(),
                 'attribute' => 'imageFile',
-                'filePath' => '@uploads/news/[[filename]].[[extension]]',
-                'fileUrl' => '/data/news/[[filename]].[[extension]]',
+                'filePath' => '@uploads/banner/[[filename]].[[extension]]',
+                'fileUrl' => '/data/banner/[[filename]].[[extension]]',
             ],
         ];
     }
@@ -79,13 +67,11 @@ class Post extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'content', 'meta_title', 'slug'], 'required'],
-            [['content', 'meta_keywords', 'meta_description'], 'string'],
-            [['status', 'created_by', 'updated_by', 'image_id', 'created_at', 'updated_at'], 'integer'],
-            [['title', 'meta_title', 'slug'], 'string', 'max' => 255],
-            [['slug'], 'unique'],
-            [['category_ids'], 'safe'],
+            [['btn_status', 'status', 'banner_id', 'image_id'], 'integer'],
+            [['banner_id', 'image_id'], 'required'],
+            [['title', 'btn_caption', 'btn_link'], 'string', 'max' => 255],
             [['imageFile'], 'file', 'extensions' => 'jpeg, gif, png, jpg'],
+            [['banner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Banner::className(), 'targetAttribute' => ['banner_id' => 'id']],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
@@ -100,23 +86,20 @@ class Post extends ActiveRecord
         return [
             'id' => Yii::t('common', 'ID'),
             'title' => Yii::t('common', 'Title'),
-            'content' => Yii::t('common', 'Content'),
-            'meta_title' => Yii::t('common', 'Meta Title'),
-            'meta_keywords' => Yii::t('common', 'Meta Keywords'),
-            'meta_description' => Yii::t('common', 'Meta Description'),
-            'slug' => Yii::t('common', 'Slug'),
-            'status' => Yii::t('common', 'Published'),
+            'btn_caption' => Yii::t('common', 'Btn Caption'),
+            'btn_link' => Yii::t('common', 'Btn Link'),
+            'btn_status' => Yii::t('common', 'Btn Status'),
+            'status' => Yii::t('common', 'Status'),
+            'banner_id' => Yii::t('common', 'Banner ID'),
+            'image_id' => Yii::t('common', 'Image ID'),
             'created_by' => Yii::t('common', 'Created By'),
             'updated_by' => Yii::t('common', 'Updated By'),
-            'image_id' => Yii::t('common', 'Image ID'),
             'created_at' => Yii::t('common', 'Created At'),
             'updated_at' => Yii::t('common', 'Updated At'),
 
             'createdName' => Yii::t('common', 'Created Name'),
             'updatedName' => Yii::t('common', 'Updated Name'),
             'statusName' => Yii::t('common', 'Published'),
-            'categoryName' => Yii::t('common', 'Category Name'),
-            'imageFile' => Yii::t('common', 'Upload image'),
         ];
     }
 
@@ -129,12 +112,16 @@ class Post extends ActiveRecord
             return false;
         }
 
-        $imageModel = new Image;
+        var_dump($this->imageFile);exit;
 
-        $imageModel->src = '/data/post/' . $this->imageFile;
+        if ($this->imageFile) {
+            $imageModel = new Image;
 
-        if ($imageModel->save()) {
-            $this->image_id = $imageModel->id;
+            $imageModel->src = '/data/banner/' . $this->imageFile;
+
+            if ($imageModel->save()) {
+                $this->image_id = $imageModel->id;
+            }
         }
 
         return true;
@@ -143,25 +130,9 @@ class Post extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory()
+    public function getBanner()
     {
-        return $this->hasOne(Category::className(), ['id' => 'category_id'])->viaTable('category_to_post', ['post_id' => 'id']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCategoryName()
-    {
-        return $this->category->title;
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategories()
-    {
-        return $this->hasMany(Category::className(), ['id' => 'category_id'])->viaTable('category_to_post', ['post_id' => 'id']);
+        return $this->hasOne(Banner::className(), ['id' => 'banner_id']);
     }
 
     /**
@@ -227,10 +198,20 @@ class Post extends ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return \common\models\query\PostQuery the active query used by this AR class.
+     */
+    public function getBtnStatusName()
+    {
+        $statusList = self::getStatusList();
+
+        return $statusList[$this->btn_status];
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return \common\models\query\BannerCaptionQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\query\PostQuery(get_called_class());
+        return new \common\models\query\BannerCaptionQuery(get_called_class());
     }
 }

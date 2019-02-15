@@ -114,7 +114,17 @@ class CategoryController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        $name = $model->title;
+
+        if ($model->delete()) {
+            foreach($model->posts as $post) {
+                $model->unlink('posts', $post, true);
+            }
+
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'Record  <strong>"{name}"</strong> deleted successfully.', ['name' => $name]));
+        }
 
         return $this->redirect(['index']);
     }

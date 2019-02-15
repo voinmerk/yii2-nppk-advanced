@@ -193,6 +193,7 @@ class TimetableController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
+        
         $name = $model->date;
 
         if ($model->delete()) {

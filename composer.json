@@ -35,7 +35,8 @@
         "wokster/yii2-adminlte-widgets": "*",
         "yii-dream-team/yii2-upload-behavior": "*",
         "ruskid/yii2-csv-importer": "dev-master",
-        "2amigos/yii2-tinymce-widget": "~1.1"
+        "2amigos/yii2-tinymce-widget": "~1.1",
+        "noam148/yii2-image-manager": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

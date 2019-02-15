@@ -153,6 +153,11 @@ class Teacher extends ActiveRecord
         return \yii\helpers\ArrayHelper::map($this->teacherGroups, 'id', 'name');
     }
 
+    public function getTeacherGroupName()
+    {
+        return $this->teacherGroup->name;
+    }
+
     /**
      * {@inheritdoc}
      */

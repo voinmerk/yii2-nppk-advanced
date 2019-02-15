@@ -28,11 +28,11 @@ body {
 }
 css;
 
-if($banner->images) {
-  foreach($banner->images as $image) {
+if($banner->bannerCaptions) {
+  foreach($banner->bannerCaptions as $bannerCaption) {
     $css .= '
-      .banner-i'.$image->id.' {
-        background-image: url(..'.$image->src.');
+      .banner-i'.$bannerCaption->id.' {
+        background-image: url(..'.$bannerCaption->image->src.');
       }
     ';
   }
@@ -51,18 +51,20 @@ $this->registerJs($js);
 $this->title = 'НППК - ' . Yii::t('frontend', 'Home');
 ?>
 <div class="site-index">
-  <?php if($banner->images) { ?>
+  <?php if($banner->bannerCaptions) { ?>
   <section id="home-banner" class="slider">
     <div class="flexslider">
       <ul class="slides">
-        <?php foreach($banner->images as $image) { ?>
+        <?php foreach($banner->bannerCaptions as $bannerCaption) { ?>
         <li>
-          <div class="banner-image banner-i<?= $image->id ?>"></div>
+          <div class="banner-image banner-i<?= $bannerCaption->id ?>"></div>
 
           <div class="banner-caption">
-            <p><?= $image->title ?></p>
+            <p><?= $bannerCaption->title ?></p>
 
-            <a href="tel:+79999999999" class="btn btn-primary btn-lg"><i class="fa fa-phone"></i> +7 (999) 999 99-99</a>
+            <?php if ($bannerCaption->btn_status) { ?>
+            <a href="<?= $bannerCaption->btn_link ?>" class="btn btn-primary btn-lg"><?= Html::decode($bannerCaption->btn_caption) ?></a>
+            <?php } ?>
           </div>
         </li>
         <?php } ?>

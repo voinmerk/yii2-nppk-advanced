@@ -527,3 +527,49 @@ img.mfp-img {
 .slick-prev::before, .slick-next::before {
 	color: #fff;
 }
+/*
+	black - #000
+	white - #fff
+*/
+.news-card {
+	background-color: #000;
+}
+.news-card .news-title a {
+	color: #fff;
+}
+.teacher-dialog {
+	background-color: #000;
+}
+.banner-caption {
+    color: #fff;
+}
+.btn-primary {
+	color: #fff;
+    background-color: #000;
+    border-color: #000;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    color: #000;
+    background-color: #fff;
+    border-color: #fff;
+}
+.feature-card {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+.feature-card .feature-btn {
+	color: #fff;
+}
+
+.post-card {
+    background-color: #000;
+    border: 1px solid #fff;
+}
+
+.post-card .post-title a {
+	color: #fff;
+}

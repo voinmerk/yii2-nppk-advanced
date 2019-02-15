@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 use dosamigos\tinymce\TinyMce;
 use kartik\file\FileInput;
 
-use backend\models\Category;
+use common\models\Category;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Post */
@@ -27,15 +27,19 @@ use backend\models\Category;
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
         <?=  $form->field($model, 'content')->widget(TinyMce::className(), [
-            'options' => ['rows' => 12],
+            'options' => ['rows' => 24],
             'language' => 'ru',
+            'value' => Html::decode($model->content),
             'clientOptions' => [
+                'file_browser_callback' => new \yii\web\JsExpression("function(field_name, url, type, win) {
+                    window.open('".\yii\helpers\Url::to(['imagemanager/manager', 'view-mode'=>'iframe', 'select-type'=>'tinymce'])."&tag_name='+field_name,'','width=800,height=540 ,toolbar=no,status=no,menubar=no,scrollbars=no,resizable=no');
+                }"),
                 'plugins' => [
                     'advlist autolink lists link charmap  print hr preview pagebreak',
                     'searchreplace wordcount textcolor visualblocks visualchars code fullscreen nonbreaking',
                     'save insertdatetime media table contextmenu template paste image'
                 ],
-                'toolbar' => 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
+                'toolbar' => 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code'
             ]
         ]); ?>
 

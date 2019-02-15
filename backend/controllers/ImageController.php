@@ -113,7 +113,13 @@ class ImageController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        $name = $model->src;
+
+        if ($model->delete()) {
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'Record  <strong>"{name}"</strong> deleted successfully.', ['name' => $name]));
+        }
 
         return $this->redirect(['index']);
     }

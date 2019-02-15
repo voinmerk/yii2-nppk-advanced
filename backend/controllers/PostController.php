@@ -77,8 +77,18 @@ class PostController extends Controller
     {
         $model = new Post();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                foreach($model->category_ids as $category_id) {
+                    $category = Category::findOne($category_id);
+
+                    $model->link('categories', $category);
+                }
+
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                var_dump($model);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -96,8 +106,23 @@ class PostController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $model->category_ids = $model->categories;
+        $model->imageFile = $model->image->src;
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save(false)) {
+                foreach($model->categories as $category) {
+                    $model->unlink('categories', $category, true);
+                }
+
+                foreach($model->category_ids as $category_id) {
+                    $category = Category::findOne($category_id);
+
+                    $model->link('categories', $category);
+                }
+
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -113,7 +138,17 @@ class PostController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        $name = $model->title;
+
+        if ($model->delete()) {
+            foreach($model->categories as $category) {
+                $model->unlink('categories', $category, true);
+            }
+
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'Record  <strong>"{name}"</strong> deleted successfully.', ['name' => $name]));
+        }
 
         return $this->redirect(['index']);
     }

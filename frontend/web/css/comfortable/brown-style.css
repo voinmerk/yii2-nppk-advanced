@@ -506,3 +506,49 @@ img.mfp-img {
 .slick-prev::before, .slick-next::before {
 	color: #4D4B43;
 }
+/*
+	light-brown - #F7F3D6
+	brown - #4D4B43
+*/
+.news-card {
+	background-color: #F7F3D6;
+}
+.news-card .news-title a {
+	color: #4D4B43;
+}
+.teacher-dialog {
+	background-color: #F7F3D6;
+}
+.banner-caption {
+    color: #4D4B43;
+}
+.btn-primary {
+	color: #4D4B43;
+    background-color: #F7F3D6;
+    border-color: #F7F3D6;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    color: #F7F3D6;
+    background-color: #4D4B43;
+    border-color: #4D4B43;
+}
+.feature-card {
+    background-color: #F7F3D6;
+    color: #4D4B43;
+    border: 1px solid #4D4B43;
+}
+
+.feature-card .feature-btn {
+	color: #4D4B43;
+}
+
+.post-card {
+    background-color: #F7F3D6;
+    border: 1px solid #4D4B43;
+}
+
+.post-card .post-title a {
+	color: #4D4B43;
+}

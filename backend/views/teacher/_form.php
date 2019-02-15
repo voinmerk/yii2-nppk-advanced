@@ -17,7 +17,7 @@ use kartik\file\FileInput;
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
         <?=  $form->field($model, 'content')->widget(TinyMce::className(), [
-            'options' => ['rows' => 12],
+            'options' => ['rows' => 24],
             'language' => 'ru',
             'clientOptions' => [
                 'plugins' => [
@@ -25,7 +25,7 @@ use kartik\file\FileInput;
                     'searchreplace wordcount textcolor visualblocks visualchars code fullscreen nonbreaking',
                     'save insertdatetime media table contextmenu template paste image'
                 ],
-                'toolbar' => 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
+                'toolbar' => 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code'
             ]
         ]); ?>
 

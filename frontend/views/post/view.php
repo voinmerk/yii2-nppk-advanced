@@ -22,13 +22,19 @@ $this->registerMetaTag([
 	</div>
 
 	<div class="page-body clearfix">
+		<?php if($post->image) { ?>
 		<div class="page-image">
-			<?php if($post->image) { ?>
+			
 			<?= Html::img('@web' . $post->image->src, ['class' => 'img-responsive']) ?>
-			<?php } else { ?>
-			<?= Html::img('@web/img/no-image.jpg', ['class' => 'img-responsive']) ?>
-			<?php } ?>
+			
+			<?php /*Html::img('@web/img/no-image.jpg', ['class' => 'img-responsive'])*/ ?>
+			
 		</div>
+		<?php } else { ?>
+		<?php /*<div class="page-image">
+		<?= Html::img('@web/img/no-image.jpg', ['class' => 'img-responsive']) ?>
+		</div>*/ ?>
+		<?php } ?>
 
 		<?= Html::decode($post->content) ?>
 	</div>

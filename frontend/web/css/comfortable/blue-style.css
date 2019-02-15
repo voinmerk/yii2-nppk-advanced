@@ -499,3 +499,49 @@ img.mfp-img {
 .slick-prev::before, .slick-next::before {
 	color: #0E2557;
 }
+/*
+	light-blue - #9DD1FF
+	blue - #0E2557
+*/
+.news-card {
+	background-color: #9DD1FF;
+}
+.news-card .news-title a {
+	color: #0E2557;
+}
+.teacher-dialog {
+	background-color: #9DD1FF;
+}
+.banner-caption {
+    color: #0E2557;
+}
+.btn-primary {
+	color: #0E2557;
+    background-color: #9DD1FF;
+    border-color: #9DD1FF;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    color: #9DD1FF;
+    background-color: #0E2557;
+    border-color: #0E2557;
+}
+.feature-card {
+    background-color: #9DD1FF;
+    color: #0E2557;
+    border: 1px solid #0E2557;
+}
+
+.feature-card .feature-btn {
+	color: #0E2557;
+}
+
+.post-card {
+    background-color: #9DD1FF;
+    border: 1px solid #0E2557;
+}
+
+.post-card .post-title a {
+	color: #0E2557;
+}

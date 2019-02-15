@@ -19,7 +19,7 @@ USE `yii_nppk_advanced`;
 -- Дамп структуры для таблица yii_nppk_advanced.banner
 CREATE TABLE IF NOT EXISTS `banner` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) DEFAULT NULL,
+  `name` varchar(32) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
@@ -33,12 +33,44 @@ CREATE TABLE IF NOT EXISTS `banner` (
   CONSTRAINT `FK_banner_image_user_updated` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii_nppk_advanced.banner: ~0 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.banner: ~2 rows (приблизительно)
 /*!40000 ALTER TABLE `banner` DISABLE KEYS */;
 INSERT INTO `banner` (`id`, `name`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-	(1, 'main_slider', 1, 1, 1, 0, 1549009047),
+	(1, 'main_slider', 1, 1, 1, 1549008949, 1550217206),
 	(2, 'new_slider', 0, 1, 1, 1549008949, 1549008949);
 /*!40000 ALTER TABLE `banner` ENABLE KEYS */;
+
+-- Дамп структуры для таблица yii_nppk_advanced.banner_caption
+CREATE TABLE IF NOT EXISTS `banner_caption` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `btn_caption` varchar(255) DEFAULT NULL,
+  `btn_link` varchar(255) DEFAULT NULL,
+  `btn_status` tinyint(4) NOT NULL DEFAULT '0',
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  `banner_id` int(11) NOT NULL,
+  `image_id` int(11) DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `created_at` int(11) NOT NULL DEFAULT '0',
+  `updated_at` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `FK_banner_caption_image` (`image_id`),
+  KEY `FK_banner_caption_banner` (`banner_id`),
+  KEY `FK_banner_caption_user_created` (`created_by`),
+  KEY `FK_banner_caption_user_updated` (`updated_by`),
+  CONSTRAINT `FK_banner_caption_banner` FOREIGN KEY (`banner_id`) REFERENCES `banner` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_banner_caption_image` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_banner_caption_user_created` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `FK_banner_caption_user_updated` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- Дамп данных таблицы yii_nppk_advanced.banner_caption: ~1 rows (приблизительно)
+/*!40000 ALTER TABLE `banner_caption` DISABLE KEYS */;
+INSERT INTO `banner_caption` (`id`, `title`, `btn_caption`, `btn_link`, `btn_status`, `status`, `banner_id`, `image_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+	(1, 'Инклюзивное образование', '<i class="fa fa-phone"></i> +7 (999) 999 9999', 'tel:+79999999999', 1, 1, 1, 167, 1, 1, 1549008949, 1550217206),
+	(2, 'Lol kek', 'Test', '//vk.com', 1, 1, 1, NULL, 1, 1, 1550217021, 1550217206);
+/*!40000 ALTER TABLE `banner_caption` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.banner_to_image
 CREATE TABLE IF NOT EXISTS `banner_to_image` (
@@ -119,7 +151,9 @@ INSERT INTO `category_to_post` (`category_id`, `post_id`) VALUES
 	(6, 13),
 	(2, 13),
 	(6, 16),
-	(3, 17);
+	(3, 17),
+	(3, 19),
+	(3, 20);
 /*!40000 ALTER TABLE `category_to_post` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.group
@@ -190,9 +224,9 @@ CREATE TABLE IF NOT EXISTS `image` (
   KEY `FK_image_user_updated` (`updated_by`),
   CONSTRAINT `FK_image_user_created` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_image_user_updated` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=164 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=168 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii_nppk_advanced.image: ~154 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.image: ~156 rows (приблизительно)
 /*!40000 ALTER TABLE `image` DISABLE KEYS */;
 INSERT INTO `image` (`id`, `title`, `content`, `src`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'Гимнастический зал', NULL, '/data/rooms/gym1.JPG', 1, NULL, 0, 0),
@@ -356,7 +390,11 @@ INSERT INTO `image` (`id`, `title`, `content`, `src`, `created_by`, `updated_by`
 	(160, NULL, NULL, '/data/post/Desert.jpg', 1, 1, 1549616022, 1549616022),
 	(161, NULL, NULL, '/data/post/', 1, 1, 1549616176, 1549616176),
 	(162, NULL, NULL, '/data/post/Tulips.jpg', 1, 1, 1549616488, 1549616488),
-	(163, NULL, NULL, '/data/post/Hydrangeas.jpg', 1, 1, 1549617598, 1549617598);
+	(163, NULL, NULL, '/data/post/Hydrangeas.jpg', 1, 1, 1549617598, 1549617598),
+	(164, NULL, NULL, '/data/post/IBP13cABgbs.jpg', 1, 1, 1549949143, 1549949143),
+	(165, NULL, NULL, '/data/post/botfather.jpg', 1, 1, 1549949429, 1549949429),
+	(166, NULL, NULL, '/data/teachers/', 1, 1, 1550212653, 1550212653),
+	(167, NULL, NULL, '/data/banner/', 1, 1, 1550215580, 1550215580);
 /*!40000 ALTER TABLE `image` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.lesson
@@ -534,15 +572,13 @@ CREATE TABLE IF NOT EXISTS `news` (
   CONSTRAINT `FK_news_user_2` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii_nppk_advanced.news: ~5 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.news: ~4 rows (приблизительно)
 /*!40000 ALTER TABLE `news` DISABLE KEYS */;
 INSERT INTO `news` (`id`, `title`, `content`, `meta_title`, `meta_keywords`, `meta_description`, `slug`, `status`, `image_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'Приёмная кампания 2017', '<p align="center"><span style="font-size: 24px;font-family: \'Open Sans\', sans-serif;"><b>Уважаемые абитуриенты!</b></span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Каждый из вас сейчас стоит перед выбором – куда поступить учиться, с какой профессией связать свое ближайшее будущее. Это очень ответственный выбор. Именно поэтому принятие решения должно быть обдуманным и взвешенным.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Наш колледж, имеет многолетнюю историю и славные традиции. Мы предоставляем своим студентам все возможное для полноценного личностного развития и профессионального роста, проявить себя в спорте и творчестве.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Преподаватели и сотрудники нашего колледжа сделают все, чтобы период учебы запомнился вам не только сложностями, связанными с овладеванием новой профессией, но и оставил в памяти яркие впечатления о студенческих годах как лучшей поре в жизни.</span></p><p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;"><br></span></p>\r\n<p style="text-align: right;"><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Приемная комиссия</span></p>', 'Приёмная кампания 2017', ' ', ' ', 'admission-campaign', 1, 155, 1, 1, 1538104254, 1538104254),
 	(3, 'Приёмная кампания 2017', '<p align="center"><span style="font-size: 24px;font-family: \'Open Sans\', sans-serif;"><b>Уважаемые абитуриенты!</b></span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Каждый из вас сейчас стоит перед выбором – куда поступить учиться, с какой профессией связать свое ближайшее будущее. Это очень ответственный выбор. Именно поэтому принятие решения должно быть обдуманным и взвешенным.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Наш колледж, имеет многолетнюю историю и славные традиции. Мы предоставляем своим студентам все возможное для полноценного личностного развития и профессионального роста, проявить себя в спорте и творчестве.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Преподаватели и сотрудники нашего колледжа сделают все, чтобы период учебы запомнился вам не только сложностями, связанными с овладеванием новой профессией, но и оставил в памяти яркие впечатления о студенческих годах как лучшей поре в жизни.</span></p><p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;"><br></span></p>\r\n<p style="text-align: right;"><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Приемная комиссия</span></p>', 'Приёмная кампания 2017', ' ', ' ', 'admission-campaign-2', 1, 60, 1, 1, 1538104254, 1538104254),
 	(4, 'Приёмная кампания 2017', '<p align="center"><span style="font-size: 24px;font-family: \'Open Sans\', sans-serif;"><b>Уважаемые абитуриенты!</b></span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Каждый из вас сейчас стоит перед выбором – куда поступить учиться, с какой профессией связать свое ближайшее будущее. Это очень ответственный выбор. Именно поэтому принятие решения должно быть обдуманным и взвешенным.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Наш колледж, имеет многолетнюю историю и славные традиции. Мы предоставляем своим студентам все возможное для полноценного личностного развития и профессионального роста, проявить себя в спорте и творчестве.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Преподаватели и сотрудники нашего колледжа сделают все, чтобы период учебы запомнился вам не только сложностями, связанными с овладеванием новой профессией, но и оставил в памяти яркие впечатления о студенческих годах как лучшей поре в жизни.</span></p><p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;"><br></span></p>\r\n<p style="text-align: right;"><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Приемная комиссия</span></p>', 'Приёмная кампания 2017', ' ', ' ', 'admission-campaign-3', 1, 66, 1, 1, 1538104254, 1538104254),
-	(5, 'Приёмная кампания 2017', '<p align="center"><span style="font-size: 24px;font-family: \'Open Sans\', sans-serif;"><b>Уважаемые абитуриенты!</b></span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Каждый из вас сейчас стоит перед выбором – куда поступить учиться, с какой профессией связать свое ближайшее будущее. Это очень ответственный выбор. Именно поэтому принятие решения должно быть обдуманным и взвешенным.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Наш колледж, имеет многолетнюю историю и славные традиции. Мы предоставляем своим студентам все возможное для полноценного личностного развития и профессионального роста, проявить себя в спорте и творчестве.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Преподаватели и сотрудники нашего колледжа сделают все, чтобы период учебы запомнился вам не только сложностями, связанными с овладеванием новой профессией, но и оставил в памяти яркие впечатления о студенческих годах как лучшей поре в жизни.</span></p><p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;"><br></span></p>\r\n<p style="text-align: right;"><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Приемная комиссия</span></p>', 'Приёмная кампания 2017', ' ', ' ', 'admission-campaign-4', 1, 31, 1, 1, 1538104254, 1538104254),
-	(6, 'asdasd', 'asdasd', 'asdasd', '', '', 'asdasd', 1, 158, 1, 1, 1549613688, 1549614616),
-	(7, 'dasdasdasd', 'asdasd', 'asdasdas', '', '', 'dasdasdasd', 1, 159, 1, 1, 1549615379, 1549615379);
+	(5, 'Приёмная кампания 2017', '<p align="center"><span style="font-size: 24px;font-family: \'Open Sans\', sans-serif;"><b>Уважаемые абитуриенты!</b></span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Каждый из вас сейчас стоит перед выбором – куда поступить учиться, с какой профессией связать свое ближайшее будущее. Это очень ответственный выбор. Именно поэтому принятие решения должно быть обдуманным и взвешенным.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Наш колледж, имеет многолетнюю историю и славные традиции. Мы предоставляем своим студентам все возможное для полноценного личностного развития и профессионального роста, проявить себя в спорте и творчестве.</span></p>\r\n<p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Преподаватели и сотрудники нашего колледжа сделают все, чтобы период учебы запомнился вам не только сложностями, связанными с овладеванием новой профессией, но и оставил в памяти яркие впечатления о студенческих годах как лучшей поре в жизни.</span></p><p><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;"><br></span></p>\r\n<p style="text-align: right;"><span style="font-size: 18px;font-family: \'Open Sans\', sans-serif;">Приемная комиссия</span></p>', 'Приёмная кампания 2017', ' ', ' ', 'admission-campaign-4', 1, 31, 1, 1, 1538104254, 1538104254);
 /*!40000 ALTER TABLE `news` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.post
@@ -568,18 +604,16 @@ CREATE TABLE IF NOT EXISTS `post` (
   CONSTRAINT `FK_post_image` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_post_user_created` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_post_user_updated` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COMMENT='Система объявлений';
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='Система объявлений';
 
--- Дамп данных таблицы yii_nppk_advanced.post: ~8 rows (приблизительно)
+-- Дамп данных таблицы yii_nppk_advanced.post: ~5 rows (приблизительно)
 /*!40000 ALTER TABLE `post` DISABLE KEYS */;
 INSERT INTO `post` (`id`, `title`, `content`, `meta_title`, `meta_keywords`, `meta_description`, `slug`, `status`, `created_by`, `updated_by`, `image_id`, `created_at`, `updated_at`) VALUES
 	(2, 'О колледже', '<p style="font-size: 16px;"><b>Новосибирский профессионально-педагогический колледж основан в 1956 году и на протяжении всего периода ведёт подготовку специалистов, востребованных на рынке труда. Воспитательно-образовательный процесс в колледже осуществляется на русском языке.</b></p>', 'О колледже', '', '', 'about-college', 1, 1, 1, 60, 1538104254, 1538104254),
 	(3, 'Мероприятия', '<h2>Абилимпикс</h2>\r\n\r\n<p>Региональный отборочный этап Национального чемпионата профмастерства среди граждан с инвалидностью «Абилимпикс».</p>\r\n\r\n<p><a href="/data/adverts/DSC_0281.JPG" class="thumbnail" title="Абилимпикс" style="width: 650px;margin: 15px auto;"><img src="/data/adverts/DSC_0281.JPG" title="Абилимпикс" /></a></p>\r\n\r\n<p>Он проводится в целях развития профессионального мастерства граждан с инвалидностью, содействия трудоустройству молодых специалистов с инвалидностью, выявления и поддержки талантливых детей и молодежи из числа граждан с инвалидностью.</p>\r\n\r\n<p>Участие в соревнованиях примут молодые специалисты, признанные в установленном порядке инвалидами, либо имеющие ограниченные возможности здоровья, не более как 5 лет завершившие освоение профессиональных образовательных программ.</p>\r\n\r\n<p><b>Региональный отборочный этап пройдет по 6 компетенциям:</b></p>\r\n\r\n<ul>\r\n	<li>Ремонт и обслуживание автомобилей;</li>\r\n	<li>Малярное дело;</li>\r\n	<li>Фотография;</li>\r\n	<li>Поварское дело;</li>\r\n	<li>Массажист;</li>\r\n	<li>Инженерный дизайн (CAD) САПР.</li>\r\n</ul>\r\n\r\n<p>Победители регионального этапа примут участие во втором Национальном чемпионате «Абилимпикс», который состоится в ноябре этого года.</p>\r\n\r\n<p>Узнать больше о региональном отборочном этапе Национального Чемпионата профессионального мастерства среди граждан с инвалидностью "Абилимпикс"</p>\r\n\r\n<p><b>Абилимпикс</b> — название соревнований по профессиональному мастерству среди инвалидов.</p>\r\n\r\n<p><b>История</b></p>\r\n\r\n<p>Впервые соревнования по профессиональному мастерству среди инвалидов прошли в Японии в 1953 году. Впоследствии эти соревнования стали международными. Соревнования проводятся Международной Федерации Абилимпикс (InternationalAbilympicFederation) с 1972 года и объединяют уже 46 стран.</p>\r\n\r\n<p><b>Абилимпикс в России</b></p>\r\n\r\n<p>C 2014 года соревнования по профессиональному мастерству среди инвалидов проводятся и в России . 1 национальный чемпионат Абилимпикс прошел в 2015 .</p>\r\n\r\n<p>Конкурс проводится в 45 компетенциях для школьников и молодых специалистов, а также в 6 компетенциях для школьников В городах России создаются региональные центры движения Абилимпикс.</p>\r\n\r\n<p>Основной организатор соревнований - Российский государственный социальный университет. В качестве экспертов-работодателей выступают различные организации.</p>', 'Мероприятия', NULL, NULL, 'events', 1, 1, 1, 60, 1538104254, 1538104254),
-	(5, 'Специальности', '&lt;div class=&quot;panel-group&quot; id=&quot;accordion&quot; role=&quot;tablist&quot; aria-multiselectable=&quot;true&quot;&gt;\r\n  &lt;div class=&quot;panel panel-primary&quot;&gt;\r\n	&lt;div class=&quot;panel-heading&quot; role=&quot;tab&quot; id=&quot;headingOne&quot;&gt;\r\n	  &lt;h4 class=&quot;panel-title&quot;&gt;\r\n		&lt;a role=&quot;button&quot; data-toggle=&quot;collapse&quot; data-parent=&quot;#accordion&quot; href=&quot;#collapseOne&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;collapseOne&quot; class=&quot;collapsed&quot;&gt;\r\n		  Прикладная информатика (по отраслям)\r\n		&lt;/a&gt;\r\n	  &lt;/h4&gt;\r\n	&lt;/div&gt;\r\n	&lt;div id=&quot;collapseOne&quot; class=&quot;panel-collapse collapse&quot; role=&quot;tabpanel&quot; aria-labelledby=&quot;headingOne&quot; aria-expanded=&quot;false&quot;&gt;\r\n	  &lt;div class=&quot;panel-body&quot;&gt;\r\n		Основная профессиональная образовательная программа базовой подготовки специалистов среднего звена специальности 09.02.05 Прикладная информатика (по отраслям) квалификация техник-программист\r\n	  &lt;/div&gt;\r\n	&lt;/div&gt;\r\n  &lt;/div&gt;\r\n  &lt;div class=&quot;panel panel-primary&quot;&gt;\r\n	&lt;div class=&quot;panel-heading&quot; role=&quot;tab&quot; id=&quot;headingTwo&quot;&gt;\r\n	  &lt;h4 class=&quot;panel-title&quot;&gt;\r\n		&lt;a class=&quot;collapsed&quot; role=&quot;button&quot; data-toggle=&quot;collapse&quot; data-parent=&quot;#accordion&quot; href=&quot;#collapseTwo&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;collapseTwo&quot;&gt;\r\n		  Земельно-имущественные отношения\r\n		&lt;/a&gt;\r\n	  &lt;/h4&gt;\r\n	&lt;/div&gt;\r\n	&lt;div id=&quot;collapseTwo&quot; class=&quot;panel-collapse collapse&quot; role=&quot;tabpanel&quot; aria-labelledby=&quot;headingTwo&quot; aria-expanded=&quot;false&quot;&gt;\r\n	  &lt;div class=&quot;panel-body&quot;&gt;\r\n		Основная профессиональная образовательная программа базовой подготовки специалистов среднего звена специальности 21.02.05 Земельно-имущественные отношения квалификация Специалист по земельно-имущественным отношениям\r\n	  &lt;/div&gt;\r\n	&lt;/div&gt;\r\n  &lt;/div&gt;\r\n  &lt;div class=&quot;panel panel-primary&quot;&gt;\r\n	&lt;div class=&quot;panel-heading&quot; role=&quot;tab&quot; id=&quot;heading3&quot;&gt;\r\n	  &lt;h4 class=&quot;panel-title&quot;&gt;\r\n		&lt;a class=&quot;collapsed&quot; role=&quot;button&quot; data-toggle=&quot;collapse&quot; data-parent=&quot;#accordion&quot; href=&quot;#collapse3&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;collapse3&quot;&gt;\r\n		  Информационные системы обеспечения градостроительной деятельности\r\n		&lt;/a&gt;\r\n	  &lt;/h4&gt;\r\n	&lt;/div&gt;\r\n	&lt;div id=&quot;collapse3&quot; class=&quot;panel-collapse collapse&quot; role=&quot;tabpanel&quot; aria-labelledby=&quot;heading3&quot; aria-expanded=&quot;false&quot;&gt;\r\n	  &lt;div class=&quot;panel-body&quot;&gt;\r\n		Основная профессиональная образовательная программа базовой подготовки специалистов среднего звена специальности 21.02.06 Информационные системы обеспечения градостроительной деятельности квалификация техник\r\n	  &lt;/div&gt;\r\n	&lt;/div&gt;\r\n  &lt;/div&gt;\r\n  &lt;div class=&quot;panel panel-primary&quot;&gt;\r\n	&lt;div class=&quot;panel-heading&quot; role=&quot;tab&quot; id=&quot;heading4&quot;&gt;\r\n	  &lt;h4 class=&quot;panel-title&quot;&gt;\r\n		&lt;a class=&quot;collapsed&quot; role=&quot;button&quot; data-toggle=&quot;collapse&quot; data-parent=&quot;#accordion&quot; href=&quot;#collapse4&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;collapse4&quot;&gt;\r\n		  Садово-парковое и ландшафтное строительство\r\n		&lt;/a&gt;\r\n	  &lt;/h4&gt;\r\n	&lt;/div&gt;\r\n	&lt;div id=&quot;collapse4&quot; class=&quot;panel-collapse collapse&quot; role=&quot;tabpanel&quot; aria-labelledby=&quot;heading4&quot; aria-expanded=&quot;false&quot;&gt;\r\n	  &lt;div class=&quot;panel-body&quot;&gt;\r\n		Основная профессиональная образовательная программа базовой подготовки специалистов среднего звена специальности 35.02.12 Садово-парковое и ландшафтное строительство квалификация - техник\r\n	  &lt;/div&gt;\r\n	&lt;/div&gt;\r\n  &lt;/div&gt;\r\n  &lt;div class=&quot;panel panel-primary&quot;&gt;\r\n	&lt;div class=&quot;panel-heading&quot; role=&quot;tab&quot; id=&quot;heading5&quot;&gt;\r\n	  &lt;h4 class=&quot;panel-title&quot;&gt;\r\n	    &lt;a class=&quot;collapsed&quot; role=&quot;button&quot; data-toggle=&quot;collapse&quot; data-parent=&quot;#accordion&quot; href=&quot;#collapse5&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;collapse5&quot;&gt;\r\n		  Профессиональное обучение (по отраслям) - мастер производственного обучения (техник программист)\r\n		&lt;/a&gt;\r\n	  &lt;/h4&gt;\r\n	&lt;/div&gt;\r\n	&lt;div id=&quot;collapse5&quot; class=&quot;panel-collapse collapse&quot; role=&quot;tabpanel&quot; aria-labelledby=&quot;heading5&quot; aria-expanded=&quot;false&quot;&gt;\r\n	  &lt;div class=&quot;panel-body&quot;&gt;\r\n		Основная профессиональная образовательная программа по углубленной подготовке специалистов среднего звена специальности 44.02.06 Профессиональное обучение (по отраслям) квалификация мастер производственного обучения (техник-программист)\r\n	  &lt;/div&gt;\r\n	&lt;/div&gt;\r\n  &lt;/div&gt;\r\n  &lt;div class=&quot;panel panel-primary&quot;&gt;\r\n	&lt;div class=&quot;panel-heading&quot; role=&quot;tab&quot; id=&quot;heading6&quot;&gt;\r\n	  &lt;h4 class=&quot;panel-title&quot;&gt;\r\n		&lt;a class=&quot;collapsed&quot; role=&quot;button&quot; data-toggle=&quot;collapse&quot; data-parent=&quot;#accordion&quot; href=&quot;#collapse6&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;collapse6&quot;&gt;\r\n		  Профессиональное обучение (по отраслям) - Мастер производственного обучения (техник)\r\n		&lt;/a&gt;\r\n	  &lt;/h4&gt;\r\n	&lt;/div&gt;\r\n	&lt;div id=&quot;collapse6&quot; class=&quot;panel-collapse collapse&quot; role=&quot;tabpanel&quot; aria-labelledby=&quot;heading6&quot; aria-expanded=&quot;false&quot;&gt;\r\n	  &lt;div class=&quot;panel-body&quot;&gt;\r\n		Основная профессиональная образовательная программа по углубленной подготовке специалистов среднего звена специальности 44.02.06 Профессиональное обучение (по отраслям) квалификация мастер производственного обучения (техник)\r\n	  &lt;/div&gt;\r\n	&lt;/div&gt;\r\n  &lt;/div&gt;\r\n  &lt;div class=&quot;panel panel-primary&quot;&gt;\r\n	&lt;div class=&quot;panel-heading&quot; role=&quot;tab&quot; id=&quot;heading7&quot;&gt;\r\n	  &lt;h4 class=&quot;panel-title&quot;&gt;\r\n		&lt;a class=&quot;collapsed&quot; role=&quot;button&quot; data-toggle=&quot;collapse&quot; data-parent=&quot;#accordion&quot; href=&quot;#collapse7&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;collapse7&quot;&gt;\r\n		  Право и организация социального обеспечения\r\n		&lt;/a&gt;\r\n	  &lt;/h4&gt;\r\n	&lt;/div&gt;\r\n	&lt;div id=&quot;collapse7&quot; class=&quot;panel-collapse collapse&quot; role=&quot;tabpanel&quot; aria-labelledby=&quot;heading7&quot; aria-expanded=&quot;false&quot;&gt;\r\n	  &lt;div class=&quot;panel-body&quot;&gt;\r\n		Основная профессиональная образовательная программа базовой  подготовки специалистов среднего звена специальности 40.02.01 Право и организация социального обеспечения квалификация  - юрист\r\n	  &lt;/div&gt;\r\n	&lt;/div&gt;\r\n  &lt;/div&gt;\r\n  &lt;div class=&quot;panel panel-primary&quot;&gt;\r\n	&lt;div class=&quot;panel-heading&quot; role=&quot;tab&quot; id=&quot;heading8&quot;&gt;\r\n	  &lt;h4 class=&quot;panel-title&quot;&gt;\r\n		&lt;a class=&quot;collapsed&quot; role=&quot;button&quot; data-toggle=&quot;collapse&quot; data-parent=&quot;#accordion&quot; href=&quot;#collapse8&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;collapse8&quot;&gt;\r\n		  Информационная  безопасность автоматизированных систем\r\n		&lt;/a&gt;\r\n	  &lt;/h4&gt;\r\n	&lt;/div&gt;\r\n	&lt;div id=&quot;collapse8&quot; class=&quot;panel-collapse collapse&quot; role=&quot;tabpanel&quot; aria-labelledby=&quot;heading8&quot; aria-expanded=&quot;false&quot;&gt;\r\n	  &lt;div class=&quot;panel-body&quot;&gt;\r\n		Основная профессиональная образовательная программа базовой  подготовки специалистов среднего звена специальности 10.02.03 Информационная  безопасность автоматизированных систем квалификация  - техник по защите информации\r\n	  &lt;/div&gt;\r\n	&lt;/div&gt;\r\n  &lt;/div&gt;\r\n&lt;/div&gt;', 'Специальности', NULL, NULL, 'specialties', 1, 1, 1, NULL, 1538104254, 1538104254),
+	(5, 'Специальности', '<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">\r\n  <div class="panel panel-primary">\r\n	<div class="panel-heading" role="tab" id="headingOne">\r\n	  <h4 class="panel-title">\r\n		<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">\r\n		  Прикладная информатика (по отраслям)\r\n		</a>\r\n	  </h4>\r\n	</div>\r\n	<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">\r\n	  <div class="panel-body">\r\n		Основная профессиональная образовательная программа базовой подготовки специалистов среднего звена специальности 09.02.05 Прикладная информатика (по отраслям) квалификация техник-программист\r\n	  </div>\r\n	</div>\r\n  </div>\r\n  <div class="panel panel-primary">\r\n	<div class="panel-heading" role="tab" id="headingTwo">\r\n	  <h4 class="panel-title">\r\n		<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">\r\n		  Земельно-имущественные отношения\r\n		</a>\r\n	  </h4>\r\n	</div>\r\n	<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">\r\n	  <div class="panel-body">\r\n		Основная профессиональная образовательная программа базовой подготовки специалистов среднего звена специальности 21.02.05 Земельно-имущественные отношения квалификация Специалист по земельно-имущественным отношениям\r\n	  </div>\r\n	</div>\r\n  </div>\r\n  <div class="panel panel-primary">\r\n	<div class="panel-heading" role="tab" id="heading3">\r\n	  <h4 class="panel-title">\r\n		<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse3" aria-expanded="false" aria-controls="collapse3">\r\n		  Информационные системы обеспечения градостроительной деятельности\r\n		</a>\r\n	  </h4>\r\n	</div>\r\n	<div id="collapse3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading3" aria-expanded="false" style="height: 0px;">\r\n	  <div class="panel-body">\r\n		Основная профессиональная образовательная программа базовой подготовки специалистов среднего звена специальности 21.02.06 Информационные системы обеспечения градостроительной деятельности квалификация техник\r\n	  </div>\r\n	</div>\r\n  </div>\r\n  <div class="panel panel-primary">\r\n	<div class="panel-heading" role="tab" id="heading4">\r\n	  <h4 class="panel-title">\r\n		<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse4" aria-expanded="false" aria-controls="collapse4">\r\n		  Садово-парковое и ландшафтное строительство\r\n		</a>\r\n	  </h4>\r\n	</div>\r\n	<div id="collapse4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading4" aria-expanded="false">\r\n	  <div class="panel-body">\r\n		Основная профессиональная образовательная программа базовой подготовки специалистов среднего звена специальности 35.02.12 Садово-парковое и ландшафтное строительство квалификация - техник\r\n	  </div>\r\n	</div>\r\n  </div>\r\n  <div class="panel panel-primary">\r\n	<div class="panel-heading" role="tab" id="heading5">\r\n	  <h4 class="panel-title">\r\n	    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse5" aria-expanded="false" aria-controls="collapse5">\r\n		  Профессиональное обучение (по отраслям) - мастер производственного обучения (техник программист)\r\n		</a>\r\n	  </h4>\r\n	</div>\r\n	<div id="collapse5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading5" aria-expanded="false">\r\n	  <div class="panel-body">\r\n		Основная профессиональная образовательная программа по углубленной подготовке специалистов среднего звена специальности 44.02.06 Профессиональное обучение (по отраслям) квалификация мастер производственного обучения (техник-программист)\r\n	  </div>\r\n	</div>\r\n  </div>\r\n  <div class="panel panel-primary">\r\n	<div class="panel-heading" role="tab" id="heading6">\r\n	  <h4 class="panel-title">\r\n		<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse6" aria-expanded="false" aria-controls="collapse6">\r\n		  Профессиональное обучение (по отраслям) - Мастер производственного обучения (техник)\r\n		</a>\r\n	  </h4>\r\n	</div>\r\n	<div id="collapse6" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading6" aria-expanded="false">\r\n	  <div class="panel-body">\r\n		Основная профессиональная образовательная программа по углубленной подготовке специалистов среднего звена специальности 44.02.06 Профессиональное обучение (по отраслям) квалификация мастер производственного обучения (техник)\r\n	  </div>\r\n	</div>\r\n  </div>\r\n  <div class="panel panel-primary">\r\n	<div class="panel-heading" role="tab" id="heading7">\r\n	  <h4 class="panel-title">\r\n		<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse7" aria-expanded="false" aria-controls="collapse7">\r\n		  Право и организация социального обеспечения\r\n		</a>\r\n	  </h4>\r\n	</div>\r\n	<div id="collapse7" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading7" aria-expanded="false">\r\n	  <div class="panel-body">\r\n		Основная профессиональная образовательная программа базовой  подготовки специалистов среднего звена специальности 40.02.01 Право и организация социального обеспечения квалификация  - юрист\r\n	  </div>\r\n	</div>\r\n  </div>\r\n  <div class="panel panel-primary">\r\n	<div class="panel-heading" role="tab" id="heading8">\r\n	  <h4 class="panel-title">\r\n		<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse8" aria-expanded="false" aria-controls="collapse8">\r\n		  Информационная  безопасность автоматизированных систем\r\n		</a>\r\n	  </h4>\r\n	</div>\r\n	<div id="collapse8" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading8" aria-expanded="false">\r\n	  <div class="panel-body">\r\n		Основная профессиональная образовательная программа базовой  подготовки специалистов среднего звена специальности 10.02.03 Информационная  безопасность автоматизированных систем квалификация  - техник по защите информации\r\n	  </div>\r\n	</div>\r\n  </div>\r\n</div>', 'Специальности', NULL, NULL, 'specialties', 1, 1, 1, NULL, 1538104254, 1538104254),
 	(6, 'Стоимость платных образовательных услуг', '<table class="table table-bordered" width="1898" height="531">\r\n	<tbody>\r\n		<tr>\r\n			<td>\r\n				<span style="font-size: 18px;">Перечень услуг</span>\r\n			</td>\r\n			<td>\r\n				<span style="font-size: 18px;">Стоимость</span>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<td>\r\n				<p><b>Образовательные услуги очной формы обучения по программам среднего профессионального образования</b></p>\r\n				<ul>\r\n					<li>09.02.05 Прикладная информатика (по отраслям)</li>\r\n					<li>21.02.05 Земельно-имущественные отношения</li>\r\n					<li>35.02.12 Садово-парковое и ландшафтное строительство</li>\r\n					<li>10.02.03 Информационная безопасность автоматизированных систем</li>\r\n					<li>40.02.01 Право и организация социального обеспечения</li>\r\n					<li>44.02.06 Профессиональное обучение по отраслям</li>\r\n				</ul>\r\n			</td>\r\n			<td rowspan="3" align="center">\r\n				<b>т. 314-94-66</b>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<td><p><b>Образовательные услуги заочной формы обучения по программам среднего профессионального образования</b></p>\r\n				<ul>\r\n					<li>40.02.01 Право и организация социального обеспечения</li>\r\n					<li>21.02.05 Земельно-имущественные отношения</li>\r\n					<li>44.02.06 Профессиональное обучение по отраслям</li>\r\n				</ul>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<td>\r\n				<p><b>Образовательные услуги заочной формы обучения в соответствии с индивидуальными планами обучения по программам среднего профессионального образования</b></p>\r\n				<ul>\r\n					<li>44.02.06 Профессиональное обучение по отраслям</li>\r\n					<li>21.02.05 Земельно-имущественные отношения</li>\r\n					<li>40.02.01 Право и организация социального обеспечения</li>\r\n				</ul>\r\n			</td>\r\n		</tr>\r\n	</tbody>\r\n</table>', 'Стоимость платных образовательных услуг', NULL, NULL, 'the-cost-of-paid-educational-services', 1, 1, 1, NULL, 1538104254, 1538104254),
-	(12, 'Наши достижения', '<div class="clearfix">\r\n	<div class="main-news-single__image">\r\n	    <a class="thumbnail" href="/data/adverts/71.png"><img src="/data/adverts/71.png" width="140" alt=""></a>\r\n	</div>\r\n	<p class="text-align-justify">Золотая медаль «Европейское качество» в номинации «100 лучших ССУЗов России»</p>\r\n</div>\r\n\r\n<div class="clearfix">\r\n	<div class="main-news-single__image">\r\n	    <a class="thumbnail" href="/data/adverts/72.jpg"><img src="/data/adverts/72.jpg" width="140" alt=""></a>\r\n	</div>\r\n	<p class="text-align-justify">Медаль «Новосибирская марка» в сфере образовательной деятельности в номинации «За устойчивое развитие на рынке образовательных услуг»</p>\r\n	<p class="text-align-justify">Медаль «Новосибирская марка» в сфере образовательной деятельности в номинации «Современные образовательные технологии»</p>\r\n</div>\r\n\r\n<div class="clearfix">\r\n	<div class="main-news-single__image">\r\n	    <a class="thumbnail" href="/data/adverts/31_12_08.jpg"><img src="/data/adverts/31_12_08.jpg" width="140" alt=""></a>\r\n	</div>\r\n	<p class="text-align-justify">Орден «За профессиональную честь, достоинство и почетную деловую репутацию» III степени</p>\r\n</div>\r\n\r\n<div class="clearfix">\r\n	<div class="main-news-single__image">\r\n	    <a class="thumbnail" href="/data/adverts/wGYkUZewk1E.jpg"><img src="/data/adverts/wGYkUZewk1E.jpg" width="140" alt=""></a>\r\n	</div>\r\n	<p class="text-align-justify">Наградной знак по итогам V Регионального чемпионата «Молодые профессионалы» (WorldSkills Russia-2018)»  «Лучшая команда чемпионата»</p>\r\n</div>', 'Наши достижения', NULL, NULL, 'our-achievements', 1, 1, 1, NULL, 1538104254, 1538104254),
-	(13, 'Тестовая запись', 'Какой то контЕнтЬ', 'Какая то тестовая запись1', '', '', '', 1, 1, 1, 45, 1549602478, 1549602789),
-	(17, 'asdasdasd', 'sdfsdfsdfsdf', 'sfsdfsdfsdf', '', '', 'asdasdasd', 1, 1, 1, 163, 1549617598, 1549617598);
+	(12, 'Наши достижения', '<div class="clearfix">\r\n	<div class="main-news-single__image">\r\n	    <a class="thumbnail" href="/data/adverts/71.png"><img src="/data/adverts/71.png" width="140" alt=""></a>\r\n	</div>\r\n	<p class="text-align-justify">Золотая медаль «Европейское качество» в номинации «100 лучших ССУЗов России»</p>\r\n</div>\r\n\r\n<div class="clearfix">\r\n	<div class="main-news-single__image">\r\n	    <a class="thumbnail" href="/data/adverts/72.jpg"><img src="/data/adverts/72.jpg" width="140" alt=""></a>\r\n	</div>\r\n	<p class="text-align-justify">Медаль «Новосибирская марка» в сфере образовательной деятельности в номинации «За устойчивое развитие на рынке образовательных услуг»</p>\r\n	<p class="text-align-justify">Медаль «Новосибирская марка» в сфере образовательной деятельности в номинации «Современные образовательные технологии»</p>\r\n</div>\r\n\r\n<div class="clearfix">\r\n	<div class="main-news-single__image">\r\n	    <a class="thumbnail" href="/data/adverts/31_12_08.jpg"><img src="/data/adverts/31_12_08.jpg" width="140" alt=""></a>\r\n	</div>\r\n	<p class="text-align-justify">Орден «За профессиональную честь, достоинство и почетную деловую репутацию» III степени</p>\r\n</div>\r\n\r\n<div class="clearfix">\r\n	<div class="main-news-single__image">\r\n	    <a class="thumbnail" href="/data/adverts/wGYkUZewk1E.jpg"><img src="/data/adverts/wGYkUZewk1E.jpg" width="140" alt=""></a>\r\n	</div>\r\n	<p class="text-align-justify">Наградной знак по итогам V Регионального чемпионата «Молодые профессионалы» (WorldSkills Russia-2018)»  «Лучшая команда чемпионата»</p>\r\n</div>', 'Наши достижения', NULL, NULL, 'our-achievements', 1, 1, 1, NULL, 1538104254, 1538104254);
 /*!40000 ALTER TABLE `post` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.room
@@ -765,7 +799,7 @@ CREATE TABLE IF NOT EXISTS `teacher` (
 -- Дамп данных таблицы yii_nppk_advanced.teacher: ~52 rows (приблизительно)
 /*!40000 ALTER TABLE `teacher` DISABLE KEYS */;
 INSERT INTO `teacher` (`id`, `title`, `content`, `room_id`, `status`, `sort_order`, `teacher_group_id`, `image_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-	(1, 'Ануфриева Ольга Юриевна', '&lt;p&gt;Должность: Преподаватель&lt;/p&gt;\r\n&lt;p&gt;Уровень образования: высшее&lt;/p&gt;\r\n&lt;p&gt;Высшая квалификационная категория&lt;/p&gt;', 9, 1, 1, 2, 95, 1, NULL, 0, 0),
+	(1, 'Ануфриева Ольга Юриевна', '<p>Должность: Преподаватель</p>\r\n<p>Уровень образования: высшее</p>\r\n<p>Высшая квалификационная категория</p>', 9, 1, 1, 2, 166, 1, 1, 0, 1550212653),
 	(2, 'Артемова Наталья Александровна', '<p>Должность: Воспитатель</p>\r\n<p>Уровень образования: высшее</p>\r\n<p>Первая квалификационная категория</p>', 0, 1, 2, 2, 96, 1, NULL, 0, 0),
 	(3, 'Виниченко Елена Петровна', '<p>Должность: Преподаватель</p>\r\n<p>Уровень образования: высшее</p>\r\n<p>Высшая квалификационная категория</p>', 16, 1, 3, 2, 97, 1, NULL, 0, 0),
 	(4, 'Волкова Надежда Ивановна', '<p>Должность: Преподаватель</p>\r\n<p>Уровень образования: высшее</p>\r\n<p>Высшая квалификационная категория</p>', 15, 1, 4, 2, 98, 1, NULL, 0, 0),
@@ -841,8 +875,8 @@ CREATE TABLE IF NOT EXISTS `teacher_group` (
 -- Дамп данных таблицы yii_nppk_advanced.teacher_group: ~2 rows (приблизительно)
 /*!40000 ALTER TABLE `teacher_group` DISABLE KEYS */;
 INSERT INTO `teacher_group` (`id`, `name`, `slug`, `sort_order`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-	(1, 'Администрация', 'administration', 1000, 1, 1, 1, 0, 0),
-	(2, 'Преподаватели', 'teachers', 2000, 1, 1, 1, 0, 0);
+	(1, 'Администрация', 'administration', 1000, 1, 1, 1, 0, 1550046150),
+	(2, 'Преподаватели', 'teachers', 2000, 1, 1, 1, 0, 1550046161);
 /*!40000 ALTER TABLE `teacher_group` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.timetable
@@ -866,39 +900,14 @@ CREATE TABLE IF NOT EXISTS `timetable` (
 -- Дамп данных таблицы yii_nppk_advanced.timetable: ~3 rows (приблизительно)
 /*!40000 ALTER TABLE `timetable` DISABLE KEYS */;
 INSERT INTO `timetable` (`id`, `date`, `group_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-	(1, '2019-01-12', 2, 1, 1, 0, 0),
+	(1, '2019-01-12', 2, 1, 1, 0, 1550209630),
 	(2, '2019-02-06', 1, 1, 1, 0, 0),
 	(3, '2019-02-22', 8, 1, 1, 1549003886, 1549004826),
-	(4, '2019-02-02', 9, 1, 1, 1549009312, 1549009343);
+	(4, '2019-02-02', 9, 1, 1, 1549009312, 1550050874);
 /*!40000 ALTER TABLE `timetable` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.timetable_lesson
 CREATE TABLE IF NOT EXISTS `timetable_lesson` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `timetable_id` int(11) NOT NULL,
-  `lesson_id` int(11) NOT NULL,
-  `room_id` int(11) NOT NULL,
-  `sort_order` int(3) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `FK_timetable_lesson_timetable` (`timetable_id`),
-  KEY `FK_timetable_lesson_lesson` (`lesson_id`),
-  KEY `FK_timetable_lesson_room` (`room_id`),
-  CONSTRAINT `FK_timetable_lesson_lesson` FOREIGN KEY (`lesson_id`) REFERENCES `lesson` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_timetable_lesson_room` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_timetable_lesson_timetable` FOREIGN KEY (`timetable_id`) REFERENCES `timetable` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-
--- Дамп данных таблицы yii_nppk_advanced.timetable_lesson: ~4 rows (приблизительно)
-/*!40000 ALTER TABLE `timetable_lesson` DISABLE KEYS */;
-INSERT INTO `timetable_lesson` (`id`, `timetable_id`, `lesson_id`, `room_id`, `sort_order`) VALUES
-	(1, 1, 111, 11, 1),
-	(2, 1, 111, 11, 2),
-	(3, 1, 98, 10, 3),
-	(4, 1, 104, 6, 0);
-/*!40000 ALTER TABLE `timetable_lesson` ENABLE KEYS */;
-
--- Дамп структуры для таблица yii_nppk_advanced.timetable_lesson_beta
-CREATE TABLE IF NOT EXISTS `timetable_lesson_beta` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `timetable_id` int(11) NOT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
@@ -909,17 +918,17 @@ CREATE TABLE IF NOT EXISTS `timetable_lesson_beta` (
   CONSTRAINT `FK_timetable_lesson_beta_timetable` FOREIGN KEY (`timetable_id`) REFERENCES `timetable` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii_nppk_advanced.timetable_lesson_beta: ~6 rows (приблизительно)
-/*!40000 ALTER TABLE `timetable_lesson_beta` DISABLE KEYS */;
-INSERT INTO `timetable_lesson_beta` (`id`, `timetable_id`, `sort_order`, `lesson`, `room`) VALUES
+-- Дамп данных таблицы yii_nppk_advanced.timetable_lesson: ~6 rows (приблизительно)
+/*!40000 ALTER TABLE `timetable_lesson` DISABLE KEYS */;
+INSERT INTO `timetable_lesson` (`id`, `timetable_id`, `sort_order`, `lesson`, `room`) VALUES
 	(1, 1, 0, 'География', '4 кабинет'),
 	(2, 1, 0, 'Русский язык', '205 кабинет'),
-	(3, 1, 0, 'аар', 'вапвап'),
+	(3, 1, 0, 'Русский язык', '209 кабинет'),
 	(4, 2, 0, '123', '123'),
 	(5, 3, 0, 'Русский язык', '5 кабинет'),
 	(6, 3, 0, 'Математика', '123'),
 	(7, 4, 0, 'Русский язык', '5 кабинет');
-/*!40000 ALTER TABLE `timetable_lesson_beta` ENABLE KEYS */;
+/*!40000 ALTER TABLE `timetable_lesson` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii_nppk_advanced.user
 CREATE TABLE IF NOT EXISTS `user` (

@@ -113,7 +113,13 @@ class TeacherGroupController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        $name = $model->name;
+
+        if ($model->delete()) {
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'Record  <strong>"{name}"</strong> deleted successfully.', ['name' => $name]));
+        }
 
         return $this->redirect(['index']);
     }

@@ -52,17 +52,17 @@ class PostController extends Controller
 	public function actionView($category, $post)
 	{
 		// Список категорий для меню
-		$categories = Category::find()->where(['status' => Category::STATUS_ACTIVE])->all();
+		$categories = Category::find()->active()->all();
 
 		// Текущая категория
-		$category = Category::find()->where(['slug' => $category, 'status' => Category::STATUS_ACTIVE])->one();
+		$category = Category::find()->where(['slug' => $category])->active()->one();
 
 		if(!$category) {
 			throw new NotFoundHttpException('Запрашиваемая страница не существует.');
 		}
 
 		// Текущая запись
-		$post = Post::find()->where(['status' => Post::STATUS_ACTIVE])->one();
+		$post = Post::find()->where(['slug' => $post])->active()->one();
 
 		if(!$post) {
 			throw new NotFoundHttpException('Запрашиваемая страница не существует.');

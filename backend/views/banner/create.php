@@ -13,7 +13,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="banner-create">
 
     <?= $this->render('_form', [
-    'model' => $model,
+	    'model' => $model,
+	    'modelCaptions' => $modelCaptions,
     ]) ?>
 
 </div>

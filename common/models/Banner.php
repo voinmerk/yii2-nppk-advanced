@@ -55,7 +55,7 @@ class Banner extends ActiveRecord
     {
         return [
             [['status', 'created_by', 'updated_by', 'created_at', 'updated_at'], 'integer'],
-            [['created_at', 'updated_at'], 'required'],
+            [['name'], 'required'],
             [['name'], 'string', 'max' => 32],
             [['name'], 'unique'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -88,7 +88,19 @@ class Banner extends ActiveRecord
      */
     public static function getBannerByName($name)
     {
-        return self::find()->with(['images'])->where(['name' => $name])->active()->one();
+        return self::find()->joinWith(['bannerCaptions' => function ($q) {
+            $joinTable = BannerCaption::tableName();
+
+            $q->with(['image'])->where($joinTable . '.status = ' . BannerCaption::STATUS_ACTIVE);
+        }])->where([self::tableName() . '.name' => $name, self::tableName() . '.status' => self::STATUS_ACTIVE])->one();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBannerCaptions()
+    {
+        return $this->hasMany(BannerCaption::className(), ['banner_id' => 'id']);
     }
 
     /**
